@@ -10,10 +10,8 @@ if (tist=true){
 
 
 
-
-
-if (dragging=false) then draw_sprite_ext(spr_formation_bars,image_index,x,y,image_xscale,image_yscale,0,c_white,1);
-if (dragging=true) then draw_sprite_ext(spr_formation_bars,image_index,x,y+1000,image_xscale,image_yscale,0,c_white,1);
+if (dragging=false) then draw_rectangle_outline(x,y,x+39,y+47, color, c_black);
+if (dragging=true) then draw_rectangle_outline(x,y+100,x+39,y+47+100, color, c_black);
 
 
 
