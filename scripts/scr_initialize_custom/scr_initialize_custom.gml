@@ -694,7 +694,7 @@ function scr_initialize_custom() {
             "Word Bearers",
             "Salamanders",
             "Raven Guard",
-            "Alpha Legion"
+            "Alpha Legion",
             "Chimeric"
         ]);
     }
