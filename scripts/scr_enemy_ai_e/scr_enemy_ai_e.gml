@@ -20,10 +20,10 @@ function scr_enemy_ai_e() {
     var damage = array_create(20,0);
 
 
-    var i = 0;
-    repeat(13) {
-        i += 1;
-        if (present_fleet[i]) then have_fleets += 1;
+    for (var i = 1; i <= 13; i += 1) {
+        if (present_fleet[i]) {
+            have_fleets += 1;
+        }
     }
 
     if (present_fleet[1] > 0) { // Battle1 is reserved for player battles
@@ -101,19 +101,32 @@ function scr_enemy_ai_e() {
             if (present_fleet[f] > 0) {
                 obj_controller.temp[1049] = self.id;
                 obj_controller.temp[1050] = f;
-
+                var _orbiting = self.id;
+                var _wanted_owner = f;
+                var fleet_strength = 0;
                 with(obj_en_fleet) {
-                    if (orbiting = obj_controller.temp[1049]) and(owner = obj_controller.temp[1050]) {
-                        obj_controller.temp[1051] = self.escort_number + (self.frigate_number * 4) + (self.capital_number * 8);
+                    if (orbiting = _orbiting) and(owner = _wanted_owner) {
+                        fleet_strength = self.escort_number + (self.frigate_number * 4) + (self.capital_number * 8);
+                        if (owner == fleet_has_cargo("ork_warboss")){
+                            fleet_strength*=1.5;
+                        }
                     }
                 }
 
-                strength[f] = obj_controller.temp[1051];
+                strength[f] = fleet_strength;
 
-                if (f = 7) and(strength[7] > 0) then strength[f] = strength[f] * 0.8;
-                if (f = 9) and(strength[9] > 0) then strength[f] = strength[f] * 1.1;
-                if (f = 10) and(strength[10] > 0) then strength[f] = strength[f] * 1.1;
-                if (f = 11) and(strength[13] > 0) then strength[13] = strength[13] * 2;
+                if (f = 7) and(strength[7] > 0){
+                    strength[f] = strength[f] * 0.8;
+                }
+                else if (f = 9) and(strength[9] > 0){
+                    strength[f] = strength[f] * 1.1;
+                }
+                else if (f = 10) and(strength[10] > 0){
+                    strength[f] = strength[f] * 1.1;
+                }
+                else if (f = 11) and(strength[13] > 0){
+                    strength[13] = strength[13] * 2;
+                }
 
                 // if (f=10) or (f=2) then show_message("["+string(f)+"] Fleet strength: "+string(strength[f]));
 
@@ -403,7 +416,7 @@ function scr_enemy_ai_e() {
                         }
                         with(obj_en_fleet) {
                             if (action = "") and(orbiting = obj_controller.temp[1049]) and(owner = 10) {
-                                if (string_count("Khorne_warband", trade_goods) > 0) then instance_create(x, y, obj_temp2);
+                                if (string_count("warband", trade_goods) > 0) then instance_create(x, y, obj_temp2);
                                 if (string_lower(trade_goods) = "csm") then instance_create(x, y, obj_temp3);
                             }
                         }
@@ -502,11 +515,12 @@ function scr_enemy_ai_e() {
                     }
                 }
             }
-
         }
-        if (p_player[run] > 0) and(has_problem_planet(run,"bomb")) {
+        if (p_player[run] > 0 && has_problem_planet(run,"necron")) {
+            log_message($"player on planet with necron mission {name} planet: {run}")
             var have_bomb;
             have_bomb = scr_check_equip("Plasma Bomb", name, run, 0);
+            log_message($"have bomb? {have_bomb} ")
             if (have_bomb > 0) {
                 var tixt;
                 tixt = "Your marines on " + planet_numeral_name(run);
@@ -597,18 +611,9 @@ function scr_enemy_ai_e() {
         thirdpop = p_max_population[run] / 3;
         halfpop = p_max_population[run] / 2;
 
-        if (array_length(p_feature[run]) != 0) {
+        if (array_length(p_feature[run])) {
             var planet_data = new PlanetData(run, self);
-            //initiate training logics rest to be found in scr_recruit_data
-            if (planet_feature_bool(p_feature[run], P_features.Recruiting_World)){
-                if (obj_controller.gene_seed == 0) and (obj_controller.recruiting > 0) {
-                    obj_controller.recruiting = 0;
-                    obj_controller.income_recruiting = 0;
-                    scr_alert("red", "recruiting", "The Chapter has run out of gene-seed!", 0, 0);
-                } else if (obj_controller.recruiting > 0){
-                    planet_data.marine_training();
-                }
-            }
+
             // Transforming billions pop number to a real number so the code can handle it
             // Otherwise, 3 and a half billions get translated as 3,50 instead of 3500000000
 
@@ -706,9 +711,10 @@ function scr_enemy_ai_e() {
             repeat(200) {
                 i += 1;
                 good = 0;
-                if (obj_ini.role[co, i] != "") and(obj_ini.loc[co, i] = name) and(obj_ini.TTRP[co, i].planet_location == floor(chaos_meeting)) then good += 1;
-                if (obj_ini.role[co, i] != obj_ini.role[100, 6]) and(obj_ini.role[co, i] != "Venerable " + string(obj_ini.role[100, 6])) then good += 1;
-                if (string_count("Dread", obj_ini.armour[co, i]) = 0) or(obj_ini.role[co, i] = "Chapter Master") then good += 1;
+                var _unit = fetch_unit([co,i]);
+                if (_unit.role() != "" && _unit.location_string = name) and(_unit.planet_location == floor(chaos_meeting)) then good += 1;
+                if (_unit.role() != obj_ini.role[100, 6]) and(_unit.role() != "Venerable " + string(obj_ini.role[100, 6])) then good += 1;
+                if (string_count("Dread", obj_ini.armour[co, i]) = 0) or(_unit.role() == obj_ini.role[100][eROLE.ChapterMaster]) then good += 1;
 
                 if (good = 3) {
                     obj_temp_meeting.dudes += 1;
@@ -716,7 +722,7 @@ function scr_enemy_ai_e() {
                     obj_temp_meeting.present[otm] = 1;
                     obj_temp_meeting.co[otm] = co;
                     obj_temp_meeting.ide[otm] = i;
-                    if (obj_ini.role[co, i] = "Chapter Master") then master_present = 1;
+                    if (_unit.role() == obj_ini.role[100][eROLE.ChapterMaster]) then master_present = 1;
                 }
             }
         }
@@ -743,7 +749,7 @@ function scr_enemy_ai_e() {
         }
     }
 
-    for (i=1;i<=planets;i++){
+    for (var i=1;i<=planets;i++){
         var existing_problem = has_any_problem_planet(i);
         if (!existing_problem){
             if (!irandom(50) && p_owner[i]==eFACTION.Imperium){

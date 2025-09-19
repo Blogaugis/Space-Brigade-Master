@@ -7,8 +7,8 @@ function scr_random_marine(role, exp_req, search_params="none"){
 	var company, i,  comp_size, unit, match, r, unit_role, marine_list;
 	company=0;i=0;
 	var company_list = [0,1,2,3,4,5,6,7,8,9,10]
-	if (role == "lib"){
-		role = role_groups("lib");
+	if (role == SPECIALISTS_LIBRARIANS){
+		role = role_groups(SPECIALISTS_LIBRARIANS);
 	}
 	for (var comp_shuffle=0;comp_shuffle<11;comp_shuffle++){
 		// this ensures that companies are searched randomly
@@ -44,7 +44,7 @@ function scr_random_marine(role, exp_req, search_params="none"){
 
 	        	//check correct search param roles
 	        	unit_role = unit.role()
-	        	if (unit_role == "Chapter Master"){
+	        	if (unit_role == obj_ini.role[100][eROLE.ChapterMaster]){
 	        		array_delete(marine_list, list_place ,1);
 					comp_size--;
 					continue;	        		
@@ -75,7 +75,7 @@ function scr_random_marine(role, exp_req, search_params="none"){
             	}
 
             	//check corect experience
-            	if (unit.experience()<exp_req){
+            	if (unit.experience<exp_req){
 	        		array_delete(marine_list, list_place ,1);
 					comp_size--;
 					continue;	        		
@@ -88,12 +88,24 @@ function scr_random_marine(role, exp_req, search_params="none"){
             		if (struct_exists(search_params, "trait")){
             			//list of traits (all required) need an option for if only one is required
             			if (is_array(search_params[$ "trait"])){
-            				for(var trait=0;trait<array_length(search_params[$ "trait"]);trait++){
-            					if (!array_contains(unit.traits, search_params[$ "trait"][trait])){
-            						match = false;
-            						break;
-            					}
+            				if (!struct_exists(search_params, "trait_any")){
+	            				for(var trait=0;trait<array_length(search_params[$ "trait"]);trait++){
+	            					if (!array_contains(unit.traits, search_params[$ "trait"][trait])){
+	            						match = false;
+	            						break;
+	            					}
+	            				}
+            				} else {
+	            				for(var trait=0;trait<array_length(search_params[$ "trait"]);trait++){
+	            					if (array_contains(unit.traits, search_params[$ "trait"][trait])){
+	            						match = true;
+	            						break;
+	            					} else {
+	            						match = false;
+	            					}
+	            				}            					
             				}
+
             			} else {
             				//search for single trait
             				if (!array_contains(unit.traits, search_params[$ "trait"])){
@@ -115,6 +127,51 @@ function scr_random_marine(role, exp_req, search_params="none"){
 							continue;	        		
 			        	}
             		}
+                    if (struct_exists(search_params, "role_tag")) {
+                        match = false;
+                        switch search_params.role_tag {
+                            case "Techmarine":
+                                if (unit.role_tag[eROLE_TAG.Techmarine] == true) {
+                                    match = true;
+                                }
+                                break;
+                            case "Librarian":
+                                if (unit.role_tag[eROLE_TAG.Librarian] == true) {
+                                    match = true;
+                                }
+                                break;
+                            case "Chaplain":
+                                if (unit.role_tag[eROLE_TAG.Chaplain] == true) {
+                                    match = true;
+                                }
+                                break;
+                            case "Apothecary":
+                                if (unit.role_tag[eROLE_TAG.Apothecary] == true) {
+                                    match = true;
+                                }
+                                break;
+                        }
+
+                        if (!match) {
+                            array_delete(marine_list, list_place, 1);
+                            comp_size--;
+                            continue;
+                        }
+                    }
+
+					if (struct_exists(search_params, "job")) {
+                        match = false;
+						if (unit.job == search_params[$ "job"]){
+							match = true;
+						}
+                        
+
+                        if (!match) {
+                            array_delete(marine_list, list_place, 1);
+                            comp_size--;
+                            continue;
+                        }
+                    }
             	}
             	//if match made exit loop and return unit
 	            if (match){

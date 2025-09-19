@@ -37,7 +37,9 @@ function scr_civil_roster(_unit_location, _target_location, _is_planet) {
 	obj_controller.bat_dreadnought_column=obj_controller.bat_drea_for[new_combat.formation_set];
 	obj_controller.bat_rhino_column=obj_controller.bat_rhin_for[new_combat.formation_set];
 	obj_controller.bat_predator_column=obj_controller.bat_pred_for[new_combat.formation_set];
-	obj_controller.bat_landraider_column=obj_controller.bat_land_for[new_combat.formation_set];
+	obj_controller.bat_landraider_column=obj_controller.bat_landraid_for[new_combat.formation_set];
+	obj_controller.bat_landspeeder_column = obj_controller.bat_landspee_for[new_combat.formation_set];
+    obj_controller.bat_whirlwind_column = obj_controller.bat_whirl_for[new_combat.formation_set];
 	obj_controller.bat_scout_column=obj_controller.bat_scou_for[new_combat.formation_set];
 
 	var co, v, meeting, he_good,unit;
@@ -100,10 +102,10 @@ function scr_civil_roster(_unit_location, _target_location, _is_planet) {
 	            if (new_combat.battle_special="cs_meeting_battle5") then new_combat.fighting[cooh,va]=1;
 	            if (new_combat.battle_special="cs_meeting_battle6") then new_combat.fighting[cooh,va]=1;
 	            if (new_combat.battle_special="cs_meeting_battle7"){
-	                if (unit.role()!="Chapter Master") then new_combat.fighting[cooh,va]=-5;
+	                if (unit.role()!=obj_ini.role[100][eROLE.ChapterMaster]) then new_combat.fighting[cooh,va]=-5;
 	            }
             
-	            if (unit.role()="Chapter Master") then new_combat.fighting[cooh,va]=1;
+	            if (unit.role()=obj_ini.role[100][eROLE.ChapterMaster]) then new_combat.fighting[cooh,va]=1;
 	            if (new_combat.fighting[cooh,va]=1) then he_good=1;
 	            if (new_combat.fighting[cooh,va]=-5) then he_good=-1;
             
@@ -200,7 +202,7 @@ function scr_civil_roster(_unit_location, _target_location, _is_planet) {
 	                targ.dudes[targ.men]=unit.role();
 	                targ.dudes_num[targ.men]=1;
 	                targ.dudes_hp[targ.men]=unit.hp();
-	                targ.dudes_exp[targ.men]=deploying_unit.experience[cooh,va];
+	                targ.dudes_exp[targ.men]=unit.experience;
 	                targ.dudes_powers[targ.men]=deploying_unit.spe[cooh,va];
 	                targ.dudes_wep1[targ.men]=deploying_unit.wep1[cooh,va];
 	                targ.dudes_wep2[targ.men]=deploying_unit.wep2[cooh,va];
@@ -335,7 +337,7 @@ function scr_civil_roster(_unit_location, _target_location, _is_planet) {
 	                    if (deploying_unit.mobi[cooh,va]="Jump Pack") then col=obj_controller.bat_assault_column;
 	                }
                 
-	                if (unit.role()="Chapter Master"){
+	                if (unit.role()=obj_ini.role[100][eROLE.ChapterMaster]){
 	                    col=obj_controller.bat_command_column;new_combat.important_dudes+=1;new_combat.big_mofo=1;
 	                    if (string_count("0",deploying_unit.spe[cooh,va])>0) then new_combat.chapter_master_psyker=1;
 	                    else{new_combat.chapter_master_psyker=0;}
@@ -359,7 +361,7 @@ function scr_civil_roster(_unit_location, _target_location, _is_planet) {
                     targ.marine_gear[targ.men] = deploying_unit.gear[cooh][va];
                     targ.marine_mobi[targ.men] = unit.mobility_item();
                     targ.marine_hp[targ.men] = unit.hp();
-                    targ.marine_exp[targ.men] = deploying_unit.experience[cooh][va];
+                    targ.marine_exp[targ.men] = unit.experience;
                     targ.marine_powers[targ.men] = deploying_unit.spe[cooh][va];
                     targ.marine_ranged[targ.men] = unit.ranged_attack();
                     targ.marine_ac[targ.men]=unit.armour_calc();

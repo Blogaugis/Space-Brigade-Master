@@ -5,7 +5,9 @@ the requested squad type , if the squad is not possible it will  not be made*/
 // company : the company you wish to create the squad in (int)
 //squad_loadout: true if you want to use the squad loadout sorting algorithem to re-equip the squad in accordance with the squad type loadout
 
-
+function fetch_squad(array_id){
+	return obj_ini.squads[array_id];
+}
 function create_squad(squad_type, company, squad_loadout = true, squad_index=false){
 
 	var squad_unit_types, fulfilled,unit, squad;
@@ -13,24 +15,24 @@ function create_squad(squad_type, company, squad_loadout = true, squad_index=fal
 	var fill_squad =  obj_ini.squad_types[$ squad_type];			//grab all the squad struct info from the squad_types struct
 	squad = new UnitSquad(squad_type, company);
 	squad.base_company = company;
-	squad.add_type_data(fill_squad[$ "type_data"]);		
+	squad.add_type_data(fill_squad[$"type_data"]);		
 	squad_unit_types = squad.find_squad_unit_types();
 	var squad_fulfilment = squad.squad_fulfilment;
 
 	var roles = obj_ini.role[100];
 	var sergeant_found = false;
-	var sgt_types = [roles[Role.SERGEANT], roles[Role.VETERAN_SERGEANT]];
+	var sgt_types = [roles[eROLE.Sergeant], roles[eROLE.VeteranSergeant]];
 
 	//if squad has sergeants in find out if there are any available sergeants
 	for (var s = 0; s < 2;s++){
 		if (struct_exists(squad_fulfilment ,sgt_types[s])){
 			sergeant_found = false;
-			for (i = 0; i < array_length(obj_ini.TTRPG[company]);i++){
+			for (var i = 0; i < array_length(obj_ini.TTRPG[company]);i++){
 				if(!is_struct(obj_ini.TTRPG[company][i])){
 					obj_ini.TTRPG[company][i]= new TTRPG_stats("chapter", company,i,"blank");
 				}
 				unit = fetch_unit([company, i]);
-				if ((unit.name() =="") or (unit.base_group=="none")) then continue;
+				if ((unit.name() =="" || unit.base_group=="none")) then continue;
 				if (unit.squad == "none"){
 					if (unit.role() == sgt_types[s]){
 						squad_fulfilment[$ sgt_types[s]] += 1;
@@ -42,7 +44,7 @@ function create_squad(squad_type, company, squad_loadout = true, squad_index=fal
 			}
 		}
 	}
-	for (i = 0; i < array_length( obj_ini.TTRPG[company]);i++){							//fill squad roles
+	for (var i = 0; i < array_length( obj_ini.TTRPG[company]);i++){							//fill squad roles
 		if(!is_struct(fetch_unit([company,i]))){ //checkposition is valid marine struct
 			obj_ini.TTRPG[company][i]= new TTRPG_stats("chapter", company,i,"blank");
 		}
@@ -69,15 +71,15 @@ function create_squad(squad_type, company, squad_loadout = true, squad_index=fal
 		if (struct_exists(squad_fulfilment ,sgt_types[s])) and (!sergeant_found){
 			var highest_exp = 0;
 			var exp_unit;
-			for (i = 0; i < array_length(squad.members);i++){
+			for (var i = 0; i < array_length(squad.members);i++){
 				if (i==0){
 					exp_unit = fetch_unit(squad.members[0]);
-					highest_exp = exp_unit.experience();
+					highest_exp = exp_unit.experience;
 					continue;
 				}
 				unit = fetch_unit(squad.members[i]);
-				if (unit.experience() > highest_exp){
-					highest_exp = unit.experience();
+				if (unit.experience > highest_exp){
+					highest_exp = unit.experience;
 					exp_unit = unit;
 				};
 			}
@@ -86,7 +88,7 @@ function create_squad(squad_type, company, squad_loadout = true, squad_index=fal
 	}
 	//evaluate if the minimum unit type requirements have been met to create a new squad
 	fulfilled = true;
-	for (i = 0;i < array_length(squad_unit_types);i++){
+	for (var i = 0;i < array_length(squad_unit_types);i++){
 		if (squad_fulfilment[$ squad_unit_types[i]] < fill_squad[$ squad_unit_types[i]][$ "min"]){
 			fulfilled = false;
 			break
@@ -103,7 +105,7 @@ function create_squad(squad_type, company, squad_loadout = true, squad_index=fal
 		}			
 		//update units squad marker
 		squad.squad_fulfilment = squad_fulfilment;
-		for (i = 0; i < array_length(squad.members);i++){
+		for (var i = 0; i < array_length(squad.members);i++){
 			unit = fetch_unit(squad.members[i]);
 			if (!squad_index){
 				unit.squad = squad_count;
@@ -138,7 +140,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 	type_data={};
 	formation_place=""
 	formation_options=[];
-	//nickname = scr_squad_names();
+	allow_bulk_swap = true;
 
 
 	//TODO introduce loyalty hits from long periods of exile from hierarchy nodes
@@ -152,10 +154,12 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 			in future i'd like to tailer these to marine skill sets e.g the marines with the best ranged stats get given the best ranged equipment	
 		*/
 	static sort_squad_loadout = function(from_armoury=true, to_armoury=true){
+		var unit;
+
 		var required_load, unit_type, load_out_name, load_out_areas, load_out_slot,load_item, optional_load, item_to_add;
 		squad_unit_types = find_squad_unit_types();
 		var full_squad_data =  obj_ini.squad_types[$ type];
-		for (i = 0;i < array_length(squad_unit_types);i++){
+		for (var i = 0;i < array_length(squad_unit_types);i++){
 			unit_type = squad_unit_types[i];
 			required_load = "none";
 			optional_load = "none";
@@ -165,7 +169,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 			 if (struct_exists(unit_squad_data,"loadout")){						//find out if the unit type for the squad has optional equipment thresholds
 				if (struct_exists(unit_squad_data[$ "loadout"],"option")){
 					if (optional_load == "none"){
-					  	optional_load = DeepCloneStruct(unit_squad_data[$ "loadout"][$ "option"]);			//create a fulfillment object for optional loadouts
+					  	optional_load = variable_clone(unit_squad_data[$ "loadout"][$ "option"]);			//create a fulfillment object for optional loadouts
 
 					  	optional_loadout_slots = struct_get_names(optional_load);
 
@@ -182,7 +186,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 				//if there are required loadout items
 				if (struct_exists(unit_squad_data[$ "loadout"],"required")){	//find out if the unit type for the squad has required  equipment thresholds
 					if (required_load == "none"){
-					  	required_load = DeepCloneStruct(unit_squad_data[$ "loadout"][$ "required"]);
+					  	required_load = variable_clone(unit_squad_data[$ "loadout"][$ "required"]);
 					  	required_loadout_slots = struct_get_names(required_load);
 						for (load_out_name = 0; load_out_name < array_length(required_loadout_slots);load_out_name++){
 							load_out_slot = required_loadout_slots[load_out_name];
@@ -285,9 +289,14 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 		}
 	}
 
+
+	static stat_average = function(stat){
+		
+	}
+
 	static add_type_data = function(data){
 		type_data=data;
-		display_name = type_data[$ "display_data"];
+		display_name = type_data[$"display_data"];
 		if (struct_exists(type_data, "class")){
 			class = type_data.class;
 		}
@@ -303,18 +312,34 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 
 	static find_squad_unit_types = function (){//find out what type of units squad consists of
 		var fill_squad =  obj_ini.squad_types[$ type];
-		squad_unit_types = struct_get_names(fill_squad);	
-		var unit_type_count = array_length(squad_unit_types);		
+		squad_unit_types = struct_get_names(fill_squad);
+		var _wanted_unit_role;	
+		var unit_type_count = array_length(squad_unit_types);	
 		for (var i = 0;i < unit_type_count;i++){
-			if (squad_unit_types[i] == "type_data"){
+			_wanted_unit_role = squad_unit_types[i];	
+			if (_wanted_unit_role == "type_data"){
 				array_delete(squad_unit_types, i, 1);
 				unit_type_count--;
 				i--;
 				continue;
 			}	
-			squad_fulfilment[$ squad_unit_types[i]] =0;	//create a fulfilment structure to log members of squad
+			squad_fulfilment[$ _wanted_unit_role] =0;	//create a fulfilment structure to log members of squad
 		}
 		return squad_unit_types;
+	}
+
+	static get_squad_structs = function(){
+		var _struct_array  = [];
+		for (var i = array_length(members)-1; i >= 0;i--){
+			unit = fetch_unit(members[i]);
+			if (unit.name() == ""){
+				array_delete(members, i, 1);
+				continue;
+			} else {
+				array_push(_struct_array, unit);
+			}
+		}
+		return _struct_array;
 	}
 	// for creating a new sergeant from existing squad members
 	static new_sergeant = function(veteran=false){
@@ -322,7 +347,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 		var unit;
 		var highest_exp = 0;
 		var member_length = array_length(members);
-		for (i = 0; i < member_length;i++){
+		for (var i = 0; i < member_length;i++){
 			unit = fetch_unit(members[i]);
 			if (unit.name() == ""){
 				array_delete(members, i, 1);
@@ -330,8 +355,8 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 				i--;
 				continue;
 			}			
-			if (unit.experience() > highest_exp){
-				highest_exp = unit.experience();
+			if (unit.experience > highest_exp){
+				highest_exp = unit.experience;
 				exp_unit = unit;
 			};
 		}
@@ -365,28 +390,26 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 		deleted if there are no longer enough members ot make a squad*/
 	static update_fulfilment = function(){
 		var unit;
+
 		squad_fulfilment ={};
 		var fill_squad =  obj_ini.squad_types[$ type];			//grab all the squad struct info from the squad_types struct
-		var squad_fulfilment = {};
+
 		var squad_unit_types = struct_get_names(fill_squad);		//find out what type of units squad consists of
 		var unit_type_count = array_length(squad_unit_types);		
-		for (var i = 0;i < unit_type_count;i++){
-			if (squad_unit_types[i] == "type_data"){
+		for (var i = unit_type_count-1;i>=0;i--){
+			var _wanted_unit_role = squad_unit_types[i];
+			if (_wanted_unit_role == "type_data"){
 				array_delete(squad_unit_types, i, 1);
-				unit_type_count--;
-				i--;
 				continue;				
 			}
-			squad_fulfilment[$ squad_unit_types[i]] = 0;	//create a fulfilment structure to log members of squad
+			squad_fulfilment[$ _wanted_unit_role] = 0;	//create a fulfilment structure to log members of squad
 		}
 		var member_length = array_length(members);
-		for (var i=0;i<member_length;i++){
+		for (var i=member_length-1;i>=0;i--){
 			//checks squad member is still valid
-			unit = fetch_unit(members[i]);
+			unit = fetch_member(i);
 			if (unit.name() == ""){
 				array_delete(members, i, 1);
-				member_length--;
-				i--;
 				continue;
 			}
 			if (struct_exists(squad_fulfilment, unit.role())){
@@ -399,35 +422,57 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 		required = {};
 		space = {};
 		has_space = false;
-		for (i = 0;i < array_length(squad_unit_types);i++){
-			if (squad_fulfilment[$ squad_unit_types[i]] < fill_squad[$ squad_unit_types[i]][$ "max"]){
-				space[$ squad_unit_types[i]] = fill_squad[$ squad_unit_types[i]][$ "max"] - squad_fulfilment[$ squad_unit_types[i]];
+		for (var i = 0;i < array_length(squad_unit_types);i++){
+			var _wanted_unit_role = squad_unit_types[i];
+			var _max_role_count = fill_squad[$ _wanted_unit_role][$ "max"];
+			var _squad_role_current = squad_fulfilment[$ _wanted_unit_role];
+
+			var _min_role_allowed = fill_squad[$ _wanted_unit_role][$ "min"];
+
+			if (_squad_role_current < _max_role_count){
+				space[$ _wanted_unit_role] = _max_role_count - _squad_role_current;
+				has_space = true;
 			}
-			has_space = true
-			if (squad_fulfilment[$ squad_unit_types[i]] < fill_squad[$ squad_unit_types[i]][$ "min"]){
+
+			if (squad_fulfilment[$ _wanted_unit_role] < _min_role_allowed){
 				fulfilled = false;
-				required[$ squad_unit_types[i]] = fill_squad[$ squad_unit_types[i]][$ "min"] - squad_fulfilment[$ squad_unit_types[i]];
+				required[$ _wanted_unit_role] = _min_role_allowed - _squad_role_current;
 			}
 		}		
 	}
 
+	static empty_squad = function(){
+		for (var r=array_length(members)-1;r>=0;r--){
+			fetch_member(r).squad = "none";
+		}
+		members = [];
+	}
+
+	static fetch_member= function(index){
+		return fetch_unit(members[index]);
+	}
+	
 	static add_member = function(comp, unit_number){
 		array_push(members, [comp, unit_number]);
 		life_members++;
 	}
 	// for saving squads
-	static jsonify = function(){
+	static jsonify = function(stringify = true){
 		var copy_struct = self; //grab marine structure
 		var new_struct = {};
 		var copy_part;
 		var names = variable_struct_get_names(copy_struct); // get all keys within structure
 		for (var name = 0; name < array_length(names); name++) { //loop through keys to find which ones are methods as they can't be saved as a json string
 			if (!is_method(copy_struct[$ names[name]])){
-				copy_part = DeepCloneStruct(copy_struct[$ names[name]])
+				copy_part = variable_clone(copy_struct[$ names[name]])
 				variable_struct_set(new_struct, names[name],copy_part); //if key value is not a method add to copy structure
 			}
 		}
-		return json_stringify(new_struct);
+		if(stringify){
+			return json_stringify(new_struct, true);
+		} else {
+			return new_struct;
+		}
 	}
 
 	//function for loading in squad save data
@@ -444,6 +489,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 		var locations = [];
 		var system = ""
 		var unit_loc;
+		var unit;
 		var same_system = true;
 		var same_loc_type = true;
 		var loc_type = false;
@@ -452,7 +498,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 		var in_orbit=false;
 		var planet_side=false;
 		var exact_loc = false;
-		for (i = 0; i < member_length;i++){
+		for (var i = 0; i < member_length;i++){
 			unit = fetch_unit(members[i]);
 			if (unit.name() == ""){
 				array_delete(members, i, 1);
@@ -516,6 +562,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 	//this means the highest ranking dude in a squad will always be the squad leader
 	//failing that the highest experience dude
 	static determine_leader = function(){
+		var unit;
 		var member_length = array_length(members);
 		var hierarchy = role_hierarchy();
 		var leader_hier_pos=array_length(hierarchy);
@@ -538,7 +585,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 						}
 					}
 				}else if (hierarchy[leader_hier_pos]==unit.role()){
-					if (obj_ini.TTRPG[leader[0]][leader[1]].experience()<unit.experience()){
+					if (obj_ini.TTRPG[leader[0]][leader[1]].experience<unit.experience){
 						leader=[unit.company, unit.marine_number];
 					}
 				}else{
@@ -562,14 +609,13 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 		var remove_sgt;
 		if (sgt!="none"){
 			remove_sgt = fetch_unit(sgt);
-			if (remove_sgt.IsSpecialist("squad_leaders")){
+			if (remove_sgt.IsSpecialist(SPECIALISTS_SQUAD_LEADERS)){
 				var replace_role = remove_sgt.role();
 				remove_sgt.update_role(new_sgt.role());
 				//TODO centralise loyalty changes for role changes in the update_role method
-				remove_sgt.loyalty-=10;
-				//TODO make update loyalty method to avoid manual 100 limit checks
+				remove_sgt.alter_loyalty(-10);
 				new_sgt.update_role(replace_role);
-				new_sgt.loyalty = min(100, new_sgt.loyalty+10);
+				new_sgt.alter_loyalty(10);
 			}
 		}
 	}
@@ -589,6 +635,7 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 	}
 
 	static member_loop = function(member_func, data_pack){
+		var unit;
 		member_length = array_length(members);
 		for (var i=0;i<member_length;i++){
 			unit = fetch_unit(members[i]);
@@ -613,6 +660,14 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 		return data_pack;
 
 	}
+
+	static get_members = function(){
+		var mems = [];
+		for (var i=0;i<array_length(members);i++){
+			array_push(mems, fetch_member(i));
+		}
+		return mems;
+	}
 }
 
 
@@ -621,18 +676,18 @@ function UnitSquad(squad_type = undefined, company = undefined) constructor{
 function game_start_squads(){
 	obj_ini.squads = [];
 	var last_squad_count
-	for (company=2;company < 10;company++){
+	for (var company=2;company < 10;company++){
 		create_squad("command_squad", company);
 		last_squad_count = array_length(obj_ini.squads);
 		while (last_squad_count == array_length(obj_ini.squads)){ ///keep making tact squads for as long as there are enough tact marines
-			if (global.chapter_name == "White Scars") or (array_contains(obj_ini.adv, "Lightning Warriors")) {
+			if (scr_has_adv("Boarders")) {
 				last_squad_count = (array_length(obj_ini.squads) + 1);
 				if(last_squad_count%2 == 0){		
 					create_squad("tactical_squad", company);
 				}else{
-					create_squad("bikers", company);
+					create_squad("breachers", company);
 				}
-			}else{
+			} else {
 				last_squad_count = (array_length(obj_ini.squads) + 1);
 				create_squad("tactical_squad", company);
 			}
@@ -644,16 +699,27 @@ function game_start_squads(){
 		}		
 		last_squad_count = array_length(obj_ini.squads);
 		while (last_squad_count == array_length(obj_ini.squads)){
-			if (global.chapter_name == "Imperial Fists") or (array_contains(obj_ini.adv, "Boarders")) {
+			if (scr_has_adv("Lightning Warriors")) {
 				last_squad_count = (array_length(obj_ini.squads) + 1);
 				if(last_squad_count%2 == 0){		
 					create_squad("assault_squad", company);
 				}else{
-					create_squad("breachers", company);
+					create_squad("bikers", company);
 				}
-			}else{
+			} else {
 				last_squad_count = (array_length(obj_ini.squads) + 1);
 				create_squad("assault_squad", company);
+			}
+		}
+		if(obj_ini.equal_scouts){
+			last_squad_count = array_length(obj_ini.squads);
+			while (last_squad_count == array_length(obj_ini.squads)){ ///keep making tact squads for as long as there are enough tact marines
+				last_squad_count = (array_length(obj_ini.squads) + 1);
+				if(last_squad_count%2 == 0){		
+					create_squad("scout_squad", company);
+				}else{
+					create_squad("scout_sniper_squad", company);
+				}
 			}
 		}
 	}
@@ -690,8 +756,8 @@ function game_start_squads(){
 	}
 
 	with (obj_ini){
-		for (i=0;i<11;i++){
-			scr_company_order(i)
+		for (var i = 0; i <= 10; i++){
+			scr_company_order(i);
 		}
 	}
 }
@@ -709,10 +775,10 @@ function set_member_loc (loc_data){
 			system.p_player[member_location[1]]-=size;
 			system.p_player[wid]+=size;
 			planet_location = wid;
-			ship_location = 0;
+			ship_location = -1;
 		}
 	} else {
-		if (wid == 0 && lid>0){
+		if (wid == 0 && lid>-1){
 			load_marine(lid);
 		}
 	}

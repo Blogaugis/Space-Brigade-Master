@@ -1,40 +1,17 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function scr_save_controller(save_id){
-    debugl("Saving to slot "+string(save_id));
+    log_message($"Saving to slot {save_id} - Part 1");
     ini_open($"save{save_id}.ini");
+
+
     // Global variables
     ini_write_string("Save","chapter_name",global.chapter_name);
     ini_write_string("Save","sector_name",obj_ini.sector_name);
-    ini_write_string("Save","version",GM_version);
+    ini_write_string("Save","version",global.game_version);
     ini_write_real("Save","play_time",play_time);
     ini_write_real("Save","game_seed",global.game_seed);
-    ini_write_real("Save","use_custom_icon",obj_ini.use_custom_icon);
 
-    var t=date_current_datetime();
-    var month=date_get_month(t);
-    var day=date_get_day(t);
-    var year=date_get_year(t);
-    var hour=date_get_hour(t);
-    var minute=date_get_minute(t);
-    var pm=(hour>=12 && hour<24) ? "PM":"AM";
-
-    if (hour=0) then hour=12;
-
-    var mahg=minute;
-    if (mahg<10) then minute=$"0{mahg}";
-
-    // if (minute<10) then minute="0"+string(minute);
-
-    ini_write_string("Save","date",string(month)+"/"+string(day)+"/"+string(year)+" ("+string(hour)+":"+string(minute)+" "+string(pm)+")");
-    ini_write_real("Save","founding",obj_ini.progenitor);
-    // ini_write_string("Save","founding_secret",global.founding_secret);
-    ini_write_real("Save","custom",global.custom);
-    ini_write_real("Save","stars",instance_number(obj_star));
-    ini_write_real("Save","p_fleets",instance_number(obj_p_fleet));
-    ini_write_real("Save","en_fleets",instance_number(obj_en_fleet));
-    ini_write_real("Save","sod",random_get_seed());
-    ini_write_real("Save","corrupt",1);
     // obj_controller variables here
     ini_write_real("boolean", "cheat_req", global.cheat_req);
     ini_write_real("boolean", "cheat_gene", global.cheat_gene);
@@ -62,7 +39,7 @@ function scr_save_controller(save_id){
     ini_write_real("Controller","tau_stars",obj_controller.tau_stars);
     ini_write_real("Controller","tau_messenger",obj_controller.tau_messenger);
     ini_write_real("Controller","fleet_all",obj_controller.fleet_all);
-    ini_write_real("Controller","tolerant",obj_ini.tolerant);
+    // ini_write_real("Controller","tolerant",obj_ini.tolerant);
     ini_write_real("Controller","stability",obj_ini.stability);
     ini_write_real("Controller","purity",obj_ini.purity);
     ini_write_real("Controller","unload",obj_controller.unload);
@@ -145,7 +122,9 @@ function scr_save_controller(save_id){
     ini_encode_and_json("Formation", "drea",obj_controller.bat_drea_for);
     ini_encode_and_json("Formation", "rhin",obj_controller.bat_rhin_for);
     ini_encode_and_json("Formation", "pred",obj_controller.bat_pred_for);
-    ini_encode_and_json("Formation", "land",obj_controller.bat_land_for);
+    ini_encode_and_json("Formation", "landraid",obj_controller.bat_landraid_for);
+    ini_encode_and_json("Formation", "landspee",obj_controller.bat_landspee_for);
+    ini_encode_and_json("Formation", "whirl",obj_controller.bat_whirl_for);
     ini_encode_and_json("Formation", "scou",obj_controller.bat_scou_for);
 
 
@@ -171,8 +150,9 @@ function scr_save_controller(save_id){
     ini_write_real("Controller","penitent_end",obj_controller.penitent_end);
     ini_write_real("Controller","penitent_blood",obj_controller.blood_debt);
     //
+    ini_write_real("Controller","tagged_training",obj_controller.tagged_training);
     ini_write_real("Controller","training_apothecary",obj_controller.training_apothecary);
-    ini_write_real("Controller","apothecary_points",obj_controller.apothecary_points);
+    ini_write_real("Controller","apothecary_recruit_points",obj_controller.apothecary_recruit_points);
     ini_write_real("Controller","apothecary_aspirant",obj_controller.apothecary_aspirant);
     ini_write_real("Controller","training_chaplain",obj_controller.training_chaplain);
     ini_write_real("Controller","chaplain_points",obj_controller.chaplain_points);
@@ -181,6 +161,8 @@ function scr_save_controller(save_id){
     ini_write_real("Controller","psyker_points",obj_controller.psyker_points);
     ini_write_real("Controller","psyker_aspirant",obj_controller.psyker_aspirant);
     ini_write_real("Controller","training_techmarine",obj_controller.training_techmarine);
+    ini_encode_and_json("Controller", "spec_train",obj_controller.spec_train_data);
+
     ini_write_real("Controller","tech_points",obj_controller.tech_points);
     ini_write_real("Controller","tech_aspirant",obj_controller.tech_aspirant);
 
@@ -196,7 +178,8 @@ function scr_save_controller(save_id){
     repeat(30){g+=1;
         ini_write_real("Controller","command"+string(g),obj_controller.command_set[g]);
     }
-    ini_write_real("Controller","blandify",obj_controller.blandify);
+    ini_write_real("Controller","modest_livery",obj_controller.modest_livery);
+    ini_write_real("Controller","progenitor_visuals",obj_controller.progenitor_visuals);
 
     ini_encode_and_json("Recruit", "data",{
     	names :obj_controller.recruit_name,
@@ -233,9 +216,6 @@ function scr_save_controller(save_id){
         ini_write_real("Factions","annoyed"+string(g),obj_controller.annoyed[g]);
         ini_write_real("Factions","ignore"+string(g),obj_controller.ignore[g]);
         ini_write_real("Factions","turns_ignored"+string(g),obj_controller.turns_ignored[g]);
-
-        ini_write_real("Factions","audience"+string(g),obj_controller.audien[g]);
-        ini_write_string("Factions","audience_topic"+string(g),obj_controller.audien_topic[g]);
     }
     //
     var g;g=0;
@@ -245,10 +225,6 @@ function scr_save_controller(save_id){
         ini_write_real("Ongoing","quest_end"+string(g),obj_controller.quest_end[g]);
     }
     var g;g=0;
-    repeat(99){g+=1;
-        ini_write_string("Ongoing","event"+string(g),obj_controller.event[g]);
-        ini_write_real("Ongoing","event_duration"+string(g),obj_controller.event_duration[g]);
-    }
     //
     ini_write_real("Controller","justmet",obj_controller.faction_justmet);
     ini_write_real("Controller","check_number",obj_controller.check_number);
@@ -265,7 +241,6 @@ function scr_save_controller(save_id){
     ini_write_real("Controller","income_home",obj_controller.income_home);
     ini_write_real("Controller","income_forge",obj_controller.income_forge);
     ini_write_real("Controller","income_agri",obj_controller.income_agri);
-    ini_write_real("Controller","income_recruiting",obj_controller.income_recruiting);
     ini_write_real("Controller","income_training",obj_controller.income_training);
     ini_write_real("Controller","income_fleet",obj_controller.income_fleet);
     ini_write_real("Controller","income_trade",obj_controller.income_trade);

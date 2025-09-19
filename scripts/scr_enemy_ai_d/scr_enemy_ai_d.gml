@@ -1,5 +1,5 @@
 function scr_enemy_ai_d() {
-
+    
 	if (x<-15000){x+=20000;y+=20000;}
 	if (x<-15000){x+=20000;y+=20000;}
 	if (x<-15000){x+=20000;y+=20000;}
@@ -53,15 +53,17 @@ function scr_enemy_ai_d() {
 	    }
     }
     for (var i=1;i<=planets;i++){
-        if (planet_problemless(i)) then continue;
         problem_count_down(i);
+        if (planet_problemless(i)) then continue;
         numeral_name = planet_numeral_name(i);
+
 	    if (has_problem_planet_and_time(i, "succession", 0)){
-            var dice1,dice2,result,alert_text;
-            dice1=floor(random(100))+1;
-            dice2=floor(random(100))+1;
+            var result,alert_text;
+            var dice1=roll_dice(1, 100);
+            var dice2=roll_dice(1, 100);
         
-            result="";alert_text="";
+            result="";
+            alert_text="";
             if (dice1<=(p_heresy[i]*2)) then result="chaos";
             if (dice2<=(p_influence[i][eFACTION.Tau]*2)) and (result="") then result="tau";
             if (result="") then result="imperial";
@@ -99,7 +101,7 @@ function scr_enemy_ai_d() {
             if (result="imperial") then scr_event_log("",alert_text);
             remove_planet_problem(i, "succession");
 	    }
-	   if (has_problem_planet_and_time(i, "recon", 0)){
+	   if (has_problem_planet_and_time(i, "recon", 0)>-1){
             var alert_text="Inquisition Mission Failed: Investigate ";
             alert_text+=string(name)+" "+scr_roman(i)+".";
             scr_alert("red","mission_failed",alert_text,0,0);
@@ -108,25 +110,28 @@ function scr_enemy_ai_d() {
             remove_planet_problem(i, "recon");
         }
 
-        if (has_problem_planet_and_time(i, "great_crusade", 0)){
-            var flet,cont,dir;cont=0;
-            flet=instance_nearest(x,y,obj_p_fleet);
+        if (has_problem_planet_and_time(i, "great_crusade", 0)>-1){
+            var dir;
+            var join_crusade=false;
+            var _player_fleet = instance_nearest(x,y,obj_p_fleet);
         
-            if (flet.action="") then cont=1;
-            if (cont=1) and (point_distance(x,y,flet.x,flet.y)<40) then cont=2;
+            if (_player_fleet.action=""){
+                if (point_distance(x, y, _player_fleet.x, _player_fleet.y)<10 ){
+                    join_crusade=true;
+                }
+            }
         
-            if (cont=2){
-                flet.action="crusade1";
+            if (join_crusade){
                 dir=point_direction(room_width/2,room_height/2,x,y);
-                flet.action_x=x+lengthdir_x(2000,dir);
-                flet.action_y=y+lengthdir_y(2000,dir);
-                // flet.action_eta=floor(random(8))+12;
-                flet.action_eta=floor(random(8))+2;
-                flet.alarm[4]=1;
+                with (_player_fleet){
+                    action_x=x+lengthdir_x(1200,dir);
+                    action_y=y+lengthdir_y(1200,dir);
+                    set_fleet_movement(false, "crusade1");
+                }
+
                 scr_alert("green","crusade","Fleet embarks upon Crusade.",x,y);
                 scr_event_log("","Fleet embarks upon Crusade.");
-            }
-            if (cont=1) or (cont=0){
+            }else {
                 // hit loyalty here
                 obj_controller.disposition[2]-=5;
                 obj_controller.disposition[4]-=10;
@@ -138,175 +143,8 @@ function scr_enemy_ai_d() {
         	remove_planet_problem(i, "great_crusade");
         }
 
-        var raider_planet_slot = has_problem_planet_with_time(i,"mech_raider");
-        if (raider_planet_slot){
-            check1=scr_role_count(obj_ini.role[100][16],string(name)+"|"+string(i)+"|");
-            check2=scr_vehicle_count("Land Raider",string(name)+"|"+string(i)+"|");
-            if (check1>=6) and (check2>=1){
-            	p_problem_other_data[p][raider_planet_slot].completion += 100/24;
-            	var completion = p_problem_other_data[i][raider_planet_slot].completion;
-            	scr_alert("",$"mission","Mechanicus Mission on {planet_numeral_name(i)} is {floor(completion)}% complete.",0,0);
-            	if (completion>=100){
-            		remove_planet_problem(i,"mech_raider")
-            		scr_mission_reward("mech_raider",id,i);
-            	}
-            }     	
-        }
-        var bionics_planet_slot = has_problem_planet_with_time(i,"mech_bionics");
-        if (bionics_planet_slot){
-            check1=scr_bionics_count("star",string(name),i,"number");
-            if (check1>=10){
-            	p_problem_other_data[p][bionics_planet_slot].completion += 100/24;
-            	var completion = p_problem_other_data[i][bionics_planet_slot].completion;
-            	scr_alert("",$"mission","Mechanicus Mission on {planet_numeral_name(i)} is {floor(completion)}% complete.",0,0);
-            	if (completion>=100){
-            		remove_planet_problem(i,"mech_bionics")
-            		scr_mission_reward("mech_bionics",id,i);
-            	}
-            }     	
-        }
-        var tomb2_planet_slot = has_problem_planet_with_time(i,"mech_tomb2");
-        if (tomb2_planet_slot){
-        	var battli=0;
-        	var roll1=floor(random(100))+1;
-        	var completion = p_problem_other_data[i][bionics_planet_slot].completion>0;
-        	if (completion>2){
-                if (roll1>=90) and (roll1<98) then battli=1;// oops
-                if (roll1>=98) then battli=2;// very oops, much necron, wow
-            
-                if (battli>0) and (p_player[i]>0){// Quene the battle
-                    obj_turn_end.battles+=1;
-                    obj_turn_end.battle[obj_turn_end.battles]=1;
-                    obj_turn_end.battle_world[obj_turn_end.battles]=i;
-                    obj_turn_end.battle_opponent[obj_turn_end.battles]=13;
-                    obj_turn_end.battle_location[obj_turn_end.battles]=name;
-                    obj_turn_end.battle_object[obj_turn_end.battles]=id;
-                    if (battli=1) then obj_turn_end.battle_special[obj_turn_end.battles]="study2a";
-                    if (battli=2) then obj_turn_end.battle_special[obj_turn_end.battles]="study2b";
-                
-                    if (obj_turn_end.battle_opponent[obj_turn_end.battles]=11){
-                        if (planet_feature_bool(p_feature[i],P_features.World_Eaters)==1){
-                            obj_turn_end.battle_special[obj_turn_end.battles]="world_eaters";
-                        }
-                    }
-                }
-                if (battli>0) and (p_player[i]<=0){// XDDDDD
-                    scr_popup("Mechanicus Mission Failed","The Mechanicus Research team on planet "+string(name)+" "+scr_roman(i)+" have been killed by Necrons in the absence of your astartes.  The Mechanicus are absolutely livid, doubly so because of the promised security they did not recieve.","","");
-                    obj_controller.turns_ignored[3]+=choose(8,10,12,14,16,18,20,22,24);
-                    obj_controller.disposition[3]-=25;
-                    remove_planet_problem(i,"mech_tomb2");
-                }
-        	}
-            if (completion>3) and (battli=0){// Done
-                if scr_has_adv("Shitty Luck") then roll1+=15;
-            
-                if (roll1>40) then scr_alert("","mission","Adeptus Mechanicus research within the Necron Tomb of "+string(name)+" "+scr_roman(i)+" continues.",0,0);
-            
-                if (roll1<=40){// Complete
-                    var reward,text;reward=choose(1,1,2);
-                    if (scr_has_adv("Tech-Brothers")) then reward=choose(1,2);
-                
-                    if (reward=1){obj_controller.requisition+=400;
-                        text="The Mechanicus Research team on planet "+string(name)+" "+scr_roman(i)+" have completed their work without any major setbacks.  Pleased with your astartes' work, they have granted you 400 Requisition to be used as you see fit.";
-                        scr_event_log("","Mechanicus Mission Completed: The Mechanicus research team on "+string(name)+" "+scr_roman(i)+" have completed their work.");
-                    }
-                    if (reward=2){
-                        if (obj_ini.fleet_type=ePlayerBase.home_world) then scr_add_artifact("random","",0,obj_ini.home_name,2);
-                        if (obj_ini.fleet_type != ePlayerBase.home_world) then scr_add_artifact("random","",0,obj_ini.ship[1],501);
-                        text="The Mechanicus Research team on planet "+string(name)+" "+scr_roman(i)+" have completed their work without any major setbacks.  Pleased with your astartes' work, they have granted your Chapter an artifact, to be used as you see fit.";
-                        scr_event_log("","Mechanicus Mission Completed: The Mechanicus research team on "+string(name)+" "+scr_roman(i)+" have completed their work.");
-                        scr_event_log("","Artifact gifted from Mechanicus.");
-                    }
-                
-                    scr_popup("Mechanicus Mission Completed",text,"mechanicus","");
-                
-                    obj_controller.disposition[3]+=1;
-                    remove_planet_problem(i,"mech_tomb2");
-                }
-            }        	
-        }
-        var tomb1_planet_slot = has_problem_planet_with_time(i,"mech_tomb1");
-        if (tomb1_planet_slot){
-        	if (scr_marine_count(id,i,20)>=20){
-        		remove_planet_problem(i,"mech_tomb1");
-        		add_new_problem(i, "mech_tomb2", 999,star="none", other_data={completion:0})
-                scr_popup("Mechanicus Research","The Mechanicus Research team on planet "+string(name)+" "+scr_roman(i)+" has taken note of your Astartes and are now prepared to begin their research.  Your marines are to stay on the planet until further notice.","necron_cave","");
-        	}
-        }
-        var mars_mech_mission = has_problem_planet_and_time(i,"mech_mars", 0);
-        if (mars_mech_mission){
-            var techs_taken,com,ide,ship_planet, unit;
-            techs_taken=0;com=-1;ide=0;ship_planet="";        	
-            for (com =0; com<=10;com++){
-                for (ide =0; ide<=array_length(obj_ini.role[com]);ide++){
-                    unit = fetch_unit([com,ide])
-                    if (unit.role()=obj_ini.role[100][Role.TECHMARINE]){
-                        // Case 1: on planet
-                        if (obj_ini.loc[com][ide]=name) and (unit.planet_location=i){
-                            p_player[i]-=scr_unit_size(obj_ini.armour[com][ide],obj_ini.role[com][ide],true);
-                            obj_ini.loc[com][ide]="Mechanicus Vessel";
-                            unit.planet_location=0;
-                            unit.ship_location=0;
-                            techs_taken+=1;
-                        }
-                        if (unit.ship_location>0){
-                            ship_planet=obj_ini.ship_location[unit.ship_location];
-                            if (ship_planet=name){
-                                obj_ini.ship_carrying[unit.ship_location]-=scr_unit_size(obj_ini.armour[com][ide],obj_ini.role[com][ide],true);
-                                obj_ini.loc[com][ide]="Mechanicus Vessel";unit.planet_location=0;unit.ship_location=0;
-                                techs_taken+=1;
-                            }
-                        }
-                    }
-                }
-            }
-            if (techs_taken=0){
-                var alert_text="Mechanicus Mission Failed: Journey to Mars Catacombs at "+string(name)+" "+scr_roman(i)+".";
-                scr_alert("red","mission_failed",alert_text,0,0);
-                scr_event_log("red",alert_text);
-                obj_controller.disposition[3]-=10;
-                remove_planet_problem(i,"mech_mars");
-            }
-        
-        
-            else if (techs_taken>0){
-                if (techs_taken>=20) then obj_controller.disposition[3]+=max(techs_taken,4);
-                var taxt="Mechanicus Ship departs for the Mars catacombs.  Onboard are "+string(techs_taken)+" of your "+string(obj_ini.role[100][16])+"s.";
-                scr_alert("","mission",taxt,0,0);
-                scr_event_log("green",taxt);
-            }
-            
-            var flit=instance_create(x,y,obj_en_fleet);
-            flit.owner = eFACTION.Mechanicus;
-            flit.sprite_index=spr_fleet_mechanicus;
-            flit.capital_number=1;flit.image_index=0;flit.image_speed=0;
-            flit.trade_goods="mars_spelunk1";
-            flit.home_x=x;
-            flit.home_y=y;
-            flit.action_x=x+lengthdir_x(3000,obj_controller.terra_direction);
-            flit.action_y=y+lengthdir_y(3000,obj_controller.terra_direction);
-            flit.action="move";flit.action_eta=48;                    	
-        }
-        if (has_problem_planet_and_time(i,"mech_tomb1", 0)){
-            var alert_text="Mechanicus Mission Failed: Necron Tomb Study at "+string(name)+" "+scr_roman(i)+".";
-            scr_alert("red","mission_failed",alert_text,0,0);
-            scr_event_log("red",alert_text, name);
-            obj_controller.disposition[3]-=15; 
-            remove_planet_problem(i,"mech_tomb1");       	
-        }
-        if (has_problem_planet_and_time(i,"mech_raider", 0)){
-            var alert_text="Mechanicus Mission Failed: Land Raider testing at "+string(name)+" "+scr_roman(i)+".";
-            scr_alert("red","mission_failed",alert_text,0,0);scr_event_log("red",alert_text);
-            obj_controller.disposition[3]-=6;
-            remove_planet_problem(i,"mech_raider");      	
-        }
-        if (has_problem_planet_and_time(i,"mech_bionics", 0)){
-            var alert_text="Mechanicus Mission Failed: Land Raider testing at "+string(name)+" "+scr_roman(i)+".";
-            scr_alert("red","mission_failed",alert_text,0,0);scr_event_log("red",alert_text);
-            obj_controller.disposition[3]-=6; 
-            remove_planet_problem(i,"mech_bionics");       	
-        }
-        if (has_problem_planet_and_time(i,"bomb", 0)){
+        mechanicus_missions_end_turn(i);
+        if (has_problem_planet_and_time(i,"bomb", 0)>-1){
 
             var alert_text="The Necron Tomb of planet ";
 
@@ -316,11 +154,11 @@ function scr_enemy_ai_d() {
         
             p_necrons[i]=4;
             if (awake_tomb_world(p_feature[i])==0) then awaken_tomb_world(p_feature[i]);
-        	remove_planet_problem(i,"bomb"); 
+        	remove_planet_problem(i,"necron"); 
             // scr_alert("red","mission_failed",alert_text,0,0);
             obj_controller.disposition[4]-=8;
         }
-        if (has_problem_planet_and_time(i,"inquisitor1", 6)|| has_problem_planet_and_time(i,"inquisitor2", 6)){
+        if (has_problem_planet_and_time(i,"inquisitor1", 6)>-1|| has_problem_planet_and_time(i,"inquisitor2", 6)>-1){
             var flit, x7,y7,drr;
             drr=random(floor(360))+1;
             x7=x+lengthdir_x(384,drr);
@@ -349,9 +187,9 @@ function scr_enemy_ai_d() {
            remove_planet_problem(i,"inquisitor1"); 
            remove_planet_problem(i,"inquisitor2"); 
         }
-         if (has_problem_planet_and_time(i,"spyrer", 0)){
+         if (has_problem_planet_and_time(i,"spyrer", 0)>-1){
             var alert_text,text;
-            var planet_name = planet_numeral_ name(i, self);
+            var planet_name = planet_numeral_name(i, self);
             alert_text=$"The Spyrer on {planet_name} has been left unchecked.  In the ensuing carnage some high-ranking officials have been killed, along with several Nobles.  Panic is running amock in several parts of the hives and the Inquisition is less than pleased.";
             text="Inquisition Mission Failed: The Spyrer on {planet_name} was not removed.";
             scr_popup("Inquisition Mission Failed",alert_text,"spyrer","");
@@ -359,98 +197,57 @@ function scr_enemy_ai_d() {
             scr_event_log("red",text);
             remove_planet_problem(i,"spyrer"); 
          }
-         if (has_problem_planet_and_time(i,"fallen", 0)){
+         if (has_problem_planet_and_time(i,"fallen", 0)>-1){
             //TODO marker point for cohesion mechanics
             var alert_text="";
             var unit;
-            if (ran>33){// Give all marines +3d6 corruption and reduce loyalty by 20*/
+            if (irandom(100)>33){// Give all marines +3d6 corruption and reduce loyalty by 20*/
                 var me=0;
                 for (var co=0;co<=obj_ini.companies;co++){
                     me=0;
                     for (me=0;me<array_length(obj_ini.role[co]);me++){
                         if (obj_ini.race[co][me]=1) and (obj_ini.role[co][me]!=""){
                             unit = fetch_unit([co,me]);
-                            unit.add_corruption(irandom_range(3, 18));
+                            unit.edit_corruption(irandom_range(3, 6));
+                            unit.alter_loyalty(10);
                         }
                     }
                 }
-                alert_text=$"Any Fallen that may have been on {planet_numeral_name(i)} ";
-                alert_text+="have been given sufficient time to escape.  Morale within your chapter has plummeted; some of your battle brothers have become restless and speak among eachother in hushed tones.";
-                scr_popup("Hunt the Fallen Failed",alert_text,"fallen","");
-                obj_controller.loyalty-=30;
-                obj_controller.loyalty_hidden-=30;
-                remove_planet_problem(i,"fallen"); 
-                scr_event_log("red",$"Mission Failed: Any Fallen within the {name} system have been given time to escape.");          	
-          }
+            }
+            alert_text=$"Any Fallen that may have been on {planet_numeral_name(i)} ";
+            alert_text+="have been given sufficient time to escape.  Morale within your chapter has plummeted; some of your battle brothers have become restless and speak among eachother in hushed tones.";
+            scr_popup("Hunt the Fallen Failed",alert_text + "\n\n(Chapter wide loyalty: -10)\nChaplains note marked changes in behaviour of some brothers" ,"fallen","");
+            obj_controller.loyalty-=10;
+            obj_controller.loyalty_hidden-=10;
+            remove_planet_problem(i,"fallen"); 
+            scr_event_log("red",$"Mission Failed: Any Fallen within the {name} system have been given time to escape.");          	
         }
         var garrison_mission = has_problem_planet_and_time(i,"provide_garrison", 0);
         if (garrison_mission>-1){
-            var planet = new PlanetData(i, self);
-            if (problem_has_key_and_value(i,garrison_mission,"stage", "active")){
-                if (planet.current_owner == eFACTION.Imperium && system_garrison[i-1].garrison_force){
-                    var mission_string = $"The garrison on {planet_numeral_name(i)} has finished the period of garrison support agreed with the planetary governor.";
-                    var p_garrison = system_garrison[i-1];
-                    var  result = p_garrison.garrison_disposition_change(id, i);
-                    if (!p_garrison.garrison_leader){
-                        p_garrison.find_leader();
-                    }
-                    if (result == "none"){
-                    //TODO make a dedicated plus minus string function if there isn't one already
-                    } else if (!result){
-                        var effect = result * irandom_range(1,5);
-                        dispo[i] += effect;
-                        mission_string += $"A number of diplomatic incidents occured over the period which had considerable negative effects on our disposition with the planetary governor (disposition -{effect})";
-                    } else {
-                        var effect = result * irandom_range(1,5);
-                        dispo[i] += result * effect;
-                        mission_string += $"As a diplomatic mission the duration of the stay was a success with our political position with the planet being enhanced greatly (disposition +{effect})";
-                    }
-                    var tester = global.character_tester;
-                    var widom_test = tester.standard_test(p_garrison.garrison_leader, "wisdom",0, ["siege"]);
-                    if (widom_test[0]){
-                        p_fortified[i]++;
-                        mission_string+=$"while stationed {p_garrison.garrison_leader.name_role()} makes several notable observations and is able to instruct the planets defense core leaving the world better defended (fortifications++).";
-                    }
-                    //TODO just generall apply this each turn with a garrison to see if a cult is found
-                    if (planet_feature_bool(p_feature[i], P_features.Gene_Stealer_Cult)){
-                        var cult = return_planet_features(planet.features,P_features.Gene_Stealer_Cult)[0];
-                        if (cult.hiding){
-                            widom_test = tester.standard_test(p_garrison.garrison_leader, "wisdom",0, ["tyranids"]);
-                            if (widom_test[0]){
-                                cult.hiding = false;
-                                mission_string+="Most alarmingly signs of a genestealer cult are noted by the garrison. how far the rot has gone will now need to be investigated and the xenos taint purged.";
-                            }
-                        }
-                    }
-                    scr_popup($"Agreed Garrison of {planet_numeral_name(i)} complete",mission_string,"","");
-                } else {
-                    dispo[i] -= 20;
-                    scr_popup($"Agreed Garrison of {planet_numeral_name(i)}",$"your agreed garrison of  {planet_numeral_name(i)} was cut short by your chapter the planetary governor has expressed his displeasure (disposition -20)","","");
-                }
-                remove_planet_problem(i, "provide_garrison");
-            } else {
-                remove_planet_problem(i, "provide_garrison");
+            try_and_report_loop("complete garrison mission", complete_garrison_mission,true, [i,garrison_mission]);
+        }
+        var _beast_hunt = has_problem_planet_and_time(i,"hunt_beast", 0);
+        if (_beast_hunt>-1){
+            try{
+                complete_beast_hunt_mission(i,_beast_hunt);
+            } catch (_exception){
+                handle_exception(_exception);
             }
         }
-        var beast_hunt = has_problem_planet_and_time(i,"hunt_beast", 0);
-        if (beast_hunt>-1){
-            var planet = new PlanetData(i, self);
-            if (problem_has_key_and_value(i,beast_hunt,"stage","active")){
-                mission_string = "";
-                
-                scr_popup($"Agreed Garrison of {planet_numeral_name(i)} complete story line mission and rewards need work",mission_string,"","");
-               
-                remove_planet_problem(i, "hunt_beast");
-            } else {
-                remove_planet_problem(i, "hunt_beast");
+
+        var train_forces = has_problem_planet_and_time(i,"train_forces", 0);
+        if (train_forces>-1){
+            try{
+                complete_train_forces_mission(i,train_forces);
+            } catch (_exception){
+                handle_exception(_exception);
             }
-        }        
+        }             
     
 	    if ((p_tyranids[i]=3) or (p_tyranids[i]=4)) and (p_population[i]>0){
 	        if (!(has_problem_planet(i, "Hive Fleet"))){
-	            var roll, cont;
-	            roll=irandom_range(100,300);
-	            cont=0;
+	            var roll=irandom_range(100,300);
+	            var cont=0;
         
             
 	            if (p_tyranids[i]=3) and (roll<=5) then cont=1;
@@ -501,11 +298,11 @@ function scr_enemy_ai_d() {
     
 	    }
 
-        if (has_problem_planet_and_time(i,"Hive Fleet", 3)){
+        if (has_problem_planet_and_time(i,"Hive Fleet", 3)>-1){
             var woop=scr_role_count("Chief "+string(obj_ini.role[100,17]),"");
         
             var o,yep,yep2;o=0;yep=true;yep2=false;
-            if (array_contains(obj_ini.dis, "Psyker Intolerant")) then yep=false;
+            if (scr_has_disadv("Psyker Intolerant")) then yep=false;
             
             if (obj_controller.known[eFACTION.Tyranids]=0) and (woop!=0) and (yep!=false){
                 scr_popup("Shadow in the Warp",$"Chief {obj_ini.role[100,17]} "+string(obj_ini.name[0,5])+" reports a disturbance in the warp.  He claims it is like a shadow.","shadow","");
@@ -515,7 +312,7 @@ function scr_enemy_ai_d() {
                 var q=0,q2=0;
                 repeat(90){
                     if (q2=0){q+=1;
-                        if (obj_ini.role[0,q]="Chapter Master"){q2=q;
+                        if (obj_ini.role[0,q]==obj_ini.role[100][eROLE.ChapterMaster]){q2=q;
                             if (string_count("0",obj_ini.spe[0,q2])>0) then yep2=true;
                         }
                     }
@@ -539,14 +336,14 @@ function scr_enemy_ai_d() {
 		storm-=1;
 	    if (storm=0){
 	        var tr="Warp Storms over "+string(name)+" dissipate.";
-	        scr_alert("green","warp",tr,x,y);scr_event_log("green",tr);
+	        scr_alert("green","Warp",tr,x,y);scr_event_log("green",tr);
 	    }
 	}
 	if (trader>0){
 		trader-=1;
 	    if (trader=0){
 	        var tr="Rogue Trader fleet departs from "+string(name)+".";
-	        scr_alert("green","warp",tr,x,y);scr_event_log("green",tr);
+	        scr_alert("green","Warp",tr,x,y);scr_event_log("green",tr);
 	    }
 	}
 
@@ -609,15 +406,17 @@ function scr_enemy_ai_d() {
                     break;
                 }
     
-                if ((p_owner[r]==eFACTION.Imperium) or (p_owner[r]==eFACTION.Ecclesiarchy))   and (p_type[r]!="Lava") and (p_type[r]!="Hive") and (p_type[r]!="Temperate")  then array_push(non_priority_requests, r);
+                if ((p_owner[r]==eFACTION.Imperium) or (p_owner[r]==eFACTION.Ecclesiarchy)){
+                    array_push(non_priority_requests, r);
+                }
             }
         }
     
-        if (array_length(pop_doner_options)>0 && array_length(non_priority_requests) && array_length(priority_requests)){
+        if (array_length(pop_doner_options)>0 && (array_length(non_priority_requests) || array_length(priority_requests))){
             var onceh=0;
             var random_chance=floor(random(100))+1;
             var doner_index = 0;
-            for(var i=1;i<array_length(pop_doner_options)i++){
+            for(var i=1;i<array_length(pop_doner_options); i++){
                 if (star_distace_calc(pop_doner_options[i]) < star_distace_calc(pop_doner_options[doner_index])){
                     doner_index = i;
                 }

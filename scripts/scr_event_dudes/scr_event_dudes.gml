@@ -8,14 +8,14 @@ function scr_event_dudes(do_action, is_planet, system_name, location_id) {
 	*/
 
 	if (do_action=1){
-	    if (obj_ini.progenitor=0){
+	    if (obj_ini.progenitor == ePROGENITOR.NONE) {
 	        if (obj_controller.fest_feasts<2) then obj_controller.fest_feasts=2;
 	    }
-	    if ((global.chapter_name="Space Wolves") or (obj_ini.progenitor=3)){
+	    if ((global.chapter_name="Space Wolves") || (obj_ini.progenitor == ePROGENITOR.SPACE_WOLVES)) {
 	        if (obj_controller.fest_feasts<10) then obj_controller.fest_feasts=10;
 	        if (obj_controller.fest_boozes<10) then obj_controller.fest_boozes=10;
 	    }
-	    if ((global.chapter_name="Blood Angels") or (obj_ini.progenitor=5)){
+	    if ((global.chapter_name="Blood Angels") || (obj_ini.progenitor == ePROGENITOR.BLOOD_ANGELS)) {
 	        if (obj_controller.fest_boozes<3) then obj_controller.fest_boozes=3;
 	    }
 	}
@@ -35,7 +35,7 @@ function scr_event_dudes(do_action, is_planet, system_name, location_id) {
 	        if (is_planet=0) and (unit.ship_location=location_id){
 	            if (obj_ini.race[coh,ide]=1) or (obj_ini.race[coh,ide]=5) then adding=true;
 	        }
-	        else if (is_planet=1) and (obj_ini.loc[coh,ide]=system_name) and (unit.planet_location==location_id){
+	        else if (is_planet=1) and (unit.location_string=system_name) and (unit.planet_location==location_id){
 	            if (obj_ini.race[coh,ide]=1) or (obj_ini.race[coh,ide]=5) then adding=true;
 	        }
         
@@ -59,7 +59,7 @@ function scr_event_dudes(do_action, is_planet, system_name, location_id) {
 	        // Don't compile a list and create an array in obj_event instead
 	        if (adding=true) and (do_action=1){
 	            var speshul=false;
-            		if (unit.IsSpecialist("heads")) then speshul=true;
+            		if (unit.IsSpecialist(SPECIALISTS_HEADS)) then speshul=true;
                 
 	                if (speshul=true){
 	                    obj_event.avatars+=1;
@@ -122,7 +122,7 @@ function scr_event_dudes(do_action, is_planet, system_name, location_id) {
 
 	// Yar har har
 	if (do_action=1){
-	    debugl("Event: Present marines passed to obj_event array");
+	    log_message("Event: Present marines passed to obj_event array");
 	    obj_event.time_max=obj_event.attendants*10;
     
 	    obj_event.alarm[0]=30;

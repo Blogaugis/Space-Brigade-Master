@@ -1,33 +1,34 @@
 
 //TODO almost all of this can be handled in the gui layer
 try{
-    script_execute(scr_ui_manage,0,0,0,0,0);
+    scr_ui_manage();
 } catch(_exception){
-    show_debug_message(_exception);
-    manage = 0;
-    menu = 0;
-
-}
-try{
-    script_execute(scr_ui_advisors,0,0,0,0,0);
-} catch(_exception){
-    show_debug_message(_exception);
-    manage = 0;
-    menu = 0;   
-}
-try{
-    script_execute(scr_ui_diplomacy,0,0,0,0,0);
-} catch(_exception){
-    show_debug_message(_exception);
-    manage = 0;
-    menu = 0;   
-}
-try{
-    script_execute(scr_ui_settings,0,0,0,0,0);
-} catch(_exception){
-    show_debug_message(_exception);
-    manage = 0;
-    menu = 0;   
+    handle_exception(_exception);
+    main_map_defaults();
 }
 
-script_execute(scr_ui_popup,0,0,0,0,0);
+try{
+    scr_ui_advisors();
+} catch(_exception){
+    handle_exception(_exception);
+    main_map_defaults(); 
+}
+ if (menu == MENU.Diplomacy){
+	try{
+	 /*if (audience > 0 && instance_exists(obj_turn_end)){
+	     menu = 20;
+		 }*/
+
+        scr_ui_diplomacy();
+	} catch(_exception){
+	 handle_exception(_exception);
+	 main_map_defaults(); 
+	}
+ }
+try{
+    scr_ui_settings();
+	scr_ui_popup();
+} catch(_exception){
+    handle_exception(_exception);
+    main_map_defaults(); 
+}

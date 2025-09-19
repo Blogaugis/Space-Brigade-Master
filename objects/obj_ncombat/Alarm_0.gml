@@ -1,16 +1,9 @@
 // Sets up the number of enemies based on the threath level, enemy type and specific story events
 
-try_and_report_loop("battle_Setup", function(){
+try{
 if (battle_special = "cs_meeting_battle5") then alpha_strike = 1;
 
 instance_activate_object(obj_enunit);
-
-// Checks if Chapter master is a psyker and then casts a pskychic power (kamehameha)
-if (chapter_master_psyker = true) and(obj_ini.psy_powers = "default") {
-	var yeo = false;
-	if (scr_has_adv("Paragon")) then yeo = true;
-	if (yeo = true) then kamehameha = true;
-}
 
 // show_message("Leader?: "+string(leader));
 
@@ -24,7 +17,8 @@ if (battle_special = "study2a") or(battle_special = "study2b") {
 	ally = 3;
 	ally_forces = 1;
 }
-
+instance_activate_object(obj_pnunit);
+if (!instance_exists(obj_pnunit)) then exit;
 xxx = instance_nearest(1000, 240, obj_pnunit);
 xxx = xxx.x + 80;
 
@@ -83,6 +77,25 @@ if (string_count("spyrer", battle_special) > 0) {
 	u.dudes_num[1] = 1;
 	enemies[1] = 1;
 	u.flank = 1;
+}
+
+if (battle_special == "protect_raiders") {
+	fortified = 0;
+	threat = 3;
+	u = instance_create(20, 240, obj_enunit);
+	u.dudes[1] = "Dire Avenger";
+	u.dudes_num[1] = 40;
+	u.dudes_special[1] = "shimmershield";
+	u.dudes[2] = "Dire Avenger Exarch";
+	u.dudes_num[2] = 4;
+	u.dudes_special[2] = "shimmershield";
+	u.dudes[3] = "Autarch";
+	u.dudes_num[3] = 1;
+	u.dudes[4] = "Farseer";
+	u.dudes_num[4] = 1;
+	u.dudes_special[4] = "farseer_powers";
+	u.dudes[5] = "Night Spinner";
+	u.dudes_num[5] = 1;
 }
 // * Small Fallen Group *
 if (battle_special = "fallen1") {
@@ -2241,7 +2254,7 @@ if (enemy = 10) and(battle_special != "ship_demon") and(battle_special != "falle
 }
 
 // ** Chaos Space Marines Forces **
-if (enemy = 11) and(battle_special != "world_eaters") and(string_count("cs_meeting_battle", battle_special) = 0) {
+if (enemy = 11) and(battle_special != "ChaosWarband") and(string_count("cs_meeting_battle", battle_special) = 0) {
 	// Small CSM Group
 	if (threat = 1) {
 		u = instance_nearest(xxx, 240, obj_enunit);
@@ -2463,7 +2476,7 @@ if (enemy = 11) and(battle_special != "world_eaters") and(string_count("cs_meeti
 }
 
 // ** World Eaters Forces **
-if (enemy = 11) and(battle_special = "world_eaters") {
+if (enemy = 11) and(battle_special = "ChaosWarband") {
 	// Small WE Group
 	if (threat = 1) {
 		u = instance_nearest(xxx, 240, obj_enunit);
@@ -3111,12 +3124,9 @@ if (player_defenses + player_silos > 0) {
 
 instance_activate_object(obj_enunit);
 
-},
-false,
-,
-function(){
+}catch (_exception) {
+	handle_exception(_exception);
 	instance_destroy(obj_enunit);
 	instance_destroy(obj_pnunit);
 	instance_destroy(obj_ncombat);
 }
-);

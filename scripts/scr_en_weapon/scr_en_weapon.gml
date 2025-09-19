@@ -21,7 +21,7 @@ function scr_en_weapon(name, is_man, man_number, man_type, group) {
 	acr = 0;
 	amm = -1;
 	faith_bonus = 0;
-
+	// var struct = gear_weapon_data("weapon",name);
 	if (string_count("elee", name) > 0) {
 		var to;
 		to = string_delete(name, 0, 5);
@@ -247,22 +247,96 @@ function scr_en_weapon(name, is_man, man_number, man_type, group) {
 	    }
 	}
 
-	if (obj_ncombat.enemy=13){// Some of these, like the Gauss Particle Cannon and Particle Whip, used to be more than twice as strong.
-	    if (name="Staff of Light"){atta=200;arp=1;rang=1;spli=3;}
-	    if (name="Staff of Light Shooting"){atta=180;arp=0;rang=3;spli=3;}
-	    if (name="Warscythe"){atta=200;arp=1;rang=1;spli=0;}
-	    if (name="Gauss Flayer"){atta=choose(50,50,50,50,50,70);atta=choose(30,30,30,30,30,70);rang=6.1;spli=0;}
-	    if (name="Gauss Blaster"){atta=choose(70,70,70,70,70,100);arp=choose(0,0,0,0,0,1);rang=6.1;spli=0;}
-	    if (name="Gauss Cannon"){atta=180;arp=1;rang=10;spli=3;}
-	    if (name="Gauss Particle Cannon"){atta=300;arp=1;rang=10.1;spli=3;}
-	    if (name="Overcharged Gauss Cannon"){atta=250;arp=1;rang=8.1;spli=3;}
-	    if (name="Wraith Claws"){atta=80;arp=1;rang=1;spli=0;}
-	    if (name="Claws"){atta=300;arp=1;rang=1;spli=0;}
-	    if (name="Gauss Flux Arc"){atta=180;arp=1;rang=8;spli=1;}
-	    if (name="Particle Whip"){atta=300;arp=1;rang=4.1;spli=1;}
-	    if (name="Gauss Flayer Array"){atta=180;arp=1;rang=8.1;spli=1;}
-	    if (name="Doomsday Cannon"){atta=300;arp=1;rang=6.1;spli=1;}
-		if (name="Large Vehicle Melee"){atta=100;arp=0;rang=1;spli=1;}
+	if (obj_ncombat.enemy = 13) { // Some of these, like the Gauss Particle Cannon and Particle Whip, used to be more than twice as strong.
+		if (name = "Staff of Light") {
+			atta = 200;
+			arp = 1;
+			rang = 1;
+			spli = 3;
+		}
+		if (name = "Staff of Light Shooting") {
+			atta = 180;
+			arp = 0;
+			rang = 3;
+			spli = 3;
+		}
+		if (name = "Warscythe") {
+			atta = 200;
+			arp = 1;
+			rang = 1;
+			spli = 0;
+		}
+		if (name = "Gauss Flayer") {
+			atta = choose(30, 30, 30, 50, 50, 70);
+			rang = 6.1;
+			spli = 0;
+		}
+		if (name = "Gauss Blaster") {
+			atta = choose(70, 70, 70, 70, 70, 100);
+			arp = choose(0, 0, 0, 0, 0, 1);
+			rang = 6.1;
+			spli = 0;
+		}
+		if (name = "Gauss Cannon") {
+			atta = 180;
+			arp = 1;
+			rang = 10;
+			spli = 3;
+		}
+		if (name = "Gauss Particle Cannon") {
+			atta = 300;
+			arp = 1;
+			rang = 10.1;
+			spli = 3;
+		}
+		if (name = "Overcharged Gauss Cannon") {
+			atta = 250;
+			arp = 1;
+			rang = 8.1;
+			spli = 3;
+		}
+		if (name = "Wraith Claws") {
+			atta = 80;
+			arp = 1;
+			rang = 1;
+			spli = 0;
+		}
+		if (name = "Claws") {
+			atta = 300;
+			arp = 1;
+			rang = 1;
+			spli = 0;
+		}
+		if (name = "Gauss Flux Arc") {
+			atta = 180;
+			arp = 1;
+			rang = 8;
+			spli = 3;
+		}
+		if (name = "Particle Whip") {
+			atta = 300;
+			arp = 1;
+			rang = 4.1;
+			spli = 3;
+		}
+		if (name = "Gauss Flayer Array") {
+			atta = 180;
+			arp = 1;
+			rang = 8.1;
+			spli = 3;
+		}
+		if (name = "Doomsday Cannon") {
+			atta = 300;
+			arp = 1;
+			rang = 6.1;
+			spli = 3;
+		}
+		if (name="Large Vehicle Melee") {
+			atta=100;
+			arp=0;
+			rang=1;
+			spli=1;
+		}
 	}
 
 	if (faith_bonus = 1) then atta = atta * 2;
@@ -281,9 +355,8 @@ function scr_en_weapon(name, is_man, man_number, man_type, group) {
 	var b, goody, first;
 	b = 0;
 	goody = 0;
-	first = 0;
+	first = -1;
 	repeat(30) {
-		b += 1;
 		if (wep[b] = name) and(goody = 0) {
 			att[b] += atta * man_number;
 			apa[b] += arp * man_number;
@@ -295,7 +368,8 @@ function scr_en_weapon(name, is_man, man_number, man_type, group) {
 			if (wep_owner[b] != "") or(man_number > 1) then wep_owner[b] = "assorted";
 			if (wep_owner[b] = "") and(man_number = 1) then wep_owner[b] = man_type;
 		}
-		if (wep[b] = "") and(first = 0) then first = b;
+		if (wep[b] = "") and(first = -1) then first = b;
+		b += 1;
 	}
 	if (goody = 0) {
 		wep[first] = name;
@@ -313,7 +387,6 @@ function scr_en_weapon(name, is_man, man_number, man_type, group) {
 
 	/*
 	wep[i]="";
-	combi[i]=0;
 	range[i]=0;
 	att[i]=0;
 	apa[i]=0;

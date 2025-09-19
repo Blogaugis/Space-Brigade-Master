@@ -34,17 +34,40 @@ if (enemy=6){
 
 
 if (enemy=7){
-    var i;i=0;i=en_capital;
+    var i=en_capital;
     
-    if (i>0){en_column[1]="Dethdeala";en_num[1]=floor(random(i))+1;i-=en_num[1];en_size[1]=3;}
+    if (i>0){
+        en_column[1]="Dethdeala";
+        en_num[1]=irandom_range(1, i);
+        i-=en_num[1];
+        en_size[1]=3;
+    }
     
-    if (i>0){en_column[2]="Gorbag's Revenge";en_num[2]=floor(random(i))+1;i-=en_num[2];en_size[2]=3;}// en_num[2]+=en_num[1]+1;
+    if (i>0){
+        en_column[2]="Gorbag's Revenge";
+        en_num[2]=irandom_range(1, i);
+        i-=en_num[2];
+        en_size[2]=3;
+    }// en_num[2]+=en_num[1]+1;
     
-    if (i>0){en_column[3]="Kroolboy";en_num[3]=i;i-=en_num[3];en_size[3]=3;}// en_num[3]+=en_num[2]+1;
+    if (i>0){
+        en_column[3]="Kroolboy";
+        en_num[3]=i;
+        i-=en_num[3];
+        en_size[3]=3;
+    }// en_num[3]+=en_num[2]+1;
     
-    if (en_frigate>0){en_column[4]="Battlekroozer";en_num[4]=en_frigate;en_size[4]=2;}// en_num[4]+=en_num[3]+1;
+    if (en_frigate>0){
+        en_column[4]="Battlekroozer";
+        en_num[4]=en_frigate;
+        en_size[4]=2;
+    }// en_num[4]+=en_num[3]+1;
     
-    if (en_escort>0){en_column[5]="Ravager";en_num[5]=en_escort;en_size[5]=1;}// en_num[5]+=en_num[4]+1;
+    if (en_escort>0){
+        en_column[5]="Ravager";
+        en_num[5]=en_escort;
+        en_size[5]=1;
+    }// en_num[5]+=en_num[4]+1;
 }
 
 if (enemy=8){
@@ -215,26 +238,6 @@ if (betchers=1) then global_melee=global_melee*0.95;
 if (catalepsean=1){global_attack=global_attack*0.95;}
 // if (occulobe=1){if (time=5) or (time=6) then global_attack=global_attack*0.7;global_defense=global_defense*0.9;}
 
-/*if (global.chapter_name="Dark Angels") or (obj_ini.main_color="Dark Green") then color_index=0;
-if (global.chapter_name="White Scars") or (obj_ini.main_color="White") then color_index=1;
-if (global.chapter_name="Space Wolves") or (obj_ini.main_color="Light Blue") then color_index=2;
-if (global.chapter_name="Imperial Fists") or (obj_ini.main_color="Yellow") then color_index=3;
-if (global.chapter_name="Blood Angels") or (obj_ini.main_color="Red") or (obj_ini.main_color="Dark Red") then color_index=4;
-if (global.chapter_name="Iron Hands") then color_index=5;
-if (global.chapter_name="Ultramarines") or (obj_ini.main_color="Blue") then color_index=6;
-if (global.chapter_name="Salamanders") or (obj_ini.main_color="Green") then color_index=7;
-if (global.chapter_name="Iron Hands") then color_index=7;
-if (global.chapter_name="Black Templars") or (obj_ini.main_color="Black") then color_index=8;
-if (global.chapter_name="Minotaurs") or (obj_ini.main_color="Brown") then color_index=9;
-if (global.chapter_name="Soul Drinkers") or (obj_ini.main_color="Purple") then color_index=10;
-if (global.chapter_name="Lamenters") then color_index=11;
-if (global.chapter_name="Emperor's Nightmares") then color_index=12;
-if (global.chapter_name="Angry Marines") then color_index=13;
-if (global.chapter_name="Star Krakens") then color_index=14;
-if (obj_ini.main_color="Pink") then color_index=15;*/
-
-
-
 /*
 global.chapter_name=5;
 obj_ini.main_color=obj_creation.main_color;
@@ -242,46 +245,6 @@ obj_ini.secondary_color=obj_creation.secondary_color;
 obj_ini.lens_color=obj_creation.lens_color;
 obj_ini.weapon_color=obj_creation.weapon_color;
 */
-
-
-
-/* */
-var i, k, onceh;i=0;k=0;onceh=0;
-
-// instance_activate_object(obj_combat_info);
-
-repeat(100){i+=1;
-    if (fighting[i]=1) and (obj_ini.ship_class[i]!="") then ships_max+=1;
-}
-
-
-
-
-i=0;
-repeat(100){i+=1;
-    if (fighting[i]=1) and (obj_ini.ship[i]!="") and (obj_ini.ship_hp[i]>0){onceh=0;
-        if (obj_ini.ship_size[i]=3) then capital+=1;
-        if (obj_ini.ship_size[i]=2) then frigate+=1;
-        if (obj_ini.ship_size[i]=1) then escort+=1;
-        
-        ship_class[i]=obj_ini.ship_class[i];
-        ship[i]=obj_ini.ship[i];ship_id[i]=i;ship_size[i]=obj_ini.ship_size[i];
-        ship_leadership[i]=100;ship_hp[i]=obj_ini.ship_hp[i];ship_maxhp[i]=obj_ini.ship_maxhp[i];
-        ship_conditions[i]=obj_ini.ship_conditions[i];ship_speed[i]=obj_ini.ship_speed[i];ship_turning[i]=obj_ini.ship_turning[i];
-        ship_front_armour[i]=obj_ini.ship_front_armour[i];ship_other_armour[i]=obj_ini.ship_other_armour[i];ship_weapons[i]=obj_ini.ship_weapons[i];
-        
-        var t;t=0;
-        t+=1;ship_wep[i,t]=obj_ini.ship_wep[i,t];ship_wep_facing[i,t]=obj_ini.ship_wep_facing[i,t];ship_wep_condition[i,t]=obj_ini.ship_wep_condition[i,t];
-        t+=1;ship_wep[i,t]=obj_ini.ship_wep[i,t];ship_wep_facing[i,t]=obj_ini.ship_wep_facing[i,t];ship_wep_condition[i,t]=obj_ini.ship_wep_condition[i,t];
-        t+=1;ship_wep[i,t]=obj_ini.ship_wep[i,t];ship_wep_facing[i,t]=obj_ini.ship_wep_facing[i,t];ship_wep_condition[i,t]=obj_ini.ship_wep_condition[i,t];
-        t+=1;ship_wep[i,t]=obj_ini.ship_wep[i,t];ship_wep_facing[i,t]=obj_ini.ship_wep_facing[i,t];ship_wep_condition[i,t]=obj_ini.ship_wep_condition[i,t];
-        t+=1;ship_wep[i,t]=obj_ini.ship_wep[i,t];ship_wep_facing[i,t]=obj_ini.ship_wep_facing[i,t];ship_wep_condition[i,t]=obj_ini.ship_wep_condition[i,t];
-        
-        ship_capacity[i]=obj_ini.ship_capacity[i];ship_carrying[i]=obj_ini.ship_carrying[i];
-        ship_contents[i]=obj_ini.ship_contents[i];ship_turrets[i]=obj_ini.ship_turrets[i];
-    }
-}
-
 
 alarm[2]=1;
 

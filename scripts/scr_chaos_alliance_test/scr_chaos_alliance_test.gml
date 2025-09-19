@@ -2,26 +2,24 @@ function scr_chaos_alliance_test() {
 
 
 	var accept_chance,o,result,jroll,shittah;
-	accept_chance=0;o=0;result="";jroll=floor(random(100))+1;shittah=false;
+	accept_chance=0;o=0;result="";jroll=roll_dice_chapter(1, 100, "high");
 
 	accept_chance+=(obj_controller.marines*0.00375);
 	accept_chance+=(obj_controller.command*0.00375);
 	
-	if (scr_has_adv("Daemon Binders")) then accept_chance+=2;
+	if (scr_has_disadv("Warp Tainted")) then accept_chance+=2;
 	if (scr_has_disadv("Suspicious")) then accept_chance+=1;
-	if (scr_has_adv("Psyker Abundance")) then accept_chance+=1;
+	if (scr_has_adv("Warp Touched")) then accept_chance+=1;
 
 	if (scr_has_adv("Reverent Guardians")) then accept_chance-=2;
 	if (scr_has_disadv("Never Forgive")) then accept_chance-=2;
 	if (scr_has_adv("Enemy: Fallen")){accept_chance-=999;result="fail_fallen";}
-	if (scr_has_disadv("Shitty Luck")) then shittah=true;
 	if (string_count("|CPF|",obj_controller.useful_info)>0) then result="fail_angry";
 	if (string_count("CHTRP2|",obj_controller.useful_info)>0) then result="fail";
 
 	if (accept_chance<3) and (result="") then result="fail";
 	if (accept_chance>=3) and (result=""){
 	    accept_chance=round(accept_chance*15);
-	    if (shittah=true) then accept_chance-=20;
     
 	    if (jroll<=accept_chance) then result="success";
 	    if (jroll>accept_chance) then result="success_trap";

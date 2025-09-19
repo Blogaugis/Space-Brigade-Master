@@ -1,5 +1,5 @@
 enum Colors {
-    White,
+    White = 0,
     Silver,
     Fenrisian_Grey,
     Grey,
@@ -9,7 +9,7 @@ enum Colors {
     Lighter_Black,
     Black,
     Red,
-    Sanguine_Red,
+    Sanguine_Red = 10,
     Dark_Red,
     Gold,
     Orange,
@@ -19,7 +19,7 @@ enum Colors {
     Deathwing,
     Bone,
     Yellow,
-    Dark_Gold,
+    Dark_Gold = 20,
     Copper,
     Lime,
     Green,
@@ -29,13 +29,16 @@ enum Colors {
     Dark_Green,
     Cyan,
     Turqoise,
-    Light_Blue,
+    Light_Blue = 30,
     Blue,
     Enchanted_Blue,
     Ultramarine,
     Dark_Ultramarine,
     Purple,
     Pink,
+    Imperial_Fists,
+    Raptors_Green,
+    Screamer_Pink
 }
 function scr_colors_initialize() {
 
@@ -48,8 +51,8 @@ function scr_colors_initialize() {
         ["Dark Metal", 105, 105, 105],
         ["Dark Grey", 70, 70, 70],
         ["Lighter Black", 52, 52, 52],
-        ["Black", 35, 35, 35],
-        ["Red", 201, 0, 0],
+        ["Black", 30, 32, 34],
+        ["Red", 220, 41, 41],
         ["Sanguine Red", 150, 0, 0],
         ["Dark Red", 124, 0, 0],
         ["Gold", 229, 162, 22],
@@ -75,8 +78,11 @@ function scr_colors_initialize() {
         ["Enchanted Blue", 58, 110, 158],
         ["Ultramarine", 4, 78, 168],
         ["Dark Ultramarine", 31, 74, 127],
-        ["Purple", 117, 0, 217],
+        ["Purple", 138, 45, 207],
         ["Pink", 255, 0, 198],
+        ["Imperial Fists", 255, 200, 0],
+        ["Raptors Green", 65, 74, 29],
+        ["Screamer Pink", 122, 14, 68]
     ];
 
 	global.colors_count = array_length(colors_array);
@@ -87,3 +93,15 @@ function scr_colors_initialize() {
         col_b[i] = colors_array[i][3];
     }
 }
+
+function get_shader_array(wanted_colour){
+    var _cols = [0,0,0];
+    with (obj_controller){
+        _cols = [col_r[wanted_colour]/255, col_g[wanted_colour]/255, col_b[wanted_colour]/255];
+    }
+
+    return _cols;
+}
+
+
+

@@ -347,8 +347,8 @@ function star_ui_name_node(){
 				} else {
 					scr_shader_initialize();
 					var main_color = make_colour_from_array(obj_controller.body_colour_replace);
-					var pauldron_color = make_colour_from_array(obj_controller.pauldron_colour_replace);
-					context.set_vertical_gradient(main_color, pauldron_color);
+					var right_pauldron = make_colour_from_array(obj_controller.pauldron_colour_replace);
+					context.set_vertical_gradient(main_color, right_pauldron);
 				}
 			})
 		.finalize()
@@ -362,8 +362,8 @@ function star_ui_name_node(){
 				context.set_valign(fa_middle)
 				context.owner.resize(new_w, 32)
 				if (owner == eFACTION.Player){
-					var trim_color = make_colour_from_array(obj_controller.trim_colour_replace);
-					context.set_color_solid(trim_color)
+					var main_trim = make_colour_from_array(obj_controller.trim_colour_replace);
+					context.set_color_solid(main_trim)
 				}
 			})
 		.finalize()
@@ -382,7 +382,7 @@ function star_ui_name_node(){
 				.set_callback(function(context) {
 					if (owner == eFACTION.Player) {
 						context.set_sprite(obj_img.creation[1])
-						context.set_image_index(obj_ini.icon)
+						context.set_image_index(0) // I have no idea what kind of schizo code this is, so I'll just set it to 0;
 					} else {
 						context.set_sprite(obj_img.force[owner])
 					}
@@ -392,66 +392,7 @@ function star_ui_name_node(){
 		.finalize()	
 }
 
-function MainMenuButton(sprite=spr_ui_but_1, sprite_hover=spr_ui_hov_1, xx=0, yy=0, Hot_key=-1, Click_function=false) constructor{
-	mouse_enter=0;
-	base_sprite = sprite;
-	hover_sprite = sprite_hover;
-	ossilate = 24;
-	ossilate_down = true;
-	hover_alpha=0;
-	XX=xx;
-	YY=yy;
-	hot_key = Hot_key;
-	clicked=false;
-	click_function = Click_function;
-	static draw = function(xx=XX,yy=YY,text="", x_scale=1, y_scale=1, width=108, height=42){
-		clicked=false;
-		height *=y_scale
-		width *=x_scale;
-		if (scr_hit(xx, yy, xx+width, yy+height)){
-			if (ossilate>0) then ossilate-=1;
-			if (ossilate<0) then ossilate=0;
-			if (hover_alpha<1) then hover_alpha+=0.42
-			draw_set_blend_mode(bm_add);
-			draw_set_alpha(hover_alpha);
-			draw_sprite(hover_sprite,0,xx,yy);
-			draw_set_blend_mode(bm_normal);
-			ossilate_down = true;
-			clicked = device_mouse_check_button_pressed(0,mb_left);
-		} else {
-			if (ossilate_down){
-				if (ossilate<24)then ossilate+=0.2;
-				if (ossilate==24) then ossilate_down=false;
-			} else {
-				if (ossilate>8) then ossilate-=0.2;
-				if(ossilate==8) then ossilate_down=true;
-			}
-			if (hover_alpha>0){
-				hover_alpha-=0.04
-				draw_set_blend_mode(bm_add);
-				draw_set_alpha(hover_alpha);
-				draw_sprite(hover_sprite,0,xx,yy);
-				draw_set_blend_mode(bm_normal);
-			}
-		}
-		if (hot_key!=-1 && !clicked){
-			clicked = press_with_held(hot_key,vk_alt);
-			//show_debug_message($"{clicked}");
-		}
-		draw_set_alpha(1);
-		draw_sprite(base_sprite,floor(ossilate),xx,yy);
-		draw_set_color(c_white);
-	    draw_set_halign(fa_center);
-	    draw_set_font(fnt_cul_14);
-	    draw_text_ext(xx+(width/2),yy+4, text, 18*y_scale, width-(15*x_scale));
-	    if (clicked){
-	    	if (click_function){
-	    		click_function();
-	    	}
-	    }
-	    return clicked;
-	}
-}
+
 
 
 

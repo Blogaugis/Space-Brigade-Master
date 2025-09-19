@@ -19,8 +19,8 @@ if (scr_hit(x,y,x+width,y+height)=true) and (obj_controller.dropdown_open=0){
         draw_rectangle(x,y,x+width,y+height,0);
     }
     
-    if (obj_controller.mouse_left=1) and (obj_controller.cooldown<=0) and (opened=0) and (options>1){
-        obj_controller.cooldown=10;opened=1;obj_controller.dropdown_open=1;
+    if (scr_click_left()) and (opened=0) and (options>1){
+        opened=1;obj_controller.dropdown_open=1;
     }
     draw_set_alpha(1);
     
@@ -29,7 +29,7 @@ if (scr_hit(x,y,x+width,y+height)=true) and (obj_controller.dropdown_open=0){
             tooltip=option[option_selected];
             if (target="event_display") and (option[option_selected]!="None"){
                 tooltip=option[option_selected];
-                tooltip2=obj_ini.artifact_struct[option_id[option_selected]].description();
+                tooltip2=fetch_artifact(option_id[option_selected]).description();
             }
             if (target="event_display") and (option[option_selected]="None"){
                 tooltip="Display";
@@ -63,11 +63,12 @@ if (opened=1){
                 draw_rectangle(x,y5,x+width,y5+hi,0);
                 
                 tooltip=option[ii];
-                if (target="event_display") and (option[ii]!="None"){tooltip=option[ii];tooltip2=obj_ini.artifact_struct[option_id[ii]].description();}
+                if (target="event_display") and (option[ii]!="None"){
+                    tooltip=option[ii];
+                    tooltip2=fetch_artifact(option_id[ii]).description();}
                 if (target="event_display") and (option[ii]="None"){tooltip="Display";tooltip2="There is no Artifact set to be displayed at the event.";}
                 
-                if (obj_controller.mouse_left=1) and (obj_controller.cooldown<=0){
-                    obj_controller.cooldown=10;
+                if (scr_click_left()){
                     obj_controller.dropdown_open=0;
                     opened=0;
                     
@@ -100,7 +101,8 @@ if (opened=1){
                     }
                     if (target="event_loc"){
                         if (obj_controller.fest_planet=0){
-                            obj_controller.fest_sid=option_id[ii];obj_controller.fest_wid=0;
+                            obj_controller.fest_sid=option_id[ii];
+                            obj_controller.fest_wid=0;
                             if (option_id[ii]>0){
                                 if (obj_controller.fest_warp=0) and (obj_ini.ship_location[option_id[ii]]="Warp") then obj_controller.fest_warp=1;
                                 if (obj_controller.fest_warp=1) and (obj_ini.ship_location[option_id[ii]]!="Warp") then obj_controller.fest_warp=0;
@@ -131,7 +133,7 @@ if (opened=1){
         }
     }
     
-    if (obj_controller.mouse_left=1) and (obj_controller.cooldown<=0) and (scr_hit(x,y,x+width,y5+yyy)=false){opened=0;obj_controller.dropdown_open=0;}
+    if (scr_click_left()) and (scr_hit(x,y,x+width,y5+yyy)=false){opened=0;obj_controller.dropdown_open=0;}
 }
 
 if (tooltip="Great Feast") then tooltip2="Holds a massive feast and celebration for your astartes.";

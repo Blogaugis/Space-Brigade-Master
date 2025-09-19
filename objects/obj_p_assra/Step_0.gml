@@ -71,8 +71,7 @@ if (boarding=true) and (board_cooldown>=0) and (instance_exists(target)) and (in
         o=firstest-1;difficulty=50;challenge=0;roll1=0;roll2=0;attack=0;arp=0;wep="";hits=0;hurt=0;damaged_ship=0;
         co=0;i=0;ac=0;dr=1;
         
-        repeat(boarders){
-            o+=1;
+        for (var o=0;o<array_length(origin.board_co);o++){
             if (!instance_exists(target)) then exit;
             
             // show_message(origin);
@@ -87,15 +86,15 @@ if (boarding=true) and (board_cooldown>=0) and (instance_exists(target)) and (in
             if (unit.hp()>0){
                 
                 // Bonuses
-                difficulty+=unit.experience()/20;
+                difficulty+=unit.experience/20;
                 difficulty+=(1-(target.hp/target.maxhp))*33;
                 //TODO define tag for bording weapons
                 if (array_contains(["Chainfist","Meltagun","Lascutter","Boarding Shield"], unit.weapon_one())) then difficulty+=3;
                 if (array_contains(["Chainfist","Meltagun","Lascutter","Boarding Shield"], unit.weapon_two())) then difficulty+=3;
 
-                if (array_contains(obj_ini.adv, "Boarders")) then  difficulty+=7;
-                if (array_contains(obj_ini.adv, "Melee Enthusiasts")) then  difficulty+=3;
-                if (array_contains(obj_ini.adv, "Lightning Warriors")) then  difficulty+=3;
+                if (scr_has_adv("Boarders")) then  difficulty+=7;
+                if (scr_has_adv("Assault Doctrine")) then  difficulty+=3;
+                if (scr_has_adv("Lightning Warriors")) then  difficulty+=3;
 
                 // Penalties
                 if (unit.weapon_one()=="")then difficulty-=10;
@@ -285,8 +284,8 @@ if (boarding=true) and (board_cooldown>=0) and (instance_exists(target)) and (in
                 
                     
                     // End, do the damage
-                    if (arp=1) then hurt=max(0,attack*dr);
-                    if (arp=0) then hurt=max(0,(attack-ac)*dr);
+                    if (arp=1) then hurt=max(0,attack*(1-dr));
+                    if (arp=0) then hurt=max(0,(attack-ac)*(1-dr));
                     
                     repeat(hits){
                         unit.add_or_sub_health(-hurt);
@@ -294,7 +293,7 @@ if (boarding=true) and (board_cooldown>=0) and (instance_exists(target)) and (in
                     
                     if (unit.hp()<=0){
                         boarders_dead+=1;
-                        if (unit.IsSpecialist("apoth") && unit.gear()=="Narthecium"){
+                        if (unit.IsSpecialist(SPECIALISTS_APOTHECARIES) && unit.gear()=="Narthecium"){
                             apothecary-=1;
                             apothecary_had-=1;
                         }
@@ -312,12 +311,11 @@ if (boarding=true) and (board_cooldown>=0) and (instance_exists(target)) and (in
         if (experience>0){
             var o=0,co=0,i=0;
             var new_exp, unit_exp, exp_roll;
-            repeat(boarders){
-                o+=1;
+            for (var o=0;o<array_length(origin.board_co);o++){
                 co=origin.board_co[o];
                 i=origin.board_id[o];               
                 unit = obj_ini.TTRPG[co][i];
-                unit_exp=unit.experience()                
+                unit_exp=unit.experience                
                 exp_roll=irandom(150+unit_exp)+1;
                 if (exp_roll>=unit_exp){
                     if (unit_exp<50){new_exp=experience

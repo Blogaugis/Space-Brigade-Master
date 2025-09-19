@@ -18,7 +18,7 @@ function default_bat_formation(){
 
 function scr_load_controller(save_id){
 		var rang=0,i=0,g=0,stars=0,pfleets=0,efleets=0;
-		debugl("Loading slot "+string(save_id));
+		log_message("Loading slot "+string(save_id));
 		var save_file_name = $"save{save_id}.ini";
 
 		if(file_exists("tsave.ini"))
@@ -33,12 +33,10 @@ function scr_load_controller(save_id){
 		}
 		else
 		{
-			debugl("Could not load save game " + save_file_name + ", file does not exist.");
+			log_error("Could not load save game " + save_file_name + ", file does not exist.");
 			game_restart();
 		}
-	    
-		// TODO temporary disabled. Will be reenabled during ironman/autosave feature task
-		//file_decrypt("tsave.ini","p");
+
 	    ini_open("tsave.ini");
 
 	    // Global variables
@@ -48,13 +46,12 @@ function scr_load_controller(save_id){
 		// TODO make it either throw error (if version is wrong) or try to upgrade the saved game data and version
 	    global.save_version=ini_read_string("Save","version",0);
 	    global.game_seed=ini_read_real("Save","game_seed",0);
-	    obj_ini.use_custom_icon=ini_read_real("Save","use_custom_icon",0);
 
 	    obj_controller.play_time=ini_read_real("Save","play_time",0);
 
-	    obj_ini.progenitor=ini_read_real("Save","founding",0);
+	    obj_ini.progenitor=ini_read_real("Save","founding",ePROGENITOR.NONE);
 	    // global.founding_secret=ini_read_string("Save","founding_secret","Error");
-	    global.custom=ini_read_real("Save","custom",1);
+	    global.custom=ini_read_real("Save","custom", eCHAPTER_TYPE.RANDOM);
 	    stars=ini_read_real("Save","stars",0);
 	    // pfleets=ini_read_real("Save","p_fleets",0);
 	    // efleets=ini_read_real("Save","en_fleets",0);
@@ -96,14 +93,13 @@ function scr_load_controller(save_id){
 	    obj_controller.tau_stars=ini_read_real("Controller","tau_stars",0);
 	    obj_controller.tau_messenger=ini_read_real("Controller","tau_messenger",0);
 	    obj_controller.fleet_all=ini_read_real("Controller","fleet_all",0);
-	    obj_ini.tolerant=ini_read_real("Controller","tolerant",0);
-	    obj_ini.stability=ini_read_real("Controller","stability",5);
+	    // obj_ini.tolerant=ini_read_real("Controller","tolerant",0);
+	    obj_ini.stability=ini_read_real("Controller","stability",90);
 	    obj_ini.purity=ini_read_real("Controller","purity",5);
-	    obj_controller.tolerant=ini_read_real("Controller","tolerant",0);
+	    // obj_controller.tolerant=ini_read_real("Controller","tolerant",0);
 	    obj_controller.unload=ini_read_real("Controller","unload",0);
 	    obj_controller.diplomacy=0;
 	    obj_controller.trading=0;
-	    obj_controller.audience=0;
 	    obj_controller.force_goodbye=0;
 	    obj_controller.combat=0;
 	    obj_controller.new_vehicles=ini_read_real("Controller","new_vehicles",0);
@@ -167,25 +163,27 @@ function scr_load_controller(save_id){
 	    if (obj_controller.last_raid_form=0) then obj_controller.last_raid_form=3;
 	    j=0;
 
-	   	obj_controller.bat_formation=return_json_from_ini("Formation","form",array_create(15,""));
-	    obj_controller.bat_formation_type=return_json_from_ini("Formation","form_type",array_create(15,0));
+	   	obj_controller.bat_formation=return_json_from_ini("Formation","form",array_create(17,""));
+	    obj_controller.bat_formation_type=return_json_from_ini("Formation","form_type",array_create(17,0));
         default_bat_formation();
 
-        obj_controller.bat_deva_for=return_json_from_ini("Formation","deva",array_create(15,1));
-        obj_controller.bat_assa_for=return_json_from_ini("Formation","assa",array_create(15,4));
-        obj_controller.bat_tact_for=return_json_from_ini("Formation","tact",array_create(15,2));
-        obj_controller.bat_vete_for=return_json_from_ini("Formation","vete",array_create(15,2));
-        obj_controller.bat_hire_for=return_json_from_ini("Formation","hire",array_create(15,3));
-        obj_controller.bat_libr_for=return_json_from_ini("Formation","libr",array_create(15,3));
-        obj_controller.bat_comm_for=return_json_from_ini("Formation","comm",array_create(15,3));
-        obj_controller.bat_tech_for=return_json_from_ini("Formation","tech",array_create(15,3));
-        obj_controller.bat_term_for=return_json_from_ini("Formation","term",array_create(15,3));
-        obj_controller.bat_hono_for=return_json_from_ini("Formation","hono",array_create(15,3));
-        obj_controller.bat_drea_for=return_json_from_ini("Formation","drea",array_create(15,5));
-        obj_controller.bat_rhin_for=return_json_from_ini("Formation","rhin",array_create(15,6));
-        obj_controller.bat_pred_for=return_json_from_ini("Formation","pred",array_create(15,7));
-        obj_controller.bat_land_for=return_json_from_ini("Formation","land",array_create(15,7));
-        obj_controller.bat_scou_for=return_json_from_ini("Formation","scou",array_create(15,1));
+        obj_controller.bat_deva_for=return_json_from_ini("Formation","deva",array_create(17,1));
+        obj_controller.bat_assa_for=return_json_from_ini("Formation","assa",array_create(17,4));
+        obj_controller.bat_tact_for=return_json_from_ini("Formation","tact",array_create(17,2));
+        obj_controller.bat_vete_for=return_json_from_ini("Formation","vete",array_create(17,2));
+        obj_controller.bat_hire_for=return_json_from_ini("Formation","hire",array_create(17,3));
+        obj_controller.bat_libr_for=return_json_from_ini("Formation","libr",array_create(17,3));
+        obj_controller.bat_comm_for=return_json_from_ini("Formation","comm",array_create(17,3));
+        obj_controller.bat_tech_for=return_json_from_ini("Formation","tech",array_create(17,3));
+        obj_controller.bat_term_for=return_json_from_ini("Formation","term",array_create(17,3));
+        obj_controller.bat_hono_for=return_json_from_ini("Formation","hono",array_create(17,3));
+        obj_controller.bat_drea_for=return_json_from_ini("Formation","drea",array_create(17,5));
+        obj_controller.bat_rhin_for=return_json_from_ini("Formation","rhin",array_create(17,6));
+        obj_controller.bat_pred_for=return_json_from_ini("Formation","pred",array_create(17,7));
+        obj_controller.bat_landraid_for=return_json_from_ini("Formation","landraid",array_create(17,7));
+        obj_controller.bat_landspee_for=return_json_from_ini("Formation","landspee",array_create(17,4));
+        obj_controller.bat_whirl_for=return_json_from_ini("Formation","whirl",array_create(17,1));
+        obj_controller.bat_scou_for=return_json_from_ini("Formation","scou",array_create(17,1));
 
 
 	    obj_controller.useful_info=ini_read_string("Controller","useful_info",""); 
@@ -207,8 +205,9 @@ function scr_load_controller(save_id){
 	    obj_controller.penitent_end=ini_read_real("Controller","penitent_end",0);
 	    obj_controller.blood_debt=ini_read_real("Controller","penitent_blood",0);
 
+	    obj_controller.tagged_training=ini_read_real("Controller","tagged_training",0);
 	    obj_controller.training_apothecary=ini_read_real("Controller","training_apothecary",0);
-	    obj_controller.apothecary_points=ini_read_real("Controller","apothecary_points",0);
+	    obj_controller.apothecary_recruit_points=ini_read_real("Controller","apothecary_recruit_points",0);
 	    obj_controller.apothecary_aspirant=ini_read_real("Controller","apothecary_aspirant",0);
 	    obj_controller.training_chaplain=ini_read_real("Controller","training_chaplain",0);
 	    obj_controller.chaplain_points=ini_read_real("Controller","chaplain_points",0);
@@ -219,6 +218,33 @@ function scr_load_controller(save_id){
 	    obj_controller.training_techmarine=ini_read_real("Controller","training_techmarine",0);
 	    obj_controller.tech_points=ini_read_real("Controller","tech_points",0);
 	    obj_controller.tech_aspirant=ini_read_real("Controller","tech_aspirant",0);
+
+	    obj_controller.spec_train_data = return_json_from_ini("Controller", "spec_train",[
+		    {
+		        name : "Techmarine",
+		        min_exp : 30,
+		        coord_offset : [0, 0],
+		        req : [["technology",34, "exmore"]]
+		    },
+		    {
+		        name : "Librarian",
+		        min_exp : 0,
+		        coord_offset : [0, -7],
+		        req : [["psionic", 1, "exmore"]]
+		    },
+		    {
+		        name : "Chaplain",
+		        min_exp : 60,
+		        coord_offset : [7, -7],
+		        req : [["piety", 34, "exmore"], ["charisma", 29, "exmore"]]
+		    },
+		    {
+		        name : "Apothecary",
+		        min_exp : 60,
+		        coord_offset : [7, 0],
+		        req : [["technology", 29, "exmore"], ["intelligence",44, "exmore"]]
+		    },
+		]);
 
 	    obj_controller.penitorium=ini_read_real("Controller","penitorium",0);
 
@@ -232,9 +258,10 @@ function scr_load_controller(save_id){
 	    if (Production_research!=0){
 	    	obj_controller.production_research = json_parse(base64_decode(Production_research));
 	    }
-	    var Forge_queue=ini_read_string("Controller","forge_queue",0);
-	    if (Forge_queue!=0){
-	    	obj_controller.forge_queue = json_parse(base64_decode(Forge_queue));
+	    specialist_point_handler = new SpecialistPointHandler();
+	    var forge_queue=ini_read_string("Controller","forge_queue",0);
+	    if (forge_queue!=0){
+	    	obj_controller.specialist_point_handler.forge_queue = json_parse(base64_decode(forge_queue));
 	    }
 	    var Stc_research=ini_read_string("Controller","stc_research",0);
 	    if (Stc_research!=0){
@@ -248,7 +275,8 @@ function scr_load_controller(save_id){
 	    if (obj_controller.command_set[23]=0) and (obj_controller.command_set[24]=0) then obj_controller.command_set[24]=1;
 
 
-	    ini_read_real("Controller","blandify",0);
+	    ini_read_real("Controller","modest_livery",0);
+		ini_read_real("Controller","progenitor_visuals",0);
 	    var _recruit_data = return_json_from_ini("Recruit", "data", {
 	    	names:[""],
 	    	corruption :[0],
@@ -295,8 +323,6 @@ function scr_load_controller(save_id){
 	        obj_controller.annoyed[g]=ini_read_real("Factions","annoyed"+string(g),0);
 	        obj_controller.ignore[g]=ini_read_real("Factions","ignore"+string(g),0);
 	        obj_controller.turns_ignored[g]=ini_read_real("Factions","turns_ignored"+string(g),0);
-	        obj_controller.audien[g]=ini_read_real("Factions","audience"+string(g),0);
-	        obj_controller.audien_topic[g]=ini_read_string("Factions","audience_topic"+string(g),"");
 	    }
 	    //
 	    var g;g=0;
@@ -304,11 +330,6 @@ function scr_load_controller(save_id){
 	        obj_controller.quest[g]=ini_read_string("Ongoing","quest"+string(g),"");
 	        obj_controller.quest_faction[g]=ini_read_real("Ongoing","quest_faction"+string(g),0);
 	        obj_controller.quest_end[g]=ini_read_real("Ongoing","quest_end"+string(g),0);
-	    }
-	    var g;g=0;
-	    repeat(99){g+=1;
-	        obj_controller.event[g]=ini_read_string("Ongoing","event"+string(g),"");
-	        obj_controller.event_duration[g]=ini_read_real("Ongoing","event_duration"+string(g),0);
 	    }
 	    //
 	    obj_controller.justmet=0;
@@ -326,7 +347,6 @@ function scr_load_controller(save_id){
 	    obj_controller.income_home=ini_read_real("Controller","income_home",0);
 	    obj_controller.income_forge=ini_read_real("Controller","income_forge",0);
 	    obj_controller.income_agri=ini_read_real("Controller","income_agri",0);
-	    obj_controller.income_recruiting=ini_read_real("Controller","income_recruiting",0);
 	    obj_controller.income_training=ini_read_real("Controller","income_training",0);
 	    obj_controller.income_fleet=ini_read_real("Controller","income_fleet",0);
 	    obj_controller.income_trade=ini_read_real("Controller","income_trade",0);
@@ -380,7 +400,7 @@ function scr_load_controller(save_id){
 		obj_controller.secondary_color = tempa2;
 		obj_ini.secondary_color = tempa2;
 
-		tempa = ini_read_string("Controller", "trim_color", "Error");
+		tempa = ini_read_string("Controller", "main_trim", "Error");
 		tempa2 = 0;
 		q = 0;
 		good = 0;
@@ -390,10 +410,10 @@ function scr_load_controller(save_id){
 				tempa2 = q;
 			}
 		}
-		obj_controller.trim_color = tempa2;
-		obj_ini.trim_color = tempa2;
+		obj_controller.main_trim = tempa2;
+		obj_ini.main_trim = tempa2;
 
-		tempa = ini_read_string("Controller", "pauldron2_color", "Error");
+		tempa = ini_read_string("Controller", "left_pauldron", "Error");
 		tempa2 = 0;
 		q = 0;
 		good = 0;
@@ -403,10 +423,10 @@ function scr_load_controller(save_id){
 				tempa2 = q;
 			}
 		}
-		obj_controller.pauldron2_color = tempa2;
-		obj_ini.pauldron2_color = tempa2;
+		obj_controller.left_pauldron = tempa2;
+		obj_ini.left_pauldron = tempa2;
 
-		tempa = ini_read_string("Controller", "pauldron_color", "Error");
+		tempa = ini_read_string("Controller", "right_pauldron", "Error");
 		tempa2 = 0;
 		q = 0;
 		good = 0;
@@ -416,8 +436,8 @@ function scr_load_controller(save_id){
 				tempa2 = q;
 			}
 		}
-		obj_controller.pauldron_color = tempa2;
-		obj_ini.pauldron_color = tempa2;
+		obj_controller.right_pauldron = tempa2;
+		obj_ini.right_pauldron = tempa2;
 
 		tempa = ini_read_string("Controller", "lens_color", "Error");
 		tempa2 = 0;

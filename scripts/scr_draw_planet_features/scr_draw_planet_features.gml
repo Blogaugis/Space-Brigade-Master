@@ -15,24 +15,22 @@ function FeatureSelected(Feature, system, planet) constructor{
 	planet_data = new PlanetData(planet,system);
 
 	if (feature.f_type == P_features.Forge){
-		var worker_caps= [2,4,8];
-		worker_capacity = worker_caps[feature.size-1];	
-		techs = collect_role_group("forge", obj_star_select.target.name);
+		var _worker_caps = [2,4,8];
+		worker_capacity = _worker_caps[feature.size-1];	
+		techs = collect_role_group(SPECIALISTS_TECHS, obj_star_select.target.name);
 		feature.techs_working = 0;
 		for (var i=0;i<array_length(techs);i++){
-			if (techs[i].assignment()=="forge" && techs[i].job.planet == obj_controller.selecting_planet){
-				feature.techs_working++;
-				if (feature.techs_working==worker_capacity) then break;
+			var _cur_tech = techs[i];
+			if (_cur_tech.assignment()=="forge"){
+				if (_cur_tech.job.planet == planet_data.planet){
+					feature.techs_working++;
+					if (feature.techs_working==worker_capacity) then break;
+				}
 			}
 		}
 	}
 
 	draw_planet_features = function(xx,yy){
-		if (!struct_exists(self,"planet_data")){
-			planet_data = new PlanetData(obj_controller.selecting_planet,obj_controller.selected.id);
-		} else if (!is_struct(planet_data)){
-			planet_data = new PlanetData(obj_controller.selecting_planet,obj_controller.selected.id);
-		}
 	    draw_set_halign(fa_center);
 	    draw_set_font(fnt_40k_14);
 	    //draw_sprite(spr_planet_screen,0,xx,yy);
@@ -53,6 +51,7 @@ function FeatureSelected(Feature, system, planet) constructor{
 	    var area_height = main_slate.height;
 	    var generic = false;
 	    var title="", body="";
+	    var _button_tooltip = "";
 	    //draw_glow_dot(xx+150, yy+150);
 	    //rack_and_pinion(xx+230, yy+170);
 	    var rectangle = [];
@@ -75,9 +74,9 @@ function FeatureSelected(Feature, system, planet) constructor{
 						purpose:"Forge Assignment",
 						purpose_code : "forge_assignment",
 						number:worker_capacity,
-						system:obj_controller.selected.id,
-						feature:obj_star_select.feature,
-						planet : obj_controller.selecting_planet,
+						system:planet_data.system,
+						feature:feature,
+						planet : planet_data.planet,
 						selections : []
 					});
 					destroy=true;
@@ -104,7 +103,7 @@ function FeatureSelected(Feature, system, planet) constructor{
 					if (point_and_click(build_coords) && obj_controller.requisition>=upgrade_cost){
 						feature.vehicle_hanger=1;
 						obj_controller.requisition -=  upgrade_cost;
-						array_push(obj_controller.player_forge_data.vehicle_hanger,[obj_controller.selected.name,obj_controller.selecting_planet]);
+						array_push(obj_controller.player_forge_data.vehicle_hanger,[obj_controller.selected.name,planet_data.planet]);
 					}					
 				} else if(feature.vehicle_hanger){
 					draw_text(next_position[0], next_position[1], "Forge has a vehicle hanger")
@@ -152,7 +151,7 @@ function FeatureSelected(Feature, system, planet) constructor{
 				}else if (cult_control<75){
 					control_string = "Has managed to galvanise the populace to overcome the former governor of the planet turning much of the local pdf to it's cause, it must be stopped, lest it spread.";
 				} else {
-					control_string = "The Cults rot and control of the planet is complete even if the cult can be dismantled the rot is great and the population will need significant purging and monitering to remove the rot";
+					control_string = "The cult’s rot and control of the planet is complete; even if the cult can be dismantled, the corruption is great and the population will need significant purging and monitoring to remove the taint";
 				}
 				body = $"The Cult of {feature.name} {control_string}";
 				break;				
@@ -179,9 +178,55 @@ function FeatureSelected(Feature, system, planet) constructor{
 					};
 				}
 				break;
+			case P_features.OrkStronghold:
+				title = "Ork Stronghold";
+				generic = true;
+				if (planet_data.planet_forces[eFACTION.Ork]){
+					body = $"For as long as this Stronghold stands the orks here will continue to fortify it. The larger it gets the greater the capacity of this planet to produce orkish machines of war and ships and the better protected the ork forces will be from bombardment";
+				} else {
+					body = "Without a force of orks to hold it together the fortress is slowly pulled apart from within by the inhabitants, It's capabilities will constantly decrease until soon there will be nothing left";
+				}
+				break
+            case P_features.Recruiting_World:
+                generic = true;
+                var _planet = planet_data.planet;
+                var _star = obj_star_select.target;
+                var p_data = new PlanetData(_planet, _star);
+                var _recruit_world = p_data.get_features(P_features.Recruiting_World)[0];
+                var _spare_apoth_points = p_data.get_local_apothecary_points();
+                title = "Marine Recruitment";
+                body = $"There are {_spare_apoth_points} apothecary rescource points available for recruit screening,\n\n";
+                var _recruit_find_chance = find_recruit_success_chance(_spare_apoth_points, _star, _planet, 1);
+
+                body += $"There is a {_recruit_find_chance * 100}% of producing a successful recruit this month on the basis of the available apothecary time to screen candidates and the chances of the aspirants passing their trials to an acceptable standard,\n\n";
+
+                if (obj_controller.faction_status[p_data.current_owner] == "War" || obj_controller.faction_status[p_data.current_owner] == "Antagonism") && (p_data.player_disposition <= 50) { // TODO LOW RECRUITING_DIALOG // Make this more dynamic.
+                    if (_recruit_world.recruit_type == 0) {
+                        body += "Since our relations with the populations' faction are... strained, we are having to do our recruiting operation covertly,\n\n"
+                    } else {
+                        body += "Since our relations with the populations' faction are... strained, we are having to do our recruiting operation covertly,"
+                        body += " our brothers are authorized to use more extreme methods of recruitment,\n\n"
+                    }
+                } else if (obj_controller.faction_status[p_data.current_owner] == "War" || obj_controller.faction_status[p_data.current_owner] == "Antagonism") {
+                    if (_recruit_world.recruit_type == 0) {
+                        body += "The population has grown accustomed to us and their Governor has given us the clear to openly recruit,\n\n"
+                    } else {
+                        body += "The population has grown accustomed to us and their Governor has given us the clear to openly recruit,"
+                        body += " however our brothers are still authorized to use more extreme methods of recruitment regardless,\n\n"
+                    }
+                } else if (_recruit_world.recruit_type == 1){
+                    body += "We've authorized our brothers to use more extreme methods of recruitment, should we really allow this Milord?\n\n"
+                }
+
+                if (p_data.player_disposition < 100) {
+                    body += "To increase recruit success chance more apothecaries will be required on the planet surface, we could also deploy garrisons to make the population more friendly to our chapter.";
+                } else {
+                    body += "To increase recruit success chance more apothecaries will be required on the planet surface.";
+                }
+                break;
 			case P_features.Mission:
 				var mission_description=$"";
-				var planet_name = planet_numeral_name(obj_controller.selecting_planet, obj_star_select.target);
+				var planet_name = planet_numeral_name(planet_data.planet, obj_star_select.target);
 				var button_text="none";
 				var button_function="none";
 				var help = "none";
@@ -191,7 +236,7 @@ function FeatureSelected(Feature, system, planet) constructor{
 						if (feature.reason == "importance"){
 
 						}
-						mission_description=$"The governor of {planet_name} has requested a force of marines might stay behind following your departure.\n\n\n assign a squad to garrison to initiate mission, The garrison leeader will need to be capable of conducting himself in a diplomatic manor in order for the garrison duration to be a success";
+						mission_description=$"The governor of {planet_name} has requested a force of marines might stay behind following your departure.\n\n\n assign a squad to garrison to initiate mission, The garrison leeader will need to be capable of conducting himself in a diplomatic manner in order for the garrison duration to be a success";
 
 						break;
 					case "join_communion":
@@ -199,6 +244,7 @@ function FeatureSelected(Feature, system, planet) constructor{
 						break;
 					case "hunt_beast":
 						mission_description=$"The governor of {planet_name} has bemoaned the raiding of huge beasts on the fringes of the planets largest city, the numbers have swelled recently and are causing huge damage to the planets small economy. You could send a force to intervene, it would provide a fine test of metal for any that partake.";
+						help = "This is a good opportunity to provide experience and training, having at least one marine with experience in such matters would be advisable";
 						button_text = "Send Hunters";
 						button_function = function(){
 							var dudes = collect_role_group("all", obj_star_select.target.name);
@@ -206,31 +252,50 @@ function FeatureSelected(Feature, system, planet) constructor{
 								purpose:"Beast Hunt",
 								purpose_code : feature.problem,
 								number:3,
-								system:obj_controller.selected.id,
+								system:planet_data.system,
 								feature:obj_star_select.feature,
-								planet : obj_controller.selecting_planet,
+								planet : planet_data.planet,
+								array_slot : feature.array_position,
 								selections : []
 							});
 							destroy=true;
 						}
 						break;
 					case "protect_raiders":
-						mission_description=$"The governor of {planet_name} has sent many requests to the sector commander for help with defending against xenos raids on the populace of the planet, the reports seem to suggest the xenos in question are in fact dark elder.";
-						help = "Set a squad to ambush ";
+						mission_description=$"The governor of {planet_name} has sent many requests to the sector commander for help with defending against xenos raids on the populace of the planet, the reports seem to suggest the xenos in question are in fact dark eldar.";
+						help = "Set a squad to ambush";
+						button_text = "Send Squad";
+						_button_tooltip = "milage may vary on playability of this mission progress at your own risk";
+						button_function = function(){
+							var dudes = collect_role_group("all", obj_star_select.target.name);
+							group_selection(dudes,{
+								purpose:"Select Squad for Ambush",
+								purpose_code : feature.problem,
+								number:1,
+								system : planet_data.system,
+								feature:obj_star_select.feature,
+								planet : planet_data.planet,
+								array_slot : feature.array_position,
+								select_type : MissionSelectType.Squads,
+								selections : []
+							});
+							destroy=true;
+						}		
 						break;
 					case "train_forces":
 						mission_description=$"The governor of {planet_name} fears the planet will not hold in the case of major incursion, it has not seen war in some time and he fears the ineptitude of the commanders available, he asks for aid in planning a thorough plan for defense and schedule of works for a period of at least 6 months.";
 						help = $"A task best suited to the more knowledgable or wise of your Commanders"
 						button_text = "Assign Officer";
 						button_function = function(){
-							var dudes = collect_role_group("captain_candidates", obj_star_select.target.name);
+							var dudes = collect_role_group(SPECIALISTS_CAPTAIN_CANDIDATES, obj_star_select.target.name);
 							group_selection(dudes,{
 								purpose:"Select Officer",
 								purpose_code : feature.problem,
 								number:1,
-								system:obj_controller.selected.id,
+								system:planet_data.system,
 								feature:obj_star_select.feature,
-								planet : obj_controller.selecting_planet,
+								planet : planet_data.planet,
+								array_slot : feature.array_position,
 								selections : []
 							});
 							destroy=true;
@@ -251,8 +316,12 @@ function FeatureSelected(Feature, system, planet) constructor{
 				}
 				
 				if (button_text!="none"){
-					if (point_and_click(draw_unit_buttons([xx+((area_width/2)-(string_width(button_text)/2)), yy+40+text_body_height+10], button_text))){
-						if (is_method(button_function)){
+					var _button = draw_unit_buttons([xx+((area_width/2)-(string_width(button_text)/2)), yy+40+text_body_height+10], button_text);
+					if (_button_tooltip != "" && scr_hit(_button)){
+						tooltip_draw(_button_tooltip);
+					}
+					if (point_and_click(_button)){
+						if (is_callable(button_function)){
 							button_function();
 							destroy=true;
 						} else {
@@ -272,336 +341,3 @@ function FeatureSelected(Feature, system, planet) constructor{
 		return "done";
 	}
 }
-
-function draw_building_builder(xx, yy, req_require, building_sprite){
-	var clicked =false;
-	draw_sprite_ext(building_sprite, 0, xx, yy, 0.5, 0.5, 0, c_white, 1);
-	var image_bottom = yy+50;
-	var image_middle = xx-15;
-	if (obj_controller.requisition>=req_require){
-		if (scr_hit(image_middle+30, image_bottom+28, image_middle+78, image_bottom+44)){
-			draw_sprite_ext(spr_slate_2, 5, image_middle-10, image_bottom, 1, 1, 0, c_white, 1);
-			if (scr_click_left()){
-				clicked=true;								
-			}
-		} else {
-			draw_sprite_ext(spr_slate_2, 3, image_middle-10, image_bottom, 1, 1, 0, c_white, 1);
-		}
-	} else {
-		draw_sprite_ext(spr_slate_2, 7, image_middle-10, image_bottom, 1, 1, 0, c_white, 1);
-	}
-	draw_sprite_ext(spr_requisition,0,image_middle+65,image_bottom+30,1,1,0,c_white,1);
-	draw_set_halign(fa_left);
-	draw_text(image_middle+32, image_bottom+30, req_require);
-	return clicked;
-}
-
-function DataSlateMKTwo()constructor{
-	height=0;
-	width=0;
-	XX=0;
-	YY=0;
-	static draw = function(xx,yy,x_scale, y_scale){
-		XX=xx;
-		YY=yy;
-		height = 250*y_scale;
-		width=365*x_scale;
-		draw_sprite_ext(spr_slate_2, 1, xx, yy, x_scale, y_scale, 0, c_white, 1);
-		draw_sprite_ext(spr_slate_2, 0, xx, yy, x_scale, y_scale, 0, c_white, 1);
-		draw_sprite_ext(spr_slate_2, 2, xx, yy, x_scale, y_scale, 0, c_white, 1);
-		//draw_sprite_ext(spr_slate_2, 0, xx, yy, 1, 1, 0, c_white, 1)
-	}
-}
-
-function RackAndPinion(Type="forward") constructor{
-	reverse =false;
-	rack_y=0;
-	rotation = 360;
-	type=Type
-	if (type="forward"){
-		draw = function(x, y, freeze=false, Reverse=""){
-			x+=19;
-			if (!freeze){
-				if (Reverse != ""){
-					if (Reverse){
-						reverse=true;
-					} else {
-						reverse=false;
-					}
-				}
-				draw_sprite_ext(spr_cog_pinion, 0, x, y, 1, 1, rotation, c_white, 1)
-				if (!reverse){
-					rotation-=4;
-				} else {
-					rotation+=4;
-				}
-				rack_y = (75.3982236862/360)*(360-rotation);
-				if (rack_y > 70){
-					reverse = true;
-				} else if (rack_y < 2){
-					reverse = false;
-				}
-				draw_sprite_ext(spr_rack, 0, x-13, y-rack_y, 1, 1, 0, c_white, 1)
-			} else {
-				draw_sprite_ext(spr_cog_pinion, 0, x, y, 1, 1, rotation, c_white, 1)
-				draw_sprite_ext(spr_rack, 0, x-13, y-rack_y, 1, 1, 0, c_white, 1)
-			}		
-		}
-	} else if (type="backward"){
-		draw = function(x, y, freeze=false, Reverse=""){
-			x-=19;
-			if (!freeze){
-				if (Reverse != ""){
-					if (Reverse){
-						reverse=true;
-					} else {
-						reverse=false;
-					}
-				}
-				draw_sprite_ext(spr_cog_pinion, 0, x, y, 1, 1, rotation, c_white, 1)
-				if (!reverse){
-					rotation+=4;
-				} else {
-					rotation-=4;
-				}
-				rack_y = (75.3982236862/360)*(360-rotation)
-				if (rack_y > 70){
-					reverse = true;
-				} else if (rack_y < 2){
-					reverse = false;
-				}
-				draw_sprite_ext(spr_rack, 0, x+13, y+rack_y, -1, 1, 0, c_white, 1)
-			} else {
-				draw_sprite_ext(spr_cog_pinion, 0, x, y, 1, 1, rotation, c_white, 1)
-				draw_sprite_ext(spr_rack, 0, x+13, y+rack_y, -1, 1, 0, c_white, 1)
-			}		
-		}		
-	}
-}
-function SpeedingDot(XX,YY, limit) constructor{
-	bottom_limit = limit;
-	stack = 0;
-	yyy=YY;
-	xxx=XX;
-	draw = function(xx,yy){
-		if (bottom_limit+(48*0.7)<stack){
-			stack=0;
-		}
-		var top_cut = 36-stack>0 ? 36-stack :0;
-		var bottom_cut = bottom_limit<stack? 46-stack-bottom_limit:46;
-		draw_sprite_part_ext(spr_research_bar, 2, 0, top_cut, 200, bottom_cut, xx-105, yy+stack, 1, 0.7, c_white, 1);
-		stack+=3;
-	}
-	current_y = function(){
-		return yy+stack;
-	}
-}
-function GlowDot() constructor{
-	flash = 0
-	flash_size = 5;
-	one_flash_finished = true;
-	draw = function(xx, yy){
-		draw_set_color(c_green);
-		for (var i=0; i<=flash_size;i++){
-			draw_set_alpha(1 - ((1/40)*i))
-			draw_circle(xx, yy, (i/3), 1);
-		}
-		if (flash==0){
-			if (flash_size<40){
-				flash_size++;
-			} else {
-				flash = 1;
-				flash_size--;
-			}
-		} else {
-			if (flash_size > 1){
-				flash_size--;
-			}else {
-				flash_size++;
-				flash = 0;
-			}
-		}		
-	}
-	draw_one_flash = function(xx, yy){
-		if (one_flash_finished) then exit;
-		draw_set_color(c_green);
-		for (var i=0; i<=flash_size;i++){
-			draw_set_alpha(1 - ((1/40)*i))
-			draw_circle(xx, yy, (i/3), 1);
-		}
-		if (flash==0){
-			if (flash_size<40){
-				flash_size++;
-			} else {
-				flash = 1;
-				flash_size--;
-			}
-		} else {
-			if (flash_size > 1){
-				flash_size--;
-			}else {
-				flash_size++;
-				flash = 0;
-				one_flash_finished = true;
-			}
-		}		
-	}
-}
-
-function ShutterButton() constructor{
-	time_open = 0;
-	click_timer = 0;
-	Width = 315;
-	Height = 90;
-	XX=0;
-	YY=0;
-	width=0;
-	height=0;
-	right_rack = new RackAndPinion();
-	left_rack = new RackAndPinion("backward");
-	draw_shutter = function(xx,yy,text, scale=1, entered = ""){
-		XX=xx;
-		YY=yy;
-        draw_set_alpha(1);
-
-        draw_set_font(fnt_40k_12);
-        draw_set_halign(fa_left);
-        draw_set_color(c_gray);		
-		width = Width *scale;
-		height = Height *scale;
-		if (text=="") then entered = false;
-		if (entered==""){
-			entered = scr_hit(xx, yy, xx+width, yy+height);
-		} else {
-			entered=entered;
-		}
-		var shutter_backdrop = 5;
-		if (entered || click_timer>0){
-			if (time_open<20){
-				time_open++;
-				right_rack.draw(xx+width, yy, false, false);
-				left_rack.draw(xx, yy, false, false);
-			} else {
-				right_rack.draw(xx+width, yy, true);
-				left_rack.draw(xx, yy, true);
-			}
-			if (point_and_click([xx, yy, xx+width, yy+height]) || click_timer>0 ){
-				shutter_backdrop = 6;
-				click_timer++;
-			}
-		} else if (time_open>0){
-			time_open--;
-			right_rack.draw(xx+width, yy, false, true);
-			left_rack.draw(xx, yy, false, true);
-		} else {
-			right_rack.draw(xx+width, yy, true);
-			left_rack.draw(xx, yy, true);
-		}
-		var text_draw = xx+(width/2)-(string_width(text)*(3*scale)/2);
-		var main_sprite = 0;
-		if (time_open<2){
-			draw_sprite_ext(spr_shutter_button, main_sprite, xx, yy, scale, scale, 0, c_white, 1)
-		} else if (time_open<8 && time_open>=2){
-			main_sprite=1;
-		}else if  (time_open<13 && time_open>=8){
-			main_sprite=2;
-		}else if  (time_open<18 && time_open>=13){
-			main_sprite=3;
-		} else if (time_open>=18){
-			main_sprite=4;
-		}
-		if (time_open>=2){
-			draw_sprite_ext(spr_shutter_button, shutter_backdrop, xx, yy, scale, scale, 0, c_white, 1)
-			draw_set_color(c_red);
-			if (click_timer>0){
-				draw_text_transformed(text_draw, yy+(24*scale), text, 3*scale, 3*scale, 0);
-			} else {
-				draw_text_transformed(text_draw, yy+(20*scale), text, 3*scale, 3*scale, 0);
-			}
-			draw_sprite_ext(spr_shutter_button, main_sprite, xx, yy, scale, scale, 0, c_white, 1)			
-		}
-		draw_set_color(c_grey);
-		if (click_timer>7){
-			click_timer = 0;
-			return true;
-		} else {
-			return false;
-		}
-	}
-}
-
-function DataSlate() constructor{
-	static_line=1;
-	title="";
-	sub_title="";
-	body_text = "";
-	inside_method = "";
-	XX=0;
-	YY=0;
-	width=0;
-	height=0;
-	percent_cut=0;
-	static draw = function(xx,yy, scale_x=1, scale_y=1){
-		XX=xx;
-		YY=yy;
-		width = 860*scale_x;
-		height = 850*scale_y;
-		draw_sprite_ext(spr_data_slate,1, xx,yy, scale_x, scale_y, 0, c_white, 1);
-		if (is_method(inside_method)){
-			inside_method();
-		}
-	    if (static_line<=10) then draw_set_alpha(static_line/10);
-	    if (static_line>10) then draw_set_alpha(1-((static_line-10)/10));		
-		draw_set_color(5998382);
-		var line_move = yy+(70*scale_y)+((36*scale_y)*static_line);
-		draw_line(xx+(30*scale_x),line_move,xx+(820*scale_x),line_move);
-		draw_set_alpha(1);
-		if (irandom(75)=0 && static_line>1){static_line--;}
-		else{
-			static_line+=0.1;
-		}
-		if (static_line>20) then static_line=1;
-		draw_set_color(c_gray);
-		draw_set_halign(fa_center);
-		var draw_height = 	5;
-		if (title!=""){
-			draw_text_transformed(xx+(0.5*width), yy+(50*scale_y), title, 3*scale_x, 3*scale_y, 0);
-			draw_height += (string_height(title)*3)*scale_y;
-		}
-		if (sub_title!=""){
-			draw_text_transformed(xx+(0.5*width), yy+(50*scale_y)+draw_height, sub_title, 2*scale_x, 2*scale_y, 0);
-			draw_height+=(25*scale_y) +(string_height(sub_title)*2)*scale_y;
-		}
-		if (body_text!=""){
-			draw_text_ext(xx+(0.5*width), yy+(50*scale_y)+draw_height, string_hash_to_newline(body_text), -1, width-60);
-		}
-	}
-	static draw_cut = function(xx,yy, scale_x=1, scale_y=1, middle_percent=percent_cut){
-		XX=xx;
-		YY=yy;
-		draw_sprite_part_ext(spr_data_slate,1, 0, 0, 850, 69, XX, YY, scale_x, scale_y, c_white, 1);
-		draw_sprite_part_ext(spr_data_slate,1, 0, 69, 850, 683*(middle_percent/100), XX, YY+(69*scale_y), scale_x, scale_y, c_white, 1);
-		draw_sprite_part_ext(spr_data_slate,1, 0, 752, 850, 98, XX, YY+(69+683*((middle_percent/100)))*scale_y, scale_x, scale_y, c_white, 1);
-		width = 860*scale_x;
-		height = (69+(683*(middle_percent/100))+98 )*scale_y;
-		if (is_method(inside_method)){
-			inside_method();
-		}		
-	}
-
-	static percent_mod_draw_cut = function(xx,yy, scale_x=1, scale_y=1, mod_edit=1){
-		percent_cut = min(percent_cut+mod_edit, 100);
-		if (!percent_cut) then percent_cut=0;
-		draw_cut(xx,yy, scale_x, scale_y);
-	}
-}
-
-
-
-
-
-
-
-
-
-

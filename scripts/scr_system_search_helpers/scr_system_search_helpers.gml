@@ -61,7 +61,12 @@ function scr_is_planet_owned_by_allies(star, planet_id) {
 	if( planet_id < 1 ){//1 because weird indexing starting at 1 in this game
 		return false;
 	}
-	return array_contains(global.SystemHelps.default_allies, star.p_owner[planet_id]);
+	if (array_contains(global.SystemHelps.default_allies, star.p_owner[planet_id])){
+		return true;
+	}else if(star.dispo[planet_id] < -4000) {
+		return true;
+	}
+	return false;
 }
 
 function scr_is_star_owned_by_allies(star) {
@@ -69,14 +74,33 @@ function scr_is_star_owned_by_allies(star) {
 }
 
 function scr_get_planet_with_type(star, type){
-	for(var i = 1; i <= star.planets; i++){
-		if(star.p_type[i] == type)
-			{
-				return i;
-			}
+	for (var i = 1; i <= star.planets; i++){
+		if(star.p_type[i] == type){
+			return i;
 		}
+	}
 	return -1;
 }
+
+function stars_with_faction_fleets(search_faction){
+    var _stars_with_fleets = {};
+    with (obj_en_fleet){
+        if (owner != search_faction) then continue;
+        if (capital_number+frigate_number+escort_number <= 0){
+            instance_destroy();
+            continue;
+        }
+        if (is_orbiting()){
+            if (struct_exists(_stars_with_fleets, orbiting.name)){
+                array_push(_stars_with_fleets[$orbiting.name],id);
+            } else {
+                _stars_with_fleets[$ orbiting.name] = [id];
+            }
+        }
+    }
+    return _stars_with_fleets;	
+}
+
 function planets_without_type(type,star="none"){
 	var return_planets = [];
 	if (star=="none"){
@@ -99,11 +123,10 @@ function scr_star_has_planet_with_type(star, type){
 
 function scr_get_planet_with_owner(star, owner){
 	for(var i = 1; i <= star.planets; i++){
-		if(star.p_owner[i] == owner)
-			{
-				return i;
-			}
+		if (star.p_owner[i] == owner){
+			return i;
 		}
+	}
 	return -1;
 }
 
@@ -111,10 +134,38 @@ function scr_star_has_planet_with_owner(star, owner){
 	return scr_get_planet_with_owner(star,owner) != -1;
 }
 
-function scr_get_stars() {
+
+/// @returns {Array<Id.Instance.obj_star>} stars
+function scr_get_stars(shuffled=false, ownership=[], types = []) {
 	var stars = [];
+	var _owner_sort = array_length(ownership);
+	var _types_sort = array_length(types);
 	with(obj_star){
-		array_push(stars,id);
+		if (!_owner_sort && !_types_sort){
+			var _add = true;
+		} else {
+			var _add = true
+			if (_owner_sort && !array_contains(ownership,owner)){
+				_add = false
+			}
+			if (_add && _types_sort){
+				for (var i=1;i<=planets;i++){
+					types = array_delete_value(types, p_type[i]);
+					if (!array_length(types)){
+						break;
+					}
+				}
+				if (array_length(types)){
+					_add = false;
+				}				
+			}
+		}
+		if (_add){
+			array_push(stars,id);
+		}
+	}
+	if (shuffled){
+		stars = array_shuffle(stars);
 	}
 	return stars;
 }
@@ -125,30 +176,45 @@ function planet_imperium_ground_total(planet_check){
 
 function star_by_name(search_name){
 	with(obj_star){
-		if (name = search_name){
+		if (name == search_name){
 			return self;
 		}
 	}
 	return "none";
 }
 
+//use this to quickly make a loop through a stars planets in an unordered way
+function shuffled_planet_array(){
+	var _planets = [];
+	for (var i=1;i<=planets;i++){
+		array_push(_planets, i);
+	}
+	_planets = array_shuffle(_planets);
+	return _planets;
+
+}
+
 function distance_removed_star(origional_x,origional_y, star_offset = choose(2,3), disclude_hulk=true, disclude_elder=true, disclude_deads=true, warp_concious=true){
 	var from = instance_nearest(origional_x,origional_y,obj_star);
+	var _deactivated = [];
     for(var i=0; i<star_offset; i++){
         from=instance_nearest(origional_x,origional_y,obj_star);
         with(from){
+        	array_push(_deactivated, id);
         	instance_deactivate_object(id);
         };
         from=instance_nearest(origional_x,origional_y,obj_star);
         if (instance_exists(from)){
 	        if (disclude_elder && from.owner==eFACTION.Eldar){
 	        	i--;
+	        	array_push(_deactivated, id);
 	        	instance_deactivate_object(from);
 	        	continue;
 	        }
 	        if (disclude_deads){
 	        	if (is_dead_star(from)){
 		        	i--;
+		        	array_push(_deactivated, id);
 		        	instance_deactivate_object(from);
 		        	continue;        		
 	        	}
@@ -156,7 +222,10 @@ function distance_removed_star(origional_x,origional_y, star_offset = choose(2,3
 	    }        
     }
     //from=instance_nearest(origional_x,origional_y,obj_star);
-    instance_activate_object(obj_star);
+    for (var i=0;i<array_length(_deactivated);i++){
+    	instance_activate_object(_deactivated[i]);
+    }
+
     //TODO finish this off to make the distance remove more concious of warp lanes
     /*if (warp_concious){
     	var options = [from];
@@ -181,8 +250,9 @@ function nearest_star_proper(xx,yy) {
 }
 
 
-function nearest_star_with_ownership(xx,yy, ownership, start_star="none"){
+function nearest_star_with_ownership(xx,yy, ownership, start_star="none", ignore_dead = true){
 	var nearest = "none"
+	var _deactivated = [];
 	var total_stars =  instance_number(obj_star);
 	var i=0;
 	if (!is_array(ownership)){
@@ -191,8 +261,12 @@ function nearest_star_with_ownership(xx,yy, ownership, start_star="none"){
 	while (nearest=="none" && i<total_stars){
 		i++;
 		var cur_star =  instance_nearest(xx,yy, obj_star);
+		if (!instance_exists(cur_star)){
+			break;
+		}
 		if (start_star!="none"){
-			if (start_star.id == cur_star.id){
+			if (start_star.id == cur_star.id || (ignore_dead && is_dead_star(cur_star))){
+				array_push(_deactivated, cur_star.id);
 				instance_deactivate_object(cur_star.id);
 				continue;
 			}
@@ -200,10 +274,13 @@ function nearest_star_with_ownership(xx,yy, ownership, start_star="none"){
 		if (array_contains(ownership, cur_star.owner)){
 			nearest=cur_star.id;
 		} else {
+			array_push(_deactivated, cur_star.id);
 			instance_deactivate_object(cur_star.id);
 		}
 	}
-	instance_activate_object(obj_star);
+    for (var i=0;i<array_length(_deactivated);i++){
+    	instance_activate_object(_deactivated[i]);
+    }
 	return nearest;
 }
 
@@ -211,7 +288,7 @@ function find_population_doners(doner_to=0){
     var pop_doner_options = [];
 	with(obj_star){
 		if (obj_star.id == doner_to) then continue;
-	   for (r=1;r<=planets;r++){
+	   for (var r=1;r<=planets;r++){
 	        if ((p_owner[r]=eFACTION.Imperium) and (p_type[r]=="Hive") and (p_population[r]>0) and (p_large[r])){
                 array_push(pop_doner_options, [id, r]);
             };
@@ -222,10 +299,12 @@ function find_population_doners(doner_to=0){
 
 function planet_numeral_name(planet, star="none"){
 	if (star=="none"){
-		return $"{name} {scr_roman(planet)}";
+		//show_debug_message($"{planet}, numeral name")
+		return $"{name} {int_to_roman(planet)}";
 	} else {
 		with (star){
-			return $"{name} {scr_roman(planet)}";
+			//show_debug_message($"{planet}, numeral name")
+			return $"{name} {int_to_roman(planet)}";
 		}		
 	}
 }
@@ -252,7 +331,7 @@ function nearest_from_array(xx,yy,list){
 function is_dead_star(star="none"){
 	var dead_star=true;
 	if (star=="none"){
-		for (i=1;i<=planets;i++){
+		for (var i=1;i<=planets;i++){
 			if (p_type[i] !="dead"){
 				dead_star=false;
 				break;
@@ -299,88 +378,24 @@ function scr_faction_string_name(faction){
 	return name;
 }
 
+function meet_system_governors(system){
+	with (system){
+        for (var i=1;i<=planets;i++){
+            if (p_first[i]<=5) and (dispo[i]>-30) and (dispo[i]<0){
+                dispo[i]=min(obj_ini.imperium_disposition,obj_controller.disposition[2])+irandom(8)-4;
+            } 
+
+        }
+	}
+}
+
 function scr_planet_image_numbers(p_type){
 	var image =0;
-	image_map = ["lava","lava", "Desert","Forge","Hive","Death","Agri","Feudal","Temperate","Ice","Dead","Daemon","Craftworld","","Space Hulk", "", "Shrine"];
+	image_map = ["","Lava","Lava", "Desert","Forge","Hive","Death","Agri","Feudal","Temperate","Ice","Dead","Daemon","Craftworld","","Space Hulk", "", "Shrine"];
 	for (var i=0;i<array_length(image_map);i++){
 		if (image_map[i] == p_type) then return i;
 	}
 	return image;
-}
-
-function PlanetData(planet, system) constructor{
-	self.planet = planet;
-	self.system = system;
-	player_disposition = system.dispo[planet];
-	planet_type = system.p_type[planet];
-    operatives = system.p_operatives[planet];
-    features =system.p_feature[planet];
-    current_owner = system.p_owner[planet];
-    origional_owner = system.p_first[planet];
-    population = system.p_population[planet];
-    max_population = system.p_max_population[planet];
-    large_population = system.p_large[planet];
-    secondary_population = system.p_pop[planet];
-    guardsmen = system.p_guardsmen[planet];
-    pdf = system.p_pdf[planet];
-    fortification_level  = system.p_fortified[planet];
-    star_station = system.p_station[planet];
-
-    // Whether or not player forces are on the planet
-    player_forces = system.p_player[planet];
-    defence_lasers = system.p_lasers[planet];
-    defence_silos = system.p_silo[planet];
-    ground_defences = system.p_defenses[planet];
-    upgrades = system.p_upgrades[planet];
-    // v how much of a problem they are from 1-5
-    planet_forces = [
-    	0,
-    	player_forces,
-    	guardsmen,
-    	0,
-    	system.p_sisters[planet],
-    	system.p_eldar[planet],
-    	system.p_orks[planet],
-    	system.p_tau[planet],
-    	system.p_tyranids[planet],
-    	system.p_chaos[planet]+ system.p_demons[planet],
-    	system.p_traitors[planet],
-    	0,
-    	system.p_necrons[planet]
-    ]
-    static xenos_and_heretics = function(){
-    	var xh_force = 0;
-    	for (var i=5;i<array_length(planet_forces)i++){
-    		xh_force += planet_forces[i];
-    	} 
-    	return xh_force;
-    }
-    deamons = system.p_demons[planet];
-    chaos_forces = system.p_chaos[planet];
-
-    requests_help = system.p_halp[planet];
-
-    // current planet heresy
-    corruption = system.p_heresy[planet];
-
-    is_heretic = system.p_hurssy[planet];
-
-    heretic_timer = system.p_hurssy_time[planet];
-
-    secret_corruption = system.p_heresy_secret[planet];
-
-    population_influences = system.p_influence[planet];
-
-    raided_this_turn = system.p_raided[planet];
-    // 
-    governor = system.p_governor[planet];
-
-    problems = system.p_problem[planet];
-    problem_data = system.p_problem_other_data[planet];
-    problem_timers = system.p_timer[planet];
-
-    static marine_training = planet_training_sequence;
-
 }
 //function scr_get_player_fleets() {
 //	var player_fleets = [];
@@ -392,3 +407,57 @@ function PlanetData(planet, system) constructor{
 
 //}
 
+/// @param {Id.Instance.obj_star} star 
+/// @param {Enum.eFACTION} faction
+/// @param {Real} minimum_strength 
+function star_has_planet_with_forces(star, faction, minimum_strength = 1){
+	var found = false;
+	with(star){
+		for(var p = 0;  p <= planets && !found; p++){
+			if(found){
+				break;
+			}
+			found = planet_has_forces(star, p, faction, minimum_strength);
+		}
+	}
+	return found;
+	
+}
+
+/// @param {Id.Instance.obj_star} star 
+/// @param {Real} planet_id
+/// @param {Enum.eFACTION} faction
+/// @param {Real} minimum_strength 
+function planet_has_forces(star, planet_id, faction, minimum_strength = 1){
+	var found = false;
+	switch(faction){
+		case eFACTION.Tau:
+			found = star.p_tau[planet_id] >= minimum_strength;
+			break;
+		case eFACTION.Tyranids:
+			found = star.p_tyranids[planet_id] >= minimum_strength;
+			break;
+		case eFACTION.Ork:
+			found = star.p_orks[planet_id] >= minimum_strength;
+			break;
+		case eFACTION.Chaos: 
+			found = star.p_chaos[planet_id] >= minimum_strength;
+			break;
+		case eFACTION.Eldar:
+			found = star.p_eldar[planet_id] >= minimum_strength;
+			break;
+		case eFACTION.Genestealer:
+			found = star.p_tyranids[planet_id] >= minimum_strength;
+			break;
+		case eFACTION.Heretics:
+			found = star.p_traitors[planet_id] >= minimum_strength;
+			break;
+		case eFACTION.Necrons:
+			found = star.p_necrons[planet_id] >= minimum_strength;
+			break;
+		case "Demons": //special case for demon world mission
+			found = star.p_demons[planet_id] >= minimum_strength;
+			break;
+	}
+	return found;
+}

@@ -30,7 +30,7 @@ selection_window.inside_method = function(){
     // draw_text(view_xview[0]+46,view_yview[0]+117,"Title");
     // draw_text(view_xview[0]+46,view_yview[0]+142,"1#2#3#4#5#6#7#8#9#10#11#1#13#14#15#16#17#18#19#20#21#22#23#24#25");    
 
-    var type="capital",lines=0,posi=0,colu=1,x3=48,y3=60,escorts,frigates,capitals,ty=0,current_ship=0,current_fleet=0,name="",sal=0,selection_box,scale=1,void_h=122,shew,ship_health=0;
+    var type="capital",lines=0,posi=-1,colu=1,x3=48,y3=60,escorts,frigates,capitals,ty=0,current_ship=0,current_fleet=0,name="",sal=0,selection_box,scale=1,void_h=122,shew,ship_health=0;
     escorts=escort;
     frigates=frigate;
     capitals=capital;
@@ -51,8 +51,30 @@ selection_window.inside_method = function(){
     		fleet_all = fleet_all==1?0:1;
     		fleet_all_click=true;  		
     	}
+
+        var math_string = (string_width("Manage Units")/2)+6
+        if (point_and_click(draw_unit_buttons([center_draw-math_string, yy+height-50], "Manage Units",[1,1],c_blue))){
+            var fleet_array = fleet_full_ship_array(current_fleet);
+            var fleet_marines_temp = [];
+            var fleet_marines = [];
+            for (var i = 0; i < array_length(fleet_array); i++) {
+                fleet_marines_temp = collect_role_group("all", ["", 0, fleet_array[i]]);
+                array_copy(fleet_marines, array_length(fleet_marines), fleet_marines_temp, 0, array_length(fleet_marines_temp));
+            }
+
+            group_selection(fleet_marines,{
+                purpose:"Ship Management",
+                purpose_code : "manage",
+                number:0,
+                system:0,
+                feature:"none",
+                planet : 0,
+                selections : []
+            });
+        }
     }
-	draw_set_halign(fa_center);	    	
+
+	draw_set_halign(fa_center);
 	var ship_type,current_ship, sel_set, full_id;
 	if (screen_expansion>0){
 	    for(var j=0; j<(escorts+frigates+capitals); j++){
@@ -66,14 +88,14 @@ selection_window.inside_method = function(){
 	        ship_health=100;
 	        if (colu==1) then void_h=min(void_h+20,560);
         
-	        if (posi==1){
+	        if (posi==0){
 	            if (mnz=0) then draw_text(center_draw,yy+y3,string_hash_to_newline("=Capital Ships="));
 	            y3+=20;
 	            if (y3>height-50) then break;
 	            set = "capitol";
 	        }
 
-	        if (posi==capitals+1) and (frigates>0){
+	        if (posi==capitals) and (frigates>0){
 	        	y3+=20;
 	        	if (y3>height-50) then break;
 	        	if (mnz=0) then draw_text(center_draw,yy+y3,string_hash_to_newline("=Frigates="));
@@ -82,7 +104,7 @@ selection_window.inside_method = function(){
 
 	        	set = "frigate";
 	        }
-	        if (posi==capitals+frigates+1) and (escorts>0){
+	        if (posi==capitals+frigates) and (escorts>0){
 	        	y3+=20;
 	        	if (y3>height-50) then break;
 	        	if (mnz=0) then draw_text(center_draw,yy+y3,string_hash_to_newline("=Escorts="));
@@ -92,22 +114,28 @@ selection_window.inside_method = function(){
 	        }
 	        switch(set){
 	        	case "capitol":
-	        		ship_type = current_fleet.capital;
 	        		current_ship=posi;
-	        		ship_select = current_fleet.capital_sel[current_ship];
-	        		full_id = current_fleet.capital_num[current_ship];
+	        		if (current_ship<array_length(current_fleet.capital)){
+		        		ship_type = current_fleet.capital;
+		        		ship_select = current_fleet.capital_sel[current_ship];
+		        		full_id = current_fleet.capital_num[current_ship];
+	        		}
 	        		break;
 	        	case "frigate":
 		        	ship_type = current_fleet.frigate;
 		        	current_ship=posi-capitals;
-		        	ship_select = current_fleet.frigate_sel[current_ship];
-		        	full_id = current_fleet.frigate_num[current_ship];
+		        	if (current_ship<array_length(current_fleet.frigate)){
+			        	ship_select = current_fleet.frigate_sel[current_ship];
+			        	full_id = current_fleet.frigate_num[current_ship];
+		        	}
 		        	break;	        		
 	        	case "escort":
 		        	ship_type = current_fleet.escort;
 	        		current_ship=posi-(capitals+frigates);
-	        		ship_select = current_fleet.escort_sel[current_ship];
-	        		full_id = current_fleet.escort_num[current_ship];
+	        		if (current_ship<array_length(current_fleet.escort)){
+		        		ship_select = current_fleet.escort_sel[current_ship];
+		        		full_id = current_fleet.escort_num[current_ship];
+	        		}
 		        	break;					        	
 	        }
 	        if (fleet_all_click) then ship_select=fleet_all;
@@ -120,16 +148,16 @@ selection_window.inside_method = function(){
 	            colu++;
 	        }*/
         
-	        if (posi<=escorts+frigates+capitals){
+	        if (posi<=escorts+frigates+capitals) && is_array(ship_type) && current_ship<array_length(ship_type){
 	            name=ship_type[current_ship];
 	            if (string_width(name)*scale>179){
-	            	for (i=0;i<9;i++){
+	            	for (var i=0;i<9;i++){
 	            		if (string_width(name)*scale>179) then scale-=0.05;
 	            	}
 	            }
 	            if (scr_hit(xx+10,yy+y3,xx+width-10,yy+y3+18)){
 	                if (string_width(name)*scale>135){
-	                	for (i=0;i<9;i++){
+	                	for (var i=0;i<9;i++){
 	                		if (string_width(name)*scale>135) then scale-=0.05;
 	                	}
 	                }

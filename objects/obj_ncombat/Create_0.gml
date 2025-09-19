@@ -1,16 +1,11 @@
 if (instance_number(obj_ncombat)>1) then  instance_destroy();
 
-set_zoom_to_defualt();
+set_zoom_to_default();
 var co,i;co=-1;
-repeat(15){co+=1;i=-1;
-    repeat(401){i+=1;
-        fighting[co][i]=0;
-        if (i<=150){veh_fighting[co][i]=0;}
-    }
-}co=0;i=0;hue=0;
+co=0;i=0;hue=0;
 
-
-debugl("Ground Combat Started");
+turn_count = 0;
+log_message("Ground Combat Started");
 
 audio_stop_sound(snd_royal);
 audio_play_sound(snd_battle,0,true);
@@ -20,18 +15,24 @@ if (nope!=1){audio_sound_gain(snd_battle,0.25*obj_controller.master_volume*obj_c
 
 
 //limit on the size of the players forces allowed
+enter_pressed = 0
 man_size_limit = 0;
+man_limit_reached = false;
+man_size_count = 0;
 fack=0;
 cd=0;
 owner  = eFACTION.Player;
 click_stall_timer=0;
 formation_set=0;
-big_boom=0;
-kamehameha=false;
 on_ship=false;
 alpha_strike=0;
 Warlord = 0;
 total_battle_exp_gain=0;
+marines_to_recover = 0;
+vehicles_to_recover = 0;
+end_alive_units = [];
+average_battle_exp_gain=0;
+upgraded_librarians=[];
 
 view_x=obj_controller.x;view_y=obj_controller.y;
 obj_controller.x=0;obj_controller.y=0;
@@ -114,8 +115,12 @@ player_defenses=0;player_silos=0;
 enemy_forces=0;enemy_max=0;
 hulk_forces=0;
 
-i=-1;messages=0;messages_to_show=4;messages_shown=0;
+i=-1;messages=0;messages_to_show=24;messages_shown=0;
 largest=0;priority=0;random_messages=0;dead_enemies=0;
+
+units_lost_counts = {};
+vehicles_lost_counts = {};
+
 repeat(70){i+=1;
     lines[i]="";
     lines_color[i]="";
@@ -126,10 +131,6 @@ repeat(70){i+=1;
     dead_ene[i]="";
     dead_ene_n[i]=0;
     
-    post_unit_lost[i]="";
-    post_unit_veh[i]=0;
-    post_units_lost[i]=0;
-    post_geneseed_recovered[i]=0;
     post_equipment_lost[i]="";
     post_equipments_lost[i]=0;
     
@@ -138,28 +139,30 @@ repeat(70){i+=1;
     if (i<=10) then mucra[i]=0;
 }
 slime=0;
+unit_recovery_score=0;
 apothecaries_alive=0;
-apoth=0;
-techma=0;
 techmarines_alive=0;
+vehicle_recovery_score=0;
 injured=0;
 command_injured=0;
 seed_saved=0;
-seed_max=0;
-units_saved=0;
+seed_lost=0;
+seed_harvestable=0;
+units_saved_count=0;
+units_saved_counts={};
+vehicles_saved_counts={};
 command_saved=0;
-vehicles_saved=0;
-final_deaths=0;
+vehicles_saved_count=0;
+vehicles_saved_counts={};
+final_marine_deaths=0;
 final_command_deaths=0;
 vehicle_deaths=0;
 casualties=0;
-command_casualties=0;
 dead_jims=0;
 newline="";
 newline_color="";
 liness=0;
 world_size=0;
-gene_penalty=0;
 
 timer=0;
 timer_stage=0;
@@ -193,6 +196,7 @@ vet_sgts=0;
 rhinos=0;
 predators=0;
 land_raiders=0;
+land_speeders=0;
 whirlwinds=0;
 
 big_mofo=10;
@@ -230,22 +234,22 @@ time=floor(random(24))+1;
 terrain="";
 weather="";
 
-ambushers=0;if (string_count("Ambushers",obj_ini.strin)>0) then ambushers=1;
-bolter_drilling=0;if (string_count("Bolter",obj_ini.strin)>0) then bolter_drilling=1;
-enemy_eldar=0;if (string_count("Enemy: Eldar",obj_ini.strin)>0) then enemy_eldar=1;
-enemy_fallen=0;if (string_count("Enemy: Fallen",obj_ini.strin)>0) then enemy_fallen=1;
-enemy_orks=0;if (string_count("Enemy: Orks",obj_ini.strin)>0) then enemy_orks=1;
-enemy_tau=0;if (string_count("Enemy: Tau",obj_ini.strin)>0) then enemy_tau=1;
-enemy_tyranids=0;if (string_count("Enemy: Tyranids",obj_ini.strin)>0) then enemy_tyranids=1;
-enemy_necrons=0;if (string_count("Enemy: Necrons",obj_ini.strin)>0) then enemy_necrons=1;
-lightning=0;if (string_count("Lightning",obj_ini.strin)>0) then lightning=1;
-siege=0;if (string_count("Siege",obj_ini.strin)>0) then siege=1;
-slow=0;if (string_count("Purposeful",obj_ini.strin)>0) then slow=1;
-melee=0;if (string_count("Melee Enthus",obj_ini.strin)>0) then melee=1;
+ambushers=0;if (scr_has_adv("Ambushers")) then ambushers=1;
+bolter_drilling=0;if (scr_has_adv("Bolter Drilling")) then bolter_drilling=1;
+enemy_eldar=0;if (scr_has_adv("Enemy: Eldar")) then enemy_eldar=1;
+enemy_fallen=0;if (scr_has_adv("Enemy: Fallen")) then enemy_fallen=1;
+enemy_orks=0;if (scr_has_adv("Enemy: Orks")) then enemy_orks=1;
+enemy_tau=0;if (scr_has_adv("Enemy: Tau")) then enemy_tau=1;
+enemy_tyranids=0;if (scr_has_adv("Enemy: Tyranids")) then enemy_tyranids=1;
+enemy_necrons=0;if (scr_has_adv("Enemy: Necrons")) then enemy_necrons=1;
+lightning=0;if (scr_has_adv("Lightning Warriors")) then lightning=1;
+siege=0;if (scr_has_adv("Siege Masters")) then siege=1;
+slow=0;if (scr_has_adv("Devastator Doctrine")) then slow=1;
+melee=0;if (scr_has_adv("Assault Doctrine")) then melee=1;
 // 
-black_rage=0;if (string_count("Black Rage",obj_ini.strin2)>0){black_rage=1;red_thirst=1;}
-shitty_luck=0;if (string_count("Shitty",obj_ini.strin2)>0) then shitty_luck=1;
-warp_touched=0;if (string_count("Warp Touched",obj_ini.strin2)>0) then warp_touched=1;
+black_rage=0;if (scr_has_disadv("Black Rage")){black_rage=1;red_thirst=1;}
+shitty_luck=0;if (scr_has_disadv("Shitty Luck")) then shitty_luck=1;
+favoured_by_the_warp=0;if (scr_has_adv("Favoured By The Warp")) then favoured_by_the_warp=1;
 
 
 lyman=obj_ini.lyman;// drop pod penalties

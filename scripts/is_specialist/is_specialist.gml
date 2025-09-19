@@ -1,259 +1,346 @@
-function role_groups(group){
-	var role_list = [];
-	var roles = obj_ini.role[100];
-	switch (group){
-		case "lib":
-			role_list = [
-						string("Chief {0}",obj_ini.role[100,17]),
-						obj_ini.role[100,17], //librarian
-						"Codiciery",
-						"Lexicanum",
-			];
-			break;
-		case "trainee":
-			role_list = [
-				string("{0} Aspirant",obj_ini.role[100,17]),
-				string("{0} Aspirant",obj_ini.role[100,15]),  
-				string("{0} Aspirant",obj_ini.role[100,14]),
-				string("{0} Aspirant",obj_ini.role[100,16]),
-			];
-			break;
-		case "heads":
-			role_list = [
-				"Master of Sanctity",
-				string("Chief {0}", obj_ini.role[100,17]),
-				"Forge Master", 
-				"Chapter Master", 
-				"Master of the Apothecarion"
-			];
-			break;
-		case "veterans":
-			role_list = [
-				obj_ini.role[100,3],  //veterans
-				obj_ini.role[100,4],  //terminatore
-				obj_ini.role[100,19], //vet sergeant
-				obj_ini.role[100,2],  //honour guard
-			];
-			break;
-		case "rank_and_file":
-			role_list = [
-				obj_ini.role[100,8], //tactical marine
-				obj_ini.role[100,9], //devastator
-				obj_ini.role[100,10], //assualt
-				obj_ini.role[100,12], //scout
-			];
-			break;
+#macro SPECIALISTS_APOTHECARIES "apothecaries"
+#macro SPECIALISTS_CHAPLAINS "chaplains"
+#macro SPECIALISTS_LIBRARIANS "librarians"
+#macro SPECIALISTS_TECHS "techs"
+#macro SPECIALISTS_TECHMARINES "techmarines"
+#macro SPECIALISTS_STANDARD "standard"
+#macro SPECIALISTS_VETERANS "veterans"
+#macro SPECIALISTS_RANK_AND_FILE "rank_and_file"
+#macro SPECIALISTS_SQUAD_LEADERS "squad_leaders"
+#macro SPECIALISTS_COMMAND "command"
+#macro SPECIALISTS_DREADNOUGHTS "dreadnoughts"
+#macro SPECIALISTS_CAPTAIN_CANDIDATES "captain_candidates"
+#macro SPECIALISTS_TRAINEES "trainees"
+#macro SPECIALISTS_HEADS "heads"
 
-		case "squad_leaders":
-			role_list = [
-				obj_ini.role[100][18], //sergeant
-				obj_ini.role[100][19],  //vet sergeant
-			]
-			break;
-		case "command":
-			role_list = [
-	            obj_ini.role[100][5],
-	            obj_ini.role[100][14],
-	            obj_ini.role[100][15],
-	            obj_ini.role[100][16],
-	            obj_ini.role[100][17],
-	            "Codiciery",
-	            "Lexicanum",
-	            obj_ini.role[100][11],
-	            obj_ini.role[100][7],
-	        ]; 
-	        break;
-	    case "dreadnoughts":
-	        role_list = [
-				obj_ini.role[100][6],//dreadnought
-				string("Venerable {0}",obj_ini.role[100][6]),
-			];
-			break;
-		case "forge":
-	        role_list = [
-				obj_ini.role[100][16],//techmarine
-				"Forge Master",
+/// @description Retrieves the active roles from the game, either from the obj_creation or obj_ini object.
+/// @returns {array}
+function active_roles(){
+	var _roles =  instance_exists(obj_creation) ?  obj_creation.role[100] : obj_ini.role[100];
+	return _roles;
+}
+
+/// @description Returns a list of roles based on the specified group, with optional inclusion of trainees and heads.
+/// @param {integer} group The group of roles to retrieve (e.g., SPECIALISTS_STANDARD, SPECIALISTS_LIBRARIANS).
+/// @param {bool} include_trainee Whether to include trainee roles (default is false).
+/// @param {bool} include_heads Whether to include head roles (default is true).
+/// @returns {array}
+function role_groups(group, include_trainee = false, include_heads = true) {
+    var _role_list = [];
+    var _roles = active_roles();
+	var _chap_name = instance_exists(obj_creation) ? obj_creation.chapter_name : global.chapter_name;
+
+    switch (group) {
+        case SPECIALISTS_STANDARD:
+            _role_list = [
+                _roles[eROLE.Captain],
+                _roles[eROLE.Dreadnought],
+                $"Venerable {_roles[eROLE.Dreadnought]}",
+                _roles[eROLE.Champion],
+                _roles[eROLE.Chaplain],
+                _roles[eROLE.Apothecary],
+                _roles[eROLE.Techmarine],
+                _roles[eROLE.Librarian],
+                "Codiciery",
+                "Lexicanum",
+                _roles[eROLE.HonourGuard]
+            ];
+            if (include_trainee) {
+				_role_list = array_concat(_role_list, role_groups(SPECIALISTS_TRAINEES));
+            }
+			if (include_heads) {
+				_role_list = array_concat(_role_list, role_groups(SPECIALISTS_HEADS));
+            }
+            break;
+
+        case SPECIALISTS_LIBRARIANS:
+            _role_list = [
+                _roles[eROLE.Librarian],
+                "Codiciery",
+                "Lexicanum"
+            ];
+			if (include_trainee) {
+				array_push(_role_list, $"{_roles[eROLE.Librarian]} Aspirant");
+            }
+			if (include_heads) {
+				array_push(_role_list, $"Chief {_roles[eROLE.Librarian]}");
+            }
+            break;
+		case SPECIALISTS_TECHS:
+			_role_list = [
+				_roles[eROLE.Techmarine],
 				"Techpriest"
 			];
+			if (include_trainee) {
+				array_push(_role_list, $"{_roles[eROLE.Techmarine]} Aspirant");
+			}
+			if (include_heads) {
+				array_push(_role_list, "Forge Master");
+			}
 			break;
-		case "captain_candidates":
-			role_list = [
-				roles[Role.SERGEANT], //sergeant
-				roles[Role.VETERAN_SERGEANT],
-				roles[Role.CHAMPION],				
-				roles[Role.CAPTAIN],								
-				roles[Role.TERMINATOR],				
-				roles[Role.VETERAN],
-				 obj_ini.role[100][11],			
-			];
+		case SPECIALISTS_TECHMARINES:
+			_role_list = [
+				_roles[eROLE.Techmarine],
+			]
+			if (include_trainee) {
+				array_push(_role_list, $"{_roles[eROLE.Techmarine]} Aspirant");
+			}
+			if (include_heads) {
+				array_push(_role_list, "Forge Master");
+			}
 			break;
-	}
-	return role_list;
+		case SPECIALISTS_CHAPLAINS:
+			_role_list = [_roles[eROLE.Chaplain]];
+			if (_chap_name == "Iron Hands") {
+				array_push(_role_list, _roles[eROLE.Techmarine]);
+				if (include_trainee) {
+					array_push(_role_list, $"{_roles[eROLE.Techmarine]} Aspirant");
+				}
+				if (include_heads) {
+					array_push(_role_list, "Forge Master");
+				}
+			}
+			if (include_trainee) {
+				array_push(_role_list, $"{_roles[eROLE.Chaplain]} Aspirant");
+			}
+			if (include_heads) {
+				array_push(_role_list, "Master of Sanctity");
+			}
+			break;
+		case SPECIALISTS_APOTHECARIES:
+			_role_list = [_roles[eROLE.Apothecary]];
+			if (_chap_name == "Space Wolves") {
+				array_push(_role_list, _roles[eROLE.Chaplain]);
+				if (include_trainee) {
+					array_push(_role_list, $"{_roles[eROLE.Chaplain]} Aspirant");
+				}
+				if (include_heads) {
+					array_push(_role_list, "Master of Sanctity");
+				}
+			}
+			if (include_trainee) {
+				array_push(_role_list, $"{_roles[eROLE.Apothecary]} Aspirant");
+			}
+			if (include_heads) {
+				array_push(_role_list, "Master of the Apothecarion");
+			}
+			break;
+
+        case SPECIALISTS_TRAINEES:
+            _role_list = [
+                $"{_roles[eROLE.Librarian]} Aspirant",
+                $"{_roles[eROLE.Apothecary]} Aspirant",
+                $"{_roles[eROLE.Chaplain]} Aspirant",
+                $"{_roles[eROLE.Techmarine]} Aspirant"
+            ];
+            break;
+        case SPECIALISTS_HEADS:
+            _role_list = [
+                "Master of Sanctity",
+                $"Chief {_roles[eROLE.Librarian]}",
+                "Forge Master",
+				obj_ini.role[100][eROLE.ChapterMaster],
+                "Master of the Apothecarion"
+            ];
+            break;
+        case SPECIALISTS_VETERANS:
+            _role_list = [
+                _roles[eROLE.Veteran],
+                _roles[eROLE.Terminator],
+                _roles[eROLE.VeteranSergeant],
+                _roles[eROLE.HonourGuard]
+            ];
+            break;
+        case SPECIALISTS_RANK_AND_FILE:
+            _role_list = [
+                _roles[eROLE.Tactical],
+                _roles[eROLE.Devastator],
+                _roles[eROLE.Assault],
+                _roles[eROLE.Scout]
+            ];
+            break;
+        case SPECIALISTS_SQUAD_LEADERS:
+            _role_list = [
+                _roles[eROLE.Sergeant],
+                _roles[eROLE.VeteranSergeant]
+            ];
+            break;
+        case SPECIALISTS_COMMAND:
+            _role_list = [
+                _roles[eROLE.Captain],
+                _roles[eROLE.Apothecary],
+                _roles[eROLE.Chaplain],
+                _roles[eROLE.Techmarine],
+                _roles[eROLE.Librarian],
+                "Codiciery",
+                "Lexicanum",
+                _roles[eROLE.Ancient],
+                _roles[eROLE.Champion]
+            ];
+            break;
+        case SPECIALISTS_DREADNOUGHTS:
+            _role_list = [
+                _roles[eROLE.Dreadnought],
+                $"Venerable {_roles[eROLE.Dreadnought]}"
+            ];
+            break;
+        case SPECIALISTS_CAPTAIN_CANDIDATES:
+            _role_list = [
+                _roles[eROLE.Sergeant],
+                _roles[eROLE.VeteranSergeant],
+                _roles[eROLE.Champion],
+                _roles[eROLE.Captain],
+                _roles[eROLE.Terminator],
+                _roles[eROLE.Veteran],
+                _roles[eROLE.Ancient]
+            ];
+            break;
+    }
+
+    return _role_list;
 }
 
-function is_specialist(unit_role, type="standard", include_trainee=false) {
+/// @description Checks if a given unit's role is a specialist within a specific role group.
+/// @param {string} unit_role The role of the unit to check.
+/// @param {integer} type The type of specialist group to check (default is SPECIALISTS_STANDARD).
+/// @param {bool} include_trainee Whether to include trainee roles (default is false).
+/// @param {bool} include_heads Whether to include head roles (default is true).
+/// @returns {bool}
+function is_specialist(unit_role, type = SPECIALISTS_STANDARD, include_trainee = false, include_heads = true) {
+    var _specialists = role_groups(type, include_trainee, include_heads);
 
-	// unit_role
-	//TODO need to make all string roles not strings but array references
-	switch(type){
-		case "standard":
-			specialists = ["Chapter Master",
-							"Forge Master",
-							"Master of Sanctity",
-							"Master of the Apothecarion",
-							string("Chief {0}",obj_ini.role[100][17]),//chief librarian
-							obj_ini.role[100][5],//captain
-							obj_ini.role[100][6],//dreadnought
-							string("Venerable {0}",obj_ini.role[100][6]),
-							obj_ini.role[100][7],//company_champion
-							obj_ini.role[100][14],//chaplain
-							obj_ini.role[100][15],//apothecary
-							obj_ini.role[100][16],//techmarine
-							obj_ini.role[100][17], //librarian
-							"Codiciery",
-							"Lexicanum",
-							obj_ini.role[100,2],//honour guard
-			];
-			if (include_trainee){
-				array_push(specialists, 
-							 string("{0} Aspirant",obj_ini.role[100][17]),
-							 string("{0} Aspirant",obj_ini.role[100][15]),  
-							 string("{0} Aspirant",obj_ini.role[100][14]),
-							 string("{0} Aspirant",obj_ini.role[100][16]),
-							 );
-			}
-			break;
-      
-		case "libs":
-			specialists = role_groups("lib");
-			if (include_trainee){
-				array_push(specialists,  string("{0} Aspirant",obj_ini.role[100][17]));
-			}
-			break;
-		case "forge":
-			specialists = role_groups("forge");
-			if (include_trainee){
-				array_push(specialists,  string("{0} Aspirant",obj_ini.role[100][16]));
-			}			
-			break;
-		case "chap":
-			specialists = [
-						obj_ini.role[100][14],//chaplain
-						"Master of Sanctity",
-			];
-			if (include_trainee){
-				array_push(specialists,  string("{0} Aspirant",obj_ini.role[100][14]));
-			}
-			if (global.chapter_name == "Iron Hands"){
-				array_push(specialists, obj_ini.role[100][16]);
-			}	
-			break;
-		case "apoth":
-			specialists = [
-						obj_ini.role[100][15],
-						"Master of the Apothecarion",
-			];
-			if (include_trainee){
-				array_push(specialists,  string("{0} Aspirant",obj_ini.role[100][15]));
-			}	
-			if (global.chapter_name == "Space Wolves"){
-				array_push(specialists, obj_ini.role[100][14]);
-			}		
-			break;
-		case "heads":
-			specialists = role_groups("heads");
-			break;
-		case "command":	
-			specialists = role_groups("command");
-			break;	
-		case "trainee":	
-			specialists = role_groups("trainee");
-			break;
-		case "rank_and_file":
-			specialists = role_groups("rank_and_file");
-			break;
-		case "squad_leaders":
-			specialists = role_groups("squad_leaders");
-			break;
-		case "dreadnoughts":
-			specialists = role_groups("dreadnoughts");	
-			break;
-		case "veterans":
-			specialists = role_groups("veterans");
-			break;
-		case "captain_candidates":
-			specialists = role_groups("captain_candidates");
-			break;			
-	}
-
-	return array_contains(specialists,unit_role);
+    return array_contains(_specialists, unit_role);
 }
 
-function collect_role_group(group="standard", location="", opposite=false, search_conditions = {companies:"all"}){
-	var units = [], unit, count=0, add=false, is_special_group;
+//TODO write this out with proper formatting when i can be assed
+//Used to quikcly collect groups of marines with given parameters
+// group takes a string relating to options in the role_groups function, to ignore filtering by group use "all"
+	// can also pass an array to filter for mutiple groups
+// location takes wther a string with a system name or an array with 3 parameters [<location name>,<planet number>,<ship number>]
+// if opposite is true then then the roles defined in the group argument are ignored and all others collected
+// search conditions
+	// companies, takes either an int or an arrat to define which companies to search in
+	// any stat allowed by the stat_valuator basically allows you to look for marines whith certain stat lines
+	// job allows you to find marines forfuling certain tasks like garrison or forge etc
+
+function collect_role_group(group=SPECIALISTS_STANDARD, location="", opposite=false, search_conditions = {companies:"all"}){
+	var _units = [], unit, count=0, _add=false, _is_special_group;
+	var _max_count = 0;
+	var _total_count = 0;
+	if (struct_exists(search_conditions, "max")){
+		_max_count =  search_conditions.max;
+	}
+	if (!struct_exists(search_conditions, "companies")){
+		search_conditions.companies = "all";
+	}
 	for (var com=0;com<=10;com++){
-		var wanted_companies = search_conditions.companies;
-		if (wanted_companies!="all"){
-			if (is_array(wanted_companies)){
-				if (!array_contains(wanted_companies, com)) then continue;
+    	if (_max_count>0){
+    		if (array_length(_units)>=_max_count){
+    			break;
+    		}
+    	}		
+		var _wanted_companies = search_conditions.companies;
+		if (_wanted_companies!="all"){
+			if (is_array(_wanted_companies)){
+				if (!array_contains(_wanted_companies, com)) then continue;
 			} else {
-				if (wanted_companies != com) then continue;
+				if (_wanted_companies != com) then continue;
 			}
 		}
-	    for (i=0;i<array_length(obj_ini.TTRPG[com]);i++){
-	    	add=false;
+	    for (var i=0;i<array_length(obj_ini.TTRPG[com]);i++){
+	    	if (_max_count>0){
+	    		if (array_length(_units)>=_max_count){
+	    			break;
+	    		}
+	    	}
+	    	if array_length(_units)
+	    	_add=false;
 			unit=fetch_unit([com,i]);
 			if (unit.name()=="") then continue;
 			if (group!="all"){
 				if (is_array(group)){
-					is_special_group = unit.IsSpecialist(group[0], group[1]);
+					if (array_length(group) == 3) {
+						_is_special_group = unit.IsSpecialist(group[0], group[1], group[2]);
+					} else {
+						_is_special_group = unit.IsSpecialist(group[0], group[1]);
+					}
 				} else {
-					is_special_group = unit.IsSpecialist(group);
+					_is_special_group = unit.IsSpecialist(group);
 				}
 			} else {
-				is_special_group = true;
+				_is_special_group = true;
 			}
-	        if ((is_special_group && !opposite) || (!is_special_group && opposite)){
+	        if ((_is_special_group && !opposite) || (!_is_special_group && opposite)){
 	        	if (location==""){
-	        		add=true;
-	       		} else if (unit.is_at_location(location, 0, 0)){
-	       			add=true;
-	       		}
+	        		_add=true;
+	       		} else if (!is_array(location)){
+		       		_add=unit.is_at_location(location);
+		       	} else {
+		       		_add=unit.is_at_location(location[0], location[1], location[2]);
+		       	}
 	        }
-	        if (add){
+	        if (_add){
 	        	if (struct_exists(search_conditions, "stat")){
-	        		add = stat_valuator(search_conditions[$ "stat"], unit);
+	        		_add = stat_valuator(search_conditions.stat, unit);
+	        	}
+	        	if (struct_exists(search_conditions,"job")){
+	        		_add =  (unit.assignment() == search_conditions.job);
 	        	}
 	        }
-	        if (add) then array_push(units, obj_ini.TTRPG[com][i]);
+	        if (_add) then array_push(_units, obj_ini.TTRPG[com][i]);
 	    }    
 	}
-	return units;
+	return _units;
 }
 
 function stat_valuator(search_params, unit){
 	match = true;
 	for (var stat = 0;stat<array_length(search_params);stat++){
-		if (search_params[stat][2] =="more"){
-			if (unit[$ search_params[stat][0]] < search_params[stat][1]){
-				match = false;
-				break;
-			}
-		} else if(search_params[stat][2] =="less"){
-				if (unit[$ search_params[stat][0]] > search_params[stat][1]){
-				match = false;
-				break;
-			}           					
+		var _stat_val = search_params[stat];		
+		if (!struct_exists(unit,_stat_val[0])){
+			match = false;
+			break;
+		}
+		switch _stat_val[2] {
+    		case "inmore":
+	    	case "more":
+    			if (unit[$ _stat_val[0]] < _stat_val[1]){
+    				match = false;
+					break;
+    			}
+			break;
+
+    		case "exmore":
+    			if (unit[$ _stat_val[0]] <= _stat_val[1]){
+    				match = false;
+					break;
+    			}
+			break;
+
+    		case "inless":
+	    	case "less":
+    			if (unit[$ _stat_val[0]] > _stat_val[1]){
+    				match = false;
+					break;
+    			}
+			break;
+
+    		case "exless":
+    			if (unit[$ _stat_val[0]] >= _stat_val[1]){
+    				match = false;
+					break;
+    			}
+			break;
 		}
 	}
 	return match;	
 }
 
 function collect_by_religeon(religion, sub_cult="", location=""){
-	var units = [], unit, count=0, add=false;
+	var _units = [], unit, count=0, _add=false;
 	for (var com=0;com<=10;com++){
-	    for (i=1;i<array_length(obj_ini.TTRPG[com]);i++){
-	    	add=false;
+	    for (var i=1;i<array_length(obj_ini.TTRPG[com]);i++){
+	    	_add=false;
 			unit=obj_ini.TTRPG[com][i];
 			if (unit.name()=="")then continue; 	
 	        if (unit.religion == religion){
@@ -263,88 +350,94 @@ function collect_by_religeon(religion, sub_cult="", location=""){
 	        		}
 	        	}
 	        	if (location==""){
-	        		add=true;
-	       		} else if (unit.is_at_location(location, 0, 0)){
-	       			add=true;
+	        		_add=true;
+	       		} else if (unit.is_at_location(location)){
+	       			_add=true;
 	       		}
 	        }
-	        if (add) then array_push(units, obj_ini.TTRPG[com][i]);
+	        if (_add) then array_push(_units, obj_ini.TTRPG[com][i]);
 	    }    
 	}
-	return units;
+	return _units;
 }
 
-function group_selection(group, selection_data){
-	var unit, s, unit_location;
-	obj_controller.selection_data = selection_data;
-	with (obj_controller){
-            menu=1;
-            onceh=1;
-            cooldown=8000;
-            click=1;
-            popup=0;
-            selected=0;
-            hide_banner=1;
-            with(obj_fleet_select){instance_destroy();}
-            with(obj_star_select){instance_destroy();}
-            view_squad=false;
-            managing=0;		
-			zoomed=0;
-			menu=1;
-			managing=0;
-			diplomacy=0;
-            cooldown=8000;
+/// @description Processes the selection of units based on group parameters and updates controller data
+/// @param {array} group The array of units to process for selection
+/// @param {struct} selection_data Data structure containing selection parameters and state
+
+enum MissionSelectType {
+	Units,
+	Squads
+}
+
+
+function group_selection(group, selection_data={}) {
+    try {
+        var unit, s, unit_location;
+        obj_controller.selection_data = selection_data;
+        set_zoom_to_default();
+        with(obj_controller) {
+        	if (menu != MENU.Manage){
+        		scr_toggle_manage();
+        	} else {
+        		basic_manage_settings();
+        	}
+
             exit_button = new ShutterButton();
             proceed_button = new ShutterButton();
-            selection_data.start_count=0;
-        // Resets selections for next turn
-            man_size=0;
-            selecting_location="";
-            selecting_types="";
-            selecting_ship=0;
-            selecting_planet=0;
-            sel_uid=0;
-            reset_manage_arrays();
-            alll=0;              
-            cooldown=10;
-            sel_loading=0;
-            unload=0;
-            alarm[6]=7;
-            company_data={};
-            view_squad=false;
-            managing =-1; 
-            var vehicles = [];
-            for (var i = 0; i< array_length(group);i++){
-            	if (!is_struct(group[i])){
-            		if (is_array(group[i])){
-            			array_push(vehicles, group[i]);
-            		}
-            		continue;
-            	}
-            	unit = group[i];
-            	add_man_to_manage_arrays(unit);
-
-                if (selection_data.purpose_code=="forge_assignment"){
-                	if (unit.job != "none"){
-                		if (unit.job.type=="forge" && unit.job.planet== selection_data.planet){
-							man_sel[array_length(display_unit)-1]=1;
-							man_size++;
-							selection_data.start_count++;
-
-                		}                		
-                	}
-                }       	
+            selection_data.start_count = 0;
+           	instance_destroy(obj_managment_panel);
+            if (!struct_exists(selection_data, "select_type")){
+            	selection_data.select_type = MissionSelectType.Units;
             }
-            var last_vehicle=0;
-        if (array_length(vehicles)>0){
-        	for (var veh=0;veh<array_length(vehicles);veh++){
-        		unit = vehicles[veh];
-        		add_vehicle_to_manage_arrays(unit)       		
-        	}
+            // Resets selections for next turn
+            scr_ui_refresh();
+            managing = -1;
+            new_company_struct();
+            var vehicles = [];
+            for (var i = 0; i < array_length(group); i++) {
+                if (!is_struct(group[i])) {
+                    if (is_array(group[i])) {
+                        array_push(vehicles, group[i]);
+                    }
+                    continue;
+                }
+                unit = group[i];
+                add_man_to_manage_arrays(unit);
+
+                if (selection_data.purpose_code == "forge_assignment") {
+                    if (unit.job != "none") {
+                        if (unit.job.type == "forge" && unit.job.planet == selection_data.planet) {
+                            man_sel[array_length(display_unit) - 1] = 1;
+                            man_size++;
+                            selection_data.start_count++;
+                        }
+                    }
+                }
+            }
+            var last_vehicle = 0;
+            if (array_length(vehicles) > 0) {
+                for (var veh = 0; veh < array_length(vehicles); veh++) {
+                    unit = vehicles[veh];
+                    add_vehicle_to_manage_arrays(unit);
+                }
+            }
+            other_manage_data();
+            man_current = 0;
+            man_max = MANAGE_MAN_MAX;
+
+            if (selection_data.select_type == MissionSelectType.Squads){
+            	new_company_struct();
+            	company_data.has_squads = true;
+            	company_data.squad_location = selection_data.system.name;
+            	company_data.squad_search();
+            	managing = -1;
+            }
         }
-        other_manage_data();
-        man_current=0;
-        man_max=array_length(display_unit)+2;
-        man_see=38-4;
-	}
+        show_debug_message($"manage_success {obj_controller.menu}");
+    } catch (_exception) {
+        //handle and send player back to map
+        handle_exception(_exception);
+        scr_toggle_manage();
+    }
 }

@@ -87,8 +87,8 @@ if (string_count("mech",battle_special)>0){
 }
 
 if (battle_special="space_hulk"){
-    if (hulk_forces>0) then p1="Your marines manuever through the hull of the Space Hulk, shadows dancing and twisting before their luxcasters.  The hallway integrity is nonexistant- twisted metal juts out in hazardous ways or opens into bottomless pits.  Still, there is loot and knowledge to be gained.  It is not long before your men's sensorium pick up hostile blips.  Your own forces are made up of ";
-    if (hulk_forces=0) then p1="Your marines manuever through the hull of the Space Hulk, shadows dancing and twisting before their luxcasters.  The hallway integrity is nonexistant- twisted metal juts out in hazardous ways or opens into bottomless pits.  Your forces are made up of ";
+    if (hulk_forces>0) then p1="Your marines maneuver through the hull of the Space Hulk, shadows dancing and twisting before their luxcasters.  The hallway integrity is non-existent – twisted metal juts out in hazardous ways or opens into bottomless pits.  Still, there is loot and knowledge to be gained.  It is not long before your men's sensorium pick up hostile blips.  Your own forces are made up of ";
+    if (hulk_forces=0) then p1="Your marines maneuver through the hull of the Space Hulk, shadows dancing and twisting before their luxcasters.  The hallway integrity is non-existent – twisted metal juts out in hazardous ways or opens into bottomless pits.  Your forces are made up of ";
 }
 
 
@@ -115,6 +115,9 @@ if (battle_special=""){
 }
 if (string_count("spyrer",battle_special)>0){
     p1="Your marines search through the alleyways and corridors likely to contain the Spyrer.  It does not take long before the lunatic attacks, springing off from a wall to fall among your men.  Your ranks are made up of ";
+}
+if (string_count("protect_raiders",battle_special)>0){
+    p1="Following responses from scans, Your marine squad deploys and lies in wait on the planets surface. Either the eldar were expecting you or the scope of the raids on the planet had been underplayed by the governor perhaps to hide his incompetence in allowing such foul xenos actions to persist unchecked for so long.";
 }
 if (string_count("fallen",battle_special)>0){
     p1="Your marines search through the alleyways and dens likely to contain the Fallen.  Several days pass before the search is succesful; the prey is located by Auspex and closed in upon.  ";
@@ -267,6 +270,10 @@ if (dreadnoughts+predators+land_raiders>3){
     
     if (land_raiders=1) then p6+=string(land_raiders)+" Land Raider, ";
     if (land_raiders>1) then p6+=string(land_raiders)+" Land Raiders, ";
+
+    if (land_speeders=1) then p6+=string(land_speeders)+" Land Speeder, ";
+    if (land_speeders>1) then p6+=string(land_speeders)+" Land Speeders, ";
+    
     
     if (whirlwinds=1) then p6+=string(whirlwinds)+" Whirlwind, ";
     if (whirlwinds>1) then p6+=string(whirlwinds)+" Whirlwinds, ";
@@ -502,7 +509,7 @@ if (temp>=100) and (threat>1) and (big_mofo>0) and (big_mofo<10) and (dropping=0
         newline=p4;scr_newtext();
         newline=p5;scr_newtext();
     }
-	if (global.chapter_name="Carcharodons"){standard_cry=1;
+	if (obj_ini.battle_cry == "..."){standard_cry=1;
         var rand;rand=choose(1,2,3);
         if (rand=1) and (big_mofo!=1){p2="remains silent as the Chapter forms for battle-";}if (rand=1) and (big_mofo=1){p2="remain silent as the Chapter forms for battle-";}
         if (rand=2) and (big_mofo!=1){p2="remains silent and issues orders to the Chapter for battle-";}if (rand=2) and (big_mofo=1){p2="remain silent and issues orders to the Chapter for battle-";}
@@ -521,7 +528,7 @@ if (temp>=100) and (threat>1) and (big_mofo>0) and (big_mofo<10) and (dropping=0
     
     // show_message(string(global.chapter_name)+"|"+string(global.custom)+"|"+string(standard_cry));
     
-    if (global.chapter_name="Iron Warriors") and (global.custom=0){standard_cry=1;
+    if (global.chapter_name="Iron Warriors") and (global.custom==eCHAPTER_TYPE.PREMADE){standard_cry=1;
         var rand;rand=choose(1,2,3,4,5);
         if (rand=1) and (big_mofo!=1){p2="breaks the silence, begining the Chapter Battlecry-";}if (rand=1) and (big_mofo=1){p2="break the silence, begining the Chapter Battlecry-";}
         if (rand=2) and (big_mofo!=1){p2="roars the first half of the Chapter Battlecry-";}if (rand=2) and (big_mofo=1){p2="roar the first half of the Chapter Battlecry-";}

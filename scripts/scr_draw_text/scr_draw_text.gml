@@ -37,7 +37,8 @@ function draw_text_glow(_x, _y, _text, _text_color, _glow_color){
     draw_set_color(_cur_color);
 }
 
-/// @function draw_text_glow
+
+/// @function draw_text_glow_transformed
 /// @description This function will draw text in a similar way to draw_text(), only now the text will have a glow effect.
 function draw_text_glow_transformed(_x, _y, _text, _text_scale = [1,1], _angle = 0, _text_color, _glow_color){
     var _cur_color = draw_get_color();
@@ -116,6 +117,16 @@ function draw_text_shadow(_x, _y, _text){
     draw_text(_x-1, _y+1, _text);
     draw_set_color(_cur_color);
     draw_text(_x, _y, _text);
+}
+
+function calc_text_scale_confines(text, width, buffer){
+    var _scale = 1;
+    var _string_width = string_width(text);
+    if (_string_width > (width - buffer)){
+        _scale = (width - buffer)/_string_width
+    }
+
+    return _scale;
 }
 
 /// @function draw_text_ext_shadow

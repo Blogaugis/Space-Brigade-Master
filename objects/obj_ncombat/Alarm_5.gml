@@ -5,69 +5,185 @@ var part5="",part6="",part7="",part8="",part10="";
 battle_over=1;
 
 alarm[8]=999999;
- var line_break = "------------------------------------------------------------------------------";
-// show_message("Final Deaths: "+string(final_deaths));
+var line_break = "------------------------------------------------------------------------------";
+// show_message("Final Deaths: "+string(final_marine_deaths));
 
 
+if (turn_count >= 50){
+    part1 = "Your forces make a fighting retreat \n"
+}
 // check for wounded marines here to finish off, if defeated defending
 var roles = obj_ini.role[100];
 var ground_mission = (instance_exists(obj_ground_mission));
-if (final_deaths+final_command_deaths>0){
-    part1=$"Marines Lost: {final_deaths+final_command_deaths}";
-    if(apoth){
-        part1+=$" ({roles[Role.APOTHECARY]}{apoth>1?"s":""} prevented the death of {units_saved})";
+
+with (obj_pnunit) {
+    after_battle_part1();
+}
+
+if (obj_ncombat.defeat == 0) {
+    marines_to_recover = ds_priority_create();
+    vehicles_to_recover = ds_priority_create();
+
+    with (obj_pnunit) {
+        add_marines_to_recovery();
+        add_vehicles_to_recovery();
     }
-    if (injured>0) then part8=$"Marines Critically Injured: {injured}";
+
+    while (!ds_priority_empty(marines_to_recover)) {
+        var _candidate = ds_priority_delete_max(marines_to_recover);
+        var _column_id = _candidate.column_id;
+        var _unit_id = _candidate.id;
+        var _unit = _candidate.unit;
+        var _unit_role = _unit.role();
+        var _constitution_test_mod = _unit.hp() * -1;
+        var _constitution_test = global.character_tester.standard_test(_unit, "constitution", _constitution_test_mod);
+
+        if (unit_recovery_score > 0) {
+            _unit.update_health(_constitution_test[1]);
+            _column_id.marine_dead[_unit_id] = false;
+            unit_recovery_score--;
+            units_saved_count++;
+
+            if (!struct_exists(obj_ncombat.units_saved_counts, _unit_role)) {
+                obj_ncombat.units_saved_counts[$ _unit_role] = 1;
+            } else {
+                obj_ncombat.units_saved_counts[$ _unit_role]++;
+            }
+            continue;
+        }
+
+        if (_unit.base_group == "astartes") {
+            if (!_unit.gene_seed_mutations[$ "membrane"]) {
+                var survival_mod = _unit.luck * -1;
+                survival_mod += _unit.hp() * -1;
     
-    var i=0;
-    for (var i=1;i<array_length(post_unit_lost);i++){
-            if (post_unit_lost[i]!="") and (post_units_lost[i]>0) and (post_unit_veh[i]=0){
-            part2+=$"{post_units_lost[i]}x {post_unit_lost[i]},";
+                var survival_test = global.character_tester.standard_test(_unit, "constitution", survival_mod);
+                if (survival_test[0]) {
+                    _column_id.marine_dead[_unit_id] = false;
+                    injured++;
+                }
+            }
         }
     }
-    part2=string_delete(part2,string_length(part2)-1,2);
-    part2+=".";i=0;
+    ds_priority_destroy(marines_to_recover);
+
+    while (!ds_priority_empty(vehicles_to_recover)) {
+        var _candidate = ds_priority_delete_max(vehicles_to_recover);
+        var _column_id = _candidate.column_id;
+        var _vehicle_id = _candidate.id;
+        var _vehicle_type = _column_id.veh_type[_vehicle_id];
     
-    if (injured>0){newline=part8;scr_newtext();}
-    newline=part1;
-    scr_newtext();
-    newline=part2;
-    newline_color="red";
-    scr_newtext();
-    newline=" ";
+        if (obj_controller.stc_bonus[3] = 4) {
+            var _survival_roll = 70 + _candidate.priority;
+            var _dice_roll = roll_dice_chapter(1, 100, "high");
+            if (_dice_roll >= _survival_roll) && (_column_id.veh_dead[_vehicle_id] != 2) {
+                _column_id.veh_hp[_vehicle_id] = roll_dice_chapter(1, 10, "high");
+                _column_id.veh_dead[_vehicle_id] = false;
+                vehicles_saved_count++;
+
+                if (!struct_exists(obj_ncombat.vehicles_saved_counts, _vehicle_type)) {
+                    obj_ncombat.vehicles_saved_counts[$ _vehicle_type] = 1;
+                } else {
+                    obj_ncombat.vehicles_saved_counts[$ _vehicle_type]++;
+                }
+                continue;
+            }
+        }
+    
+        if (vehicle_recovery_score > 0) {
+            _column_id.veh_hp[_vehicle_id] = roll_dice_chapter(1, 10, "high");
+            _column_id.veh_dead[_vehicle_id] = false;
+            vehicle_recovery_score -= _candidate.priority;
+            vehicles_saved_count++;
+
+            if (!struct_exists(obj_ncombat.vehicles_saved_counts, _vehicle_type)) {
+                obj_ncombat.vehicles_saved_counts[$ _vehicle_type] = 1;
+            } else {
+                obj_ncombat.vehicles_saved_counts[$ _vehicle_type]++;
+            }
+        }
+    }
+    ds_priority_destroy(vehicles_to_recover);
+}
+
+
+with (obj_pnunit) {
+    after_battle_part2();
+}
+
+var _total_deaths = final_marine_deaths + final_command_deaths;
+var _total_injured = _total_deaths + injured + units_saved_count;
+if (_total_injured > 0) {
+    newline = $"{string_plural_count("unit", _total_injured)} {smart_verb("was", _total_injured)} critically injured.";
+	scr_newtext();
+
+    if (units_saved_count > 0) {
+        var _units_saved_string = "";
+        var _unit_roles = struct_get_names(units_saved_counts);
+
+        for (var i = 0; i < array_length(_unit_roles); i++) {
+            var _unit_role = _unit_roles[i];
+            var _saved_count = units_saved_counts[$ _unit_role];
+            _units_saved_string += $"{string_plural_count(_unit_role, _saved_count)}";
+            _units_saved_string += smart_delimeter_sign(_unit_roles, i, false);
+        }
+
+        newline = $"{units_saved_count}x {smart_verb("was", units_saved_count)} saved by the {string_plural(roles[eROLE.Apothecary], apothecaries_alive)}. ({_units_saved_string})";
+        scr_newtext();
+    }
+
+    if (injured > 0) {
+        newline = $"{injured}x survived thanks to the Sus-an Membrane.";
+        newline_color = "red";
+        scr_newtext();
+    }
+
+    if (_total_deaths > 0) {
+        var _units_lost_string = "";
+        var _unit_roles = struct_get_names(units_lost_counts);
+        for (var i = 0; i < array_length(_unit_roles); i++) {
+            var _unit_role = _unit_roles[i];
+            var _lost_count = units_lost_counts[$ _unit_role];
+            _units_lost_string += $"{string_plural_count(_unit_role, _lost_count)}";
+            _units_lost_string += smart_delimeter_sign(_unit_roles, i, false);
+        }
+        newline += $"{_total_deaths} units succumbed to their wounds! ({_units_lost_string})";
+        newline_color="red";
+        scr_newtext();
+
+    }
+
+    newline = " ";
     scr_newtext();
 }
 
+
 if (ground_mission){
-	if (apoth < 0){
-		obj_ground_mission.apothecary_present = apoth;
+	if (apothecaries_alive < 0){
+		obj_ground_mission.apothecary_present = apothecaries_alive;
 	}
 };
 
-seed_saved=(min(seed_max,apoth*40))-gene_penalty;
-if (string_count("Doom",obj_ini.strin2)>0) then seed_saved=0;
-if (seed_saved>0) then obj_controller.gene_seed+=seed_saved;
+if (seed_lost > 0) {
+    if (obj_ini.doomed) {
+        newline = $"Chapter mutation prevents retrieving gene-seed. {seed_lost} gene-seed lost.";
+        scr_newtext();
+    } else if (!apothecaries_alive) {
+        newline = $"No able-bodied {roles[eROLE.Apothecary]}. {seed_lost} gene-seed lost.";
+        scr_newtext();
+    } else {
+        seed_saved = min(seed_harvestable, apothecaries_alive * 40);
+        newline = $"{seed_saved} gene-seed was recovered; {seed_lost - seed_harvestable} was lost due damage; {seed_harvestable - seed_saved} was left to rot;";
+        scr_newtext();
+    }
 
-if (string_count("Doom",obj_ini.strin2)>0) &&  (!apoth){
-    part3=$"Chapter Mutation prevents retrieving Gene-Seed.  {seed_max} Gene-Seed lost.";
-    newline=part3;
-    scr_newtext();
-    newline=" ";
-    scr_newtext();
-}else if (!apoth) and (string_count("Doom",obj_ini.strin2)=0){
-    part3=$"No able-bodied {roles[Role.APOTHECARY]}.  {seed_max} Gene-Seed lost.";
-    newline=part3;scr_newtext();
-    newline=" ";scr_newtext();
-}else if (apoth>0) and (final_deaths+final_command_deaths>0) and (string_count("Doom",obj_ini.strin2)=0){
-    part3=$"Gene-Seed Recovered: {seed_saved}(";
-    part3 += seed_saved ? $"{round((seed_saved/seed_max)*100)}" : "0";
-    part3 += "%)";
-    newline=part3;
-    scr_newtext();
-    newline=" ";
+    if (seed_saved > 0) {
+        obj_controller.gene_seed += seed_saved;
+    }
+
+    newline = " ";
     scr_newtext();
 }
-
 
 if (red_thirst>2){
     var voodoo="";
@@ -77,41 +193,62 @@ if (red_thirst>2){
     
     newline=voodoo;newline_color="red";
     scr_newtext();
-    newline=" ";scr_newtext();
+    newline=" ";
+    scr_newtext();
 }
 
+newline = " ";
+scr_newtext();
 
-if (vehicle_deaths>0){
-    part4="Vehicles Lost: "+string(vehicle_deaths);
-    if (techma=1) then part4+=" ("+string(roles[16])+" prevented the destruction of "+string(vehicles_saved)+")";
-    if (techma>1) then part4+=" ("+string(roles[16])+"s prevented the destruction of "+string(vehicles_saved)+")";
-    
-    var i;i=0;
-    repeat(30){i+=1;
-        if (post_unit_lost[i]!="") and (post_units_lost[i]>0) and (post_unit_veh[i]=1){
-            part5+=string(post_units_lost[i])+"x "+string(post_unit_lost[i])+", ";
+
+var _total_damaged_count = vehicle_deaths + vehicles_saved_count;
+if (_total_damaged_count > 0) {
+	newline = $"{string_plural_count("vehicle", _total_damaged_count)} {smart_verb("was", _total_damaged_count)} disabled during battle.";
+    scr_newtext();
+
+    if (vehicles_saved_count > 0) {
+        var _vehicles_saved_string = "";
+        var _vehicle_types = struct_get_names(vehicles_saved_counts);
+
+        for (var i = 0; i < array_length(_vehicle_types); i++) {
+            var _vehicle_type = _vehicle_types[i];
+            var _saved_count = vehicles_saved_counts[$ _vehicle_type];
+            _vehicles_saved_string += $"{string_plural_count(_vehicle_type, _saved_count)}";
+            _vehicles_saved_string += smart_delimeter_sign(_vehicle_types, i, false);
         }
+
+        newline = $"{string_plural(roles[eROLE.Techmarine], techmarines_alive)} {smart_verb("was", techmarines_alive)} able to restore {vehicles_saved_count}. ({_vehicles_saved_string})";
+        scr_newtext();
     }
-    part5=string_delete(part5,string_length(part5)-1,2);part5+=".";i=0;
-    
-    newline=part4;scr_newtext();
-    newline=part5;scr_newtext();
-    newline=" ";scr_newtext();
+
+    if (vehicle_deaths > 0) {
+        var _vehicles_lost_string = "";
+        var _vehicle_types = struct_get_names(vehicles_lost_counts);
+
+        for (var i = 0; i < array_length(_vehicle_types); i++) {
+            var _vehicle_type = _vehicle_types[i];
+            var _lost_count = vehicles_lost_counts[$ _vehicle_type];
+            _vehicles_lost_string += $"{string_plural_count(_vehicle_type, _lost_count)}";
+            _vehicles_lost_string += smart_delimeter_sign(_vehicle_types, i, false);
+        }
+
+        newline += $"{vehicle_deaths} {smart_verb("was", vehicle_deaths)} lost forever. ({_vehicles_lost_string})";
+        newline_color="red";
+        scr_newtext();
+    }
+
+    newline = " ";
+    scr_newtext();
 }
+
 
 
 if (post_equipment_lost[1]!=""){
     part6="Equipment Lost: ";
     
-    var i=0;
-    for (var i=0;i<array_length(post_equipment_lost);i++){
-        if (post_equipment_lost[i]!="") and (post_equipments_lost[i]>0){
-            part7+=string(post_equipments_lost[i])+"x "+string(post_equipment_lost[i])+", ";
-        }
-    }
-    part7=string_delete(part7,string_length(part7)-1,2);part7+=".";i=0;
+    part7 += arrays_to_string_with_counts(post_equipment_lost, post_equipments_lost, true, false);
 	if (ground_mission){
-        part7 += "Some may be recoverable"
+        part7 += " Some may be recoverable."
     }
     newline=part6;
     scr_newtext();
@@ -120,45 +257,44 @@ if (post_equipment_lost[1]!=""){
     newline=" ";
     scr_newtext();
 }
+
+
+
 if (total_battle_exp_gain>0){
+    with (obj_pnunit) {
+        assemble_alive_units();
+    }
+    average_battle_exp_gain = distribute_experience(end_alive_units, total_battle_exp_gain); // Due to cool alarm timer shitshow, I couldn't think of anything but to put it here.
+    newline = $"Each marine gained {average_battle_exp_gain} experience, reduced by their total experience.";
+    scr_newtext();
+
+    var _upgraded_librarians_count = array_length(upgraded_librarians);
+    if (_upgraded_librarians_count > 0) {
+        for (var i = 0; i < _upgraded_librarians_count; i++) {
+            if (i > 0) {
+                newline += ", ";
+            }
+            newline += $"{upgraded_librarians[i].name_role()}";
+        }
+        newline += " learned new psychic powers after gaining enough experience."
+        scr_newtext();
+    }
+
     newline=" ";
     scr_newtext();
-    newline = $"Marines gained a total of {total_battle_exp_gain} experience";
-    scr_newtext();
 }
+
 if (ground_mission){
 	obj_ground_mission.post_equipment_lost = post_equipment_lost
 	obj_ground_mission.post_equipments_lost = post_equipments_lost
 }
+
 if (slime>0){
-    var compan_slime;
-    compan_slime=0;
-    
-    var s1,s2,s3,s4;
-    s1="";s2="";s3="";s4="";
-    
-    i=-1;
-    
-    s1="Slime has short-circuited and destroyed "+string(slime);
-    
-    for (var i=0;i<=10;i++){
-        if (mucra[i]){
-            compan_slime+=1;
-			if (i>0){
-				s3+=$"{i}, ";
-			} else {
-				s3+=$"HQ, ";
-			}
-        }
-    }
-    
-    s2=$" {slime==1?"suit":"suits"} of Power Armour.  {compan_slime>1?$"{s3} Companies":$"{s3} company"} {s4} has been effected.";
-    
-    s3=string_delete(s3,string_length(s3)-1,2);
-    
-    newline=s1+s2+s3+s4;
+    var slime_string=$"Faulty Mucranoid and other afflictions have caused damage to the equipment. {slime} Forge Points will be allocated for repairs.";    
+    newline=slime_string;
     newline_color="red";
     scr_newtext();
+
     newline=" ";
     scr_newtext();
 }
@@ -203,7 +339,10 @@ if (fortified>0) and (!instance_exists(obj_nfort)) and (reduce_fortification=tru
 
 
 if (defeat=0) and (battle_special="space_hulk"){
-    var enemy_power=0,loot=0,dicey=floor(random(100))+1,ex=0;
+    var enemy_power=0,
+    loot=0,
+    dicey=roll_dice_chapter(1, 100, "low"),
+    ex=0;
 
     if (enemy=7){
         enemy_power=battle_object.p_orks[battle_id];
@@ -225,7 +364,6 @@ if (defeat=0) and (battle_special="space_hulk"){
     if (ex=100) then newline_color="red";
     scr_newtext();
 
-    if (string_count("Shitty",obj_ini.strin2)>0) then dicey=dicey*1.5;
     // show_message("Roll Under: "+string(enemy_power*10)+", Roll: "+string(dicey));
 
     if (dicey<=(enemy_power*10)){
@@ -258,8 +396,8 @@ if (battle_special="fallen2") then reduce_power=false;
 if (battle_special="study2a") then reduce_power=false;
 if (battle_special="study2b") then reduce_power=false;
 if (defeat=0) and (reduce_power=true){
-    var enemy_power,new_power, power_reduction, final_pow, requisition_reward, power_fought;
-    enemy_power=0;new_power=0; power_reduction=0; requisition_reward=0; power_fought=0;
+    var enemy_power,new_power, power_reduction, final_pow, requisition_reward;
+    enemy_power=0;new_power=0; power_reduction=0; requisition_reward=0;
 
     if (enemy=2){
         enemy_power=battle_object.p_guardsmen[battle_id];
@@ -309,17 +447,15 @@ if (defeat=0) and (reduce_power=true){
     if (enemy!=2){
         if (dropping == true || defending == true) {
             power_reduction = 1;
-            power_fought = max(enemy_power - 1, 1); // Raiding generates enemies at -1 power, so less points
         } else {
             power_reduction = 2;
-            power_fought = enemy_power;
         }
         new_power = enemy_power - power_reduction;
         new_power = max(new_power, 0);
 
         // Give some money for killing enemies?
-        var reward_table = [0, 5, 10, 20, 40, 80, 160, 320];
-        requisition_reward = reward_table[power_fought];
+        var _quad_factor = 6;
+        requisition_reward = _quad_factor * sqr(threat);
         obj_controller.requisition += requisition_reward;
 
 		//(¿?) Ramps up threat/enemy presence in case enemy Type == "Daemon" (¿?)
@@ -407,9 +543,11 @@ if (defeat=0) and (reduce_power=true){
             part10+=$" were reduced to {new_power} after this battle. Previous power: {
                 enemy_power}. Reduction: {power_reduction}.";
         }
-        newline=part10;scr_newtext();
+        newline=part10;
+        scr_newtext();
         part10 = $"Received {requisition_reward} requisition points as a reward for slaying enemies of the Imperium.";
-        newline=part10;scr_newtext();
+        newline=part10;
+        scr_newtext();
     
         if (new_power<=0) and (enemy_power>0) then battle_object.p_raided[battle_id]=1;
     }
@@ -465,8 +603,8 @@ if (defeat=0) and (reduce_power=true){
         pip.cooldown=15;
         cooldown=15;
 
-        pip.option1="Advance!";
-        pip.option2="Cancel the attack";*/
+        pip.add_option="Advance!";
+        pip.add_option="Cancel the attack";*/
 
 
 
@@ -521,7 +659,7 @@ scr_newtext();
 newline=line_break;
 scr_newtext();
 
-if (((leader)) or ((battle_special="world_eaters") and (!obj_controller.faction_defeated[10]))) and (!defeat){
+if (((leader)) or ((battle_special="ChaosWarband") and (!obj_controller.faction_defeated[10]))) and (!defeat){
     var nep;nep=false;
     newline="The enemy Leader has been killed!";newline_color="yellow";scr_newtext();
     newline=line_break;
@@ -554,13 +692,12 @@ inq_eated=false;
 
 
 if (obj_ini.omophagea){
-    var eatme=floor(random(100))+1;
+    var eatme=roll_dice_chapter(1, 100, "high");
     if (enemy=13) or (enemy=9) or (battle_special="ship_demon") then eatme+=100;
     if (enemy=10) and (battle_object.p_traitors[battle_id]=7) then eatme+=200;
 
     if (red_thirst=3) then thirsty=1;if (red_thirst>3) then thirsty=red_thirst-2;
     if (thirsty>0) then eatme-=(thirsty*6);if (really_thirsty>0) then eatme-=(really_thirsty*15);
-    if (string_count("Shitty",obj_ini.strin2)=1) then eatme-=10;
 
     if (allies>0){
         obj_controller.disposition[2]-=choose(1,0,0);
@@ -591,8 +728,7 @@ if (obj_ini.omophagea){
 
 
         // check for pdf/guardsmen
-        eatme=floor(random(100))+1;
-        if (array_contains(obj_ini.dis,"Shitty Luck")) then eatme-=10;
+        eatme=roll_dice_chapter(1, 100, "high");
         if (eatme<=10) and (allies>0){
             obj_controller.disposition[2]-=2;
             if (allies=1){
@@ -607,8 +743,7 @@ if (obj_ini.omophagea){
         }
 
         // check for inquisitor
-        eatme=floor(random(100))+1;
-        if (array_contains(obj_ini.dis,"Shitty Luck")) then eatme-=5;
+        eatme=roll_dice_chapter(1, 100, "high");
         if (eatme<=40) and (present_inquisitor=1){
             var thatta=0,remove=0,i=0;
             obj_controller.disposition[4]-=10;
@@ -672,7 +807,6 @@ if (obj_ini.omophagea){
                 instance_deactivate_object(obj_turn_end);
 
                 with(inquisitor_ship){instance_destroy();}
-                with(obj_temp3){instance_destroy();}
                 with(obj_ground_mission){instance_destroy();}
             }
             instance_deactivate_object(obj_star);
@@ -759,13 +893,8 @@ if (obj_ini.fleet_type != ePlayerBase.home_world) and (defeat==1) and (dropping=
 	    endline=0;
 
 	    if (obj_controller.und_gene_vaults=0){
-	        obj_controller.gene_seed=0;
-            for (var w=0;w<array_length(obj_ini.slave_batch_num);w++){
-                if (obj_ini.slave_batch_num[w]>0){
-                    obj_ini.slave_batch_num[w]=0;
-                    obj_ini.slave_batch_eta[w]=0;
-                }
-            }
+            //all Gene Pod Incubators and gene seed are lost
+	        destroy_all_gene_slaves(false);
 	    }
 	    if (obj_controller.und_gene_vaults>0) then obj_controller.gene_seed-=floor(obj_controller.gene_seed/10);
 	}
@@ -784,15 +913,16 @@ if (endline=0){
 if (defeat=1){
 	player_forces=0;
 	if (ground_mission){
-		obj_ground_mission.recoverable_gene_seed = seed_max;
+		obj_ground_mission.recoverable_gene_seed = seed_lost;
 	}
 	
 }
 
+gene_slaves = [];
+
 instance_deactivate_object(obj_star);
 instance_deactivate_object(obj_ground_mission);
 
-show_debug_message($"{instance_number(obj_popup)}");
 show_debug_message($"{started}");
 /* */
 /*  */

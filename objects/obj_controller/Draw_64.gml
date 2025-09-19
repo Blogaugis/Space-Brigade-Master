@@ -1,6 +1,5 @@
 /// @description Insert description here
 // You can write your code in this editor
-
 // Draws the main UI menu. The function is used to highlight if you selected something in the menu
 if instance_exists
 var l_hei=37,l_why=0;
@@ -8,7 +7,7 @@ var l_hei=37,l_why=0;
 if (instance_exists(obj_saveload)) then exit;
 if (instance_exists(obj_ncombat)) then exit;
 if (instance_exists(obj_fleet)) then exit;
-if (global.load>0) then exit;
+if (global.load>=0) then exit;
 if (invis==true) then exit;
 
 if (is_test_map==true){
@@ -18,60 +17,82 @@ if (is_test_map==true){
     draw_set_alpha(1);
 }
 // if (instance_exists(obj_turn_end)) then exit;
-
+draw_set_alpha(1);
+draw_set_valign(fa_top);
+draw_set_halign(fa_left);
 var xx = 0;
 var yy = 0;
+if (menu == MENU.Diplomacy){
+    add_draw_return_values();
+    if (diplomacy > 0){
+        draw_diplomacy_diplo_text();
+        if (trading==true){
+            if ((diplomacy>1) && is_struct(trade_attempt)){
+                try {
+                    trade_attempt.draw_trade_screen();
+                } catch(_exception){
+                     handle_exception(_exception);
+                     delete trade_attempt;
+                     trading = false;
 
+                }
+            }
+        } else if (diplomacy!=10.1){
+            draw_character_diplomacy_base_page()
+        }
+    } else if (diplomacy == -1){
+        if (is_struct(character_diplomacy)){
+            draw_character_diplomacy();
+        }
+    }
+    pop_draw_return_values();
+}
 // Main UI
 if (!zoomed && !zui){
-    draw_sprite(spr_new_ui,0,0,0);
+    draw_sprite(spr_new_ui,menu==0,0,0);
     draw_set_color(c_white);
 
-    menu_buttons.chapter_manage.draw(34,838+y_slide, "Chapter Management",1,1,145)
-    menu_buttons.chapter_settings.draw(179,838+y_slide, "Chapter Settings",1,1,145)
-    menu_buttons.apoth.draw(357,838+y_slide, "Apothecarium")
-    menu_buttons.reclu.draw(473,838+y_slide, "Reclusium")
-    menu_buttons.lib.draw(590,838+y_slide, "Librarium")
-    menu_buttons.arm.draw(706,838+y_slide, "Armamentarium")
-    menu_buttons.recruit.draw(822,838+y_slide, "Recruitment")
-    menu_buttons.fleet.draw(938,838+y_slide, "Fleet")
-    menu_buttons.diplo.draw(1130,838+y_slide, "Diplomacy",1,1,145)
-    menu_buttons.event.draw(1275,838+y_slide, "Event Log",1,1,145)
-    menu_buttons.end_turn.draw(1420,838+y_slide, "End Turn",1,1,145);
-    menu_buttons.help.draw(1374,8+y_slide, "Help");
-    menu_buttons.menu.draw(1484,8+y_slide, "Menu");
+    if (!instance_exists(obj_popup)){
+        menu_buttons.chapter_manage.draw(34,838+y_slide, "Chapter Management",1,1,145)
+        menu_buttons.chapter_settings.draw(179,838+y_slide, "Chapter Settings",1,1,145)
+        menu_buttons.apoth.draw(357,838+y_slide, "Apothecarium")
+        menu_buttons.reclu.draw(473,838+y_slide, "Reclusium")
+        menu_buttons.lib.draw(590,838+y_slide, "Librarium")
+        menu_buttons.arm.draw(706,838+y_slide, "Armamentarium")
+        menu_buttons.recruit.draw(822,838+y_slide, "Recruitment")
+        menu_buttons.fleet.draw(938,838+y_slide, "Fleet")
+        menu_buttons.diplo.draw(1130,838+y_slide, "Diplomacy",1,1,145)
+        menu_buttons.event.draw(1275,838+y_slide, "Event Log",1,1,145)
+        menu_buttons.end_turn.draw(1420,838+y_slide, "End Turn",1,1,145);
+        menu_buttons.help.draw(1374,8+y_slide, "Help");
+        menu_buttons.menu.draw(1484,8+y_slide, "Menu");
+    }
     
     
     if (y_slide>0) then draw_set_alpha((100-(y_slide*2))/100);
-    
+
     draw_set_alpha(1);
     draw_sprite(spr_new_banner,0,1439+new_banner_x,62);
     draw_sprite(spr_new_ui_cover,0,0,(900-17));
-    // Handles custom chapters
-    if (string_count("custom",obj_ini.icon_name)>0){
-        var cusl=string_replace(obj_ini.icon_name,"custom","");
-        cusl=real(cusl);
-        if (obj_cuicons.spr_custom[cusl]>0) and (obj_cuicons.spr_custom_icon[cusl]!=-1){
-            draw_sprite_stretched(obj_cuicons.spr_custom_icon[cusl],0,1451+new_banner_x,73,141,141);
-        }
-    }
-    // Handles icon for normal chapters
-    if (string_count("custom",obj_ini.icon_name)==0){
-        var icon_sprite=spr_icon,icc=obj_ini.icon;
-        if (icc<=20) then scr_image("creation",icc,1451+new_banner_x,73,141,141);
-        if (icc>20){
-            icon_sprite=spr_icon_chapters;
-            icc-=19;
-            draw_sprite(icon_sprite,icc,1451+new_banner_x,73);
-        }
-    }
     
-    draw_set_color(38144);
+    var sprx = 1451+new_banner_x,
+        spry = 73,
+        sprw = 141,
+        sprh = 141;
+    
+    if (sprite_exists(global.chapter_icon.sprite)){
+        draw_sprite_stretched(global.chapter_icon.sprite, 0, sprx, spry, sprw, sprh);
+    }
+       
+    
+    draw_set_color(CM_GREEN_COLOR);
     draw_set_font(fnt_menu);
     draw_set_halign(fa_center);
+    draw_set_valign(fa_top);
     // Draws the sector name
-    draw_text(775,17,string_hash_to_newline("Sector "+string(obj_ini.sector_name)));
-    draw_text(775.5,17.5,string_hash_to_newline("Sector "+string(obj_ini.sector_name)));
+    var _sector_string = $"Sector {obj_ini.sector_name ?? "Terra Nova"}";
+    draw_text(775,17,_sector_string);
+    draw_text(775.5,17.5,_sector_string);
     
     // Checks if you are penitent
     if (obj_controller.faction_status[eFACTION.Imperium]!="War"){
@@ -86,7 +107,7 @@ if (!zoomed && !zui){
             draw_set_color(c_red);
             draw_text(998,17,string_hash_to_newline(string(min(100,floor((penitent_current/penitent_max)*100)))+"% Penitent"));
             draw_text(998,17.5,string_hash_to_newline(string(min(100,floor((penitent_current/penitent_max)*100)))+"% Penitent"));
-            draw_set_color(38144);
+            draw_set_color(CM_GREEN_COLOR);
             // TODO Need a tooltip for here to display the actual amounts
         }
     }
@@ -95,9 +116,17 @@ if (!zoomed && !zui){
         draw_set_color(255);
         draw_text(998,17,string_hash_to_newline("Renegade"));
         draw_text(998,17.5,string_hash_to_newline("Renegade"));
-        draw_set_color(38144);
+        draw_set_color(CM_GREEN_COLOR);
     }
-    // Checks if the chapter name is less than 140 chars, adjusts chapter_master_name_width accordingly
+    if (menu==0){
+        if (obj_controller.imp_ships == 0 && obj_controller.turn<2){
+            sector_imperial_fleet_strength();
+        }
+        draw_text(850, 60, $"Sector Fleet Strength {imp_ships}/{max_fleet_strength}");
+        if (scr_hit([700, 60, 1000, 80])){
+            tooltip_draw("The relative strength of the imperial navy and defence fleet forces and their max supported strength. Increase The number of imperial aligned planets and active forge worlds to increase the limit")
+        }
+    }    // Checks if the chapter name is less than 140 chars, adjusts chapter_master_name_width accordingly
     var chapter_master_name_width=1;
     for(var i=0; i<10; i++){
         if ((string_width(string_hash_to_newline(string(global.chapter_name)))*chapter_master_name_width)>140) then chapter_master_name_width-=0.1;
@@ -127,6 +156,10 @@ if (!zoomed && !zui){
     draw_set_color(#af5a00)
     draw_text(180,16, string(forge_points));
     draw_text(180.5,16.5, string(forge_points));
+    // Draws apothecary points
+    var _apoth_string = ($"apothecary points : {specialist_point_handler.apothecary_points}");
+    draw_text(180,32, _apoth_string);
+    draw_text(180.5,32.5, _apoth_string);
     // Draws the current loyalty
     draw_sprite(spr_new_resource,1,267,17);
     draw_set_color(1164001);
@@ -140,10 +173,10 @@ if (!zoomed && !zui){
     // Draws the current marines in your command
     draw_sprite(spr_new_resource,3,475-10,17);
     draw_set_color(16291875);
-    draw_text(495-10,16,string_hash_to_newline(string(marines)+"/"+string(command)));
-    draw_text(495.5-10,16.5,string_hash_to_newline(string(marines)+"/"+string(command)));
+    draw_text(495-10,16,string(marines)+"/"+string(command));
+    draw_text(495.5-10,16.5,string(marines)+"/"+string(command));
 
-    if (menu==0){
+    if (menu==MENU.Default){
         location_viewer.draw();
     }
 }
@@ -153,9 +186,8 @@ draw_set_halign(fa_left);
 draw_set_alpha(1);
 // Sets up debut mode
 if (global.cheat_debug == true){
-    draw_text(1124, 7, string_hash_to_newline("DEBUG MODE"));
+    draw_text(1124, 7, "DEBUG MODE");
 }
-
 
 function draw_line(x1, y1, y_slide, variable) {
     l_hei = 37;
@@ -172,8 +204,27 @@ function draw_line(x1, y1, y_slide, variable) {
 }
 
 
+try{
+    if (menu == MENU.Manage) {
+        if (managing != 0){
+            draw_sprite_and_unit_equip_data();
+        }
+        if (managing == -1){
+            scr_manage_task_selector();
+        }
+        if (managing > 0){
+            company_specific_management();
+        }
 
-
+    } else if (menu == MENU.Armamentarium) {
+        scr_draw_armentarium_gui();
+    } else if (menu == MENU.Librarium){
+        scr_librarium_gui();
+    }
+} catch(_exception){
+    handle_exception(_exception);
+    menu = MENU.Default;
+}
 
 
 

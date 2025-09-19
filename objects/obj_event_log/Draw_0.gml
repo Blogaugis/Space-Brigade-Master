@@ -3,7 +3,7 @@ __b__ = action_if_variable(help, 0, 0);
 if (__b__) {
     var bad = 1;
     if (instance_exists(obj_controller)) {
-        if (obj_controller.menu = 17) {
+        if (obj_controller.menu == MENU.EventLog) {
             bad = 0;
         }
     }
@@ -17,45 +17,33 @@ if (__b__) {
         draw_set_alpha(0.5);
         draw_sprite(spr_rock_bg, 0, xx, yy);
         draw_set_alpha(1);
-        draw_set_color(c_gray); // 38144
+        draw_set_color(c_gray); // CM_GREEN_COLOR
         draw_set_font(fnt_40k_30b);
         draw_set_halign(fa_center);
-        draw_text(xx + 800, yy + 74, string_hash_to_newline(string(global.chapter_name) + " Event Log"));
+        draw_text(xx + 800, yy + 74, string(global.chapter_name) + " Event Log");
         draw_set_halign(fa_left);
         var t = 0,
             p = -1,
             cur_event;
         var ent = array_length(event);
-        draw_set_color(38144);
+        draw_set_color(CM_GREEN_COLOR);
         if (ent == 0) {
-            draw_text(xx + 25, yy + 120, string_hash_to_newline("No entries logged."));
+            draw_text(xx + 25, yy + 120, "No entries logged.");
         } else {
-            t = top - 2;
             p = -1;
             draw_set_font(fnt_40k_14);
             draw_set_alpha(0.8);
-            repeat(25) {
-                t++;
+            for (var t=top - 1; t<ent; t++){
                 p++;
-                if (t >= ent) {
-                    break;
-                }
                 cur_event = event[t];
                 if (cur_event.text != "") { // 1554
-                    draw_set_color(38144);
-                    if (cur_event.colour = "red") {
-                        draw_set_color(c_red);
-                    }
-                    if (cur_event.colour = "purple") {
-                        draw_set_color(c_purple);
-                    }
+                    set_alert_draw_colour(cur_event.colour);
                     draw_text_ext(xx + 25, yy + 120 + (p * 26), $"{cur_event.date}  (Turn {cur_event.turn}) - {cur_event.text}", -1, 1554);
                     if (cur_event.event_target != "none") {
                         if (point_and_click(draw_unit_buttons([xx + 1400, yy + 120 + (p * 26)], "View", [1, 1], c_green, , fnt_40k_14b, 1,true))) {
                             var view_star = star_by_name(cur_event.event_target);
                             if (view_star != "none") {
-                                obj_controller.menu = 0;
-                                obj_controller.hide_banner = 0;
+                                main_map_defaults();
                                 obj_controller.x = view_star.x;
                                 obj_controller.y = view_star.y;
                             }
@@ -95,11 +83,10 @@ if (__b__) {
     }
     if (scr_hit(xx + 1104, yy + 72, xx + 1137, yy + 105) = true) {
         draw_sprite(spr_help_exit, 1, xx + 1104, yy + 72);
-        if (obj_controller.mouse_left = 1) and(obj_controller.cooldown <= 0) {
+        if (scr_click_left()) {
             with(obj_controller) {
-                menu = 0;
+                main_map_defaults();
                 onceh = 1;
-                cooldown = 8000;
                 click = 1;
                 hide_banner = 0;
             }
@@ -133,8 +120,7 @@ if (__b__) {
                 draw_set_alpha(0.2);
                 draw_rectangle(x1, y1, x1 + 198, y1 + 22, 0);
                 draw_set_alpha(1);
-                if (obj_controller.mouse_left = 1) and(obj_controller.cooldown <= 0) {
-                    obj_controller.cooldown = 8000;
+                if (scr_click_left()) {
                     topic = topics[t];
                     ini_open("main\\help.ini");
                     info = ini_read_string(string(t), "info", "");

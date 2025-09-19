@@ -1,19 +1,13 @@
 
-tab=0;
+tab=-1;
 role=obj_controller.settings;
 refresh=true;
 engage=false;
 
 total_role_number=0;
 total_roles="";
-var i;i=-1;repeat(11){i+=1;role_number[i]=0;}
-var i;i=-1;repeat(61){i+=1;
-    arm[i]="";arm_n[i]=0;
-    mob[i]="";mob_n[i]=0;
-    gea[i]="";gea_n[i]=0;
-    we1[i]="";we1_n[i]=0;
-    we2[i]="";we2_n[i]=0;
-}
+
+role_number = [];
 
 armour_equip="";
 wep1_equip="";
@@ -48,5 +42,5 @@ good3=0;
 good4=0;
 good5=0;
 
-
+item_name = [];
 

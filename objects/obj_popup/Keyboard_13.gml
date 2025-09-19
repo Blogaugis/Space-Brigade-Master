@@ -13,13 +13,17 @@ if (battle_special>0){
     cooldown=10;exit;
 }
 
-if (option1="") and (type<5){
+if (array_length(options == 0) && type<5){
     obj_controller.cooldown=10;
-    if (number!=0) and (obj_controller.complex_event=false) then obj_turn_end.alarm[1]=4;
+    if (number!=0) and (obj_controller.complex_event=false){
+        if (instance_exists(obj_turn_end)){
+            obj_turn_end.alarm[1]=4;
+        }
+    }
     instance_destroy();
 }
 
-if (type=98){
+if (type=POPUP_TYPE.BATTLE_OPTIONS){
     obj_controller.cooldown=10;
     obj_turn_end.current_battle+=1;
     obj_turn_end.alarm[0]=1;

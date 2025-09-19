@@ -1,41 +1,8 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-
-function mission_name_key(mission){
-	var mission_key = {
-		"meeting_trap" : "Chaos Lord Meeting",
-		"meeting" : "Chaos Lord Meeting",
-		"succession" : "War of succession",
-		"spyrer" : "Kill Spyrer for Inquisitor",
-		"mech_raider" : "Provide Land Raider to Mechanicus",
-		"mech_bionics" : "Provide Bionic Augmented marines to study",
-		"mech_mars" : "Send Techmarines to mars",
-		"mech_tomb1": "Explore Mechanicus Tomb",
-		"fallen" : "Find Chapter Fallen",
-		"recon" : "Recon Mission for Inquisitor",
-		"cleanse" : "Cleanse Planet for Inquisitor",
-		"tyranid_org" : "Capture Tyranid for Inquisitor",
-		"recon" : "Recon Mission for Inquisitor",
-		"bomb" : "Bombard World for inquisitor",
-		"great_crusade": "Answer Crusade Muster Call",
-		"harlequins" : "Harlequin presence Report",
-		"artifact_loan" : "Safeguard Artifact for the inquisition",
-		"fund_elder" : "provide assistance to Eldar",
-		"provide_garrison" : "Provision Garrison",
-		"hunt_beast" : "Hunt Beasts",
-		"protect_raiders" : "Protect From Raiders",
-		"join_communion" : "Join Planetary Religious Celebration",
-		"join_parade" : "Join Parade on Planet Surface",
-		"recover_artifacts" : "Recover Artifacts"
-	}
-	if (struct_exists(mission_key, mission)){
-		return mission_key[$ mission];
-	} else{
-		return "none"
-	}  
-}
 function UnitQuickFindPanel() constructor{
 	main_panel = new DataSlate();
+	garrison_log = {};
 	tab_buttons = {
 	    "fleets":new MainMenuButton(spr_ui_but_3, spr_ui_hov_3),
 	    "garrisons":new MainMenuButton(spr_ui_but_3, spr_ui_hov_3),
@@ -43,39 +10,66 @@ function UnitQuickFindPanel() constructor{
 	    "missions":new MainMenuButton(spr_ui_but_3, spr_ui_hov_3),
 	}
 
+	static detail_slate = new DataSlateMKTwo();
+
 	view_area = "fleets";
-	update_garrison_log = function(){
-		for (var i = 0;i<=200; i++){
-			obj_ini.ship_carrying[i]=0
+
+	static has_troops = function(name){
+		return struct_exists(garrison_log, name);
+	}
+
+	static player_force_stars=function(){
+		var _names = struct_get_names(garrison_log);
+		var _stars = [];
+		for (var i=0;i<array_length(_names);i++){
+			var _star = star_by_name(_names[i]);
+			if (_star != "none"){
+				array_push(_stars, _star);
+			}
+		}
+
+		return _stars;
+	}
+
+	static update_garrison_log = function(){
+		try{
+		for (var i = 0;i<array_length(obj_ini.ship_carrying); i++){
+			obj_ini.ship_carrying[i]=0;
 		};
-		var u, unit, unit_location, group;
+		var _unit, unit_location, group;
+		delete garrison_log;
 	    garrison_log = {};
-	    for (var co=0;co<11;co++){
+	    obj_controller.specialist_point_handler.calculate_research_points(false);
+	    var _ship_count = array_length(obj_ini.ship_carrying);
+	    // show_debug_message(obj_controller.specialist_point_handler.point_breakdown);
+	    for (var co=0;co<=obj_ini.companies;co++){
 	    	for (var u=0;u<array_length(obj_ini.TTRPG[co]);u++){
-	    		unit = fetch_unit([co, u]);
-	    		if (unit.name() == "") then continue;
-	    		unit_location = unit.marine_location();
-	    		if (unit_location[2]=="Terra") then continue;
-	    		if (unit_location[0]==location_types.planet){
+				/// @type {Struct.TTRPG_stats}
+	    		_unit = fetch_unit([co, u]);
+	    		if (_unit.name() == "" || !_unit.controllable()) then continue;
+	    		unit_location = _unit.marine_location();
+	    		if (unit_location[0]==location_types.planet && unit_location[2] != ""){
 	    			if (!struct_exists(garrison_log, unit_location[2])){
 	    				garrison_log[$ unit_location[2]] = {
-	    					units:[unit],
+	    					units:[_unit],
 	    					vehicles:0, 
 	    					garrison:false, 
 	    					healers:0, 
 	    					techies:0
 	    				}
 	    			} else {
-	    				array_push(garrison_log[$ unit_location[2]].units, unit);
+	    				array_push(garrison_log[$ unit_location[2]].units, _unit);
 	    			}
 	    			group = garrison_log[$ unit_location[2]];
-	    			if (unit.IsSpecialist("apoth")){
+	    			if (_unit.IsSpecialist(SPECIALISTS_APOTHECARIES)){
 						group.healers++;
-	    			} else if (unit.IsSpecialist("forge")){
+	    			} else if (_unit.IsSpecialist(SPECIALISTS_TECHS)){
 						group.techies++;
 	    			}
 	    		} else if (unit_location[0]==location_types.ship){
-	    			obj_ini.ship_carrying[unit.ship_location]+=unit.get_unit_size();
+	    			if (_unit.ship_location<_ship_count && _unit.ship_location>-1){
+	    				obj_ini.ship_carrying[_unit.ship_location]+=_unit.get_unit_size();
+	    			}
 	    		}
 	    	}
 	    	try{
@@ -84,28 +78,31 @@ function UnitQuickFindPanel() constructor{
 		    		if (obj_ini.veh_race[co][u]==0) then continue;
 		    		if (obj_ini.veh_wid[co][u]>0){
 		    			unit_location = obj_ini.veh_loc[co][u];
-		    			unit = [co, u];
+		    			_unit = [co, u];
 		    			if (!struct_exists(garrison_log, unit_location)){
 		    				garrison_log[$ unit_location] = {
-		    					units:[unit],
+		    					units:[_unit],
 		    					vehicles:1, 
 		    					garrison:false, 
 		    					healers:0, 
 		    					techies:0
 		    				}
 		    			} else {
-		    				array_push(garrison_log[$ unit_location].units, unit);
+		    				array_push(garrison_log[$ unit_location].units, _unit);
 		    				garrison_log[$ unit_location].vehicles++;
 		    			}
-		    		} else if (obj_ini.veh_lid[co][u]>0){
+		    		} else if (obj_ini.veh_lid[co][u]>-1){
 		    			obj_ini.ship_carrying[obj_ini.veh_lid[co][u]]+=scr_unit_size("",obj_ini.veh_role[co][u],true);
 		    		}
 		    	}
 		    }catch(_exception){
-				show_debug_message(_exception.message);
+				handle_exception(_exception);
 			}
 	    }
-	    update_mission_log();	
+	    update_mission_log();
+	    }catch(_exception){
+			handle_exception(_exception);
+		}	
 	}
 
 	update_mission_log = function(){
@@ -186,15 +183,55 @@ function UnitQuickFindPanel() constructor{
 			    draw_text(xx+80, yy+90+(20*i), cur_fleet.capital_number);
 			    draw_text(xx+160, yy+90+(20*i), cur_fleet.frigate_number);
 			    draw_text(xx+240, yy+90+(20*i), cur_fleet.escort_number);
-			    if (cur_fleet.action=="move"){
-			    	draw_text(xx+310, yy+90+(20*i), "Warp Travel");
-			    } else {
-			    	draw_text(xx+310, yy+90+(20*i), instance_nearest(cur_fleet.x, cur_fleet.y, obj_star).name);
+			    var _fleet_point_data = cur_fleet.point_breakdown;
+			    var _loc_display_string = "";
+			    var _zoomable_loc = true;
+			    if (cur_fleet.action == "Lost"){
+			    	_loc_display_string = "Lost";
+			    	_zoomable_loc = false;
 			    }
-			    if (point_and_click([xx+10, yy+90+(20*i)-2,xx+main_panel.width,yy+90+(20*i)+18])){
-			    	travel_target = [cur_fleet.x, cur_fleet.y];
-			    	travel_increments = [(travel_target[0]-obj_controller.x)/15,(travel_target[1]-obj_controller.y)/15];
-			    	travel_time = 0;
+			    else if (string_count("crusade", cur_fleet.action)){
+			    	_loc_display_string = "Crusading";
+			    	_zoomable_loc = false;
+			    }			    
+			    else if (cur_fleet.action=="move"){
+			    	_loc_display_string = "Warp Travel";
+			    } else {
+			    	var _near_star = instance_nearest(cur_fleet.x, cur_fleet.y, obj_star);
+			    	_loc_display_string = _near_star.name;
+			    	
+			    	var _special_points = obj_controller.specialist_point_handler.point_breakdown.systems;
+			    	if (struct_exists(_special_points,_near_star)){
+						var _fleet_point_data = _special_points[$ _near_star.name][0];
+					}
+			    }
+			    draw_text(xx+310, yy+90+(20*i), _loc_display_string);
+
+			    var _fleet_coords = [xx+10, yy+90+(20*i)-2,xx+main_panel.width,yy+90+(20*i)+18];
+			    
+			    if (_zoomable_loc){
+    			    if (point_and_click([xx+10, yy+90+(20*i)-2,xx+main_panel.width,yy+90+(20*i)+18])){
+    			    	travel_target = [cur_fleet.x, cur_fleet.y];
+    			    	travel_increments = [(travel_target[0]-obj_controller.x)/15,(travel_target[1]-obj_controller.y)/15];
+    			    	travel_time = 0;
+    			    }
+    			}
+
+			    if (scr_hit(_fleet_coords)){
+					detail_slate.draw(xx+main_panel.width-10,_fleet_coords[1]-20, 1.5, 1.5);
+					var _xx = xx+main_panel.width-10;
+					var _yy = _fleet_coords[1]-20;
+					draw_set_font(fnt_40k_12i);
+					draw_text(_xx+160, _yy+10,"forge point\ntotal");
+					draw_text( _xx+240, _yy+10,"forge point\nuse");
+					draw_text( _xx+320, _yy+10,"apothecary\npoint total");
+					draw_text(_xx+400, _yy+10,"apothecary\npoint use");
+					draw_text(_xx+60, _yy+50,"Orbiting");
+					var _y_line = _yy+50;
+					draw_text(_xx+160, _y_line,_fleet_point_data.forge_points);
+					draw_text(_xx+240, _y_line,_fleet_point_data.forge_points_use);
+					draw_text(_xx+320, _y_line , _fleet_point_data.heal_points);
+					draw_text(_xx+400, _y_line, _fleet_point_data.heal_points_use);							    	
 			    }
 			    i++;
 			}			
@@ -216,9 +253,11 @@ function UnitQuickFindPanel() constructor{
 				hover_entered = scr_hit(loc[0],loc[1],loc[2],loc[3]);
 			}		    
 		    while(i<array_length(system_names) && (yy+90+(20*i)+12 +20)<main_panel.YY+yy+main_panel.height){
-		    	system_data = garrison_log[$system_names[i]];
+		    	var _sys_name = system_names[i];
+		    	system_data = garrison_log[$_sys_name];
 		    	registered_hover=false;
-				if (scr_hit(xx+10, yy+90+(20*i),xx+main_panel.width,yy+90+(20*i)+18)){
+		    	var _sys_item_y = yy+90+(20*i)+18;
+				if (scr_hit(xx+10, yy+90+(20*i),xx+main_panel.width,_sys_item_y)){
 					if (!hover_entered){
 						draw_set_color(c_gray);
 						draw_rectangle(xx+10+20, yy+90+(20*i)-2,xx+main_panel.width-20,yy+90+(20*i)+18, 0);
@@ -234,6 +273,33 @@ function UnitQuickFindPanel() constructor{
 						if (hover_item.root_item == i){
 							draw_rectangle(xx+10+20, yy+90+(20*i)-2,xx+main_panel.width-20,yy+90+(20*i)+18, 0);
 						}
+					}
+					detail_slate.draw(xx+main_panel.width-10,_sys_item_y-20, 1.5, 1.5);
+					var _special_points = obj_controller.specialist_point_handler.point_breakdown.systems;
+					if (struct_exists(_special_points,_sys_name)){
+						var _system_point_data = _special_points[$ _sys_name];
+						var _xx = xx+main_panel.width-10;
+						var _yy = _sys_item_y-20;
+						draw_set_font(fnt_40k_12i);
+						draw_text(_xx+160, _yy+10,"forge point\ntotal");
+						draw_text( _xx+240, _yy+10,"forge point\nuse");
+						draw_text( _xx+320, _yy+10,"apothecary\npoint total");
+						draw_text(_xx+400, _yy+10,"apothecary\npoint use");
+						draw_text(_xx+60, _yy+50,"Orbiting");
+						draw_text( _xx+60, _yy+100,"I");
+						draw_text(_xx+60, _yy+150,"II");
+						draw_text(_xx+60, _yy+200,"III");
+						draw_text(_xx+60, _yy+300,"IV");
+						var _y_line = _yy+50;
+						for (var o=0;o<5;o++){
+							var _area_item = _system_point_data[o];
+							draw_text(_xx+220, _y_line,_area_item.forge_points);
+							draw_text(_xx+300, _y_line,_area_item.forge_points_use);
+							draw_text(_xx+380, _y_line , _area_item.heal_points);
+							draw_text(_xx+460, _y_line, _area_item.heal_points_use);
+							_y_line+=50;						
+						}
+
 					}
 				}
 			    draw_text(xx+80, yy+90+(20*i), system_names[i]);
@@ -256,8 +322,8 @@ function UnitQuickFindPanel() constructor{
     			    if (hover_count==10){
     			    	hover_item = new HoverBox();
     			    	var mouse_consts = return_mouse_consts()
-    			    	hover_item.relative_x = (mouse_consts[0]-xx+(10-10));
-    			    	hover_item.relative_y = (mouse_consts[1]-(yy+90+(20*i)));
+    			    	hover_item.relative_x = (mouse_consts[0]);
+    			    	hover_item.relative_y = (mouse_consts[1]);
     			    	hover_item.root_item=i;
     			    }
     			}
@@ -323,7 +389,7 @@ function UnitQuickFindPanel() constructor{
 	}
 	static draw = function(){
 		if (obj_controller.menu==0 && obj_controller.zoomed==0 ){
-			if (!instance_exists(obj_fleet_select) && !instance_exists(obj_star_select)){
+			if (!instances_exist_any([obj_fleet_select,obj_star_select])){
 
 				var x_draw=0;
 				var lower_draw = main_panel.height+110;
@@ -395,11 +461,7 @@ function HoverBox() constructor{
 }
 
 function exit_adhoc_manage(){
-	menu=0;
-    onceh=1;
-    cooldown=10;
-    click=1;
-    hide_banner=0;
+	scr_toggle_manage();
     if (instance_exists(selection_data.system)){
    		selection_data.system.alarm[3]=2;
     }		
@@ -409,7 +471,6 @@ function exit_adhoc_manage(){
 	if (struct_exists(location_viewer.garrison_log, selection_data.system.name)){
 		var sys_name = selection_data.system.name;
 		group_selection(location_viewer.garrison_log[$sys_name].units,selection_data);
-		company_data={};
 	} else {
 		exit_adhoc_manage();		
 	} 	
@@ -421,14 +482,13 @@ function update_general_manage_view(){
 	    if (managing>0){
 	        if (managing<=10) and (managing!=0){
 	        	scr_company_view(managing);
-	        	company_data = new CompanyStruct(managing);
 	        }
 	        if (managing>10) or (managing=0){
 				scr_special_view(managing);
-				company_data={};
-	        }            
+	        }  
+	        new_company_struct();          
 	        cooldown=10;
-	        sel_loading=0;
+	        sel_loading=-1;
 	        unload=0;
 	        alarm[6]=30;
 	    } else if (managing==-1){
@@ -437,59 +497,14 @@ function update_general_manage_view(){
     }	
 }
 
-
-function transfer_selection(){
-	if (instance_number(obj_popup)==0){
-        var pip=instance_create(0,0,obj_popup);
-        pip.type=5.1;
-        pip.company=managing;
-
-        var god=0,nuuum=0,nuuum2=0,checky=0,check_number=0;
-        for(var f=1; f<array_length(display_unit); f++){
-            if (god==1) then break;
-            if (god==0) and (man_sel[f]==1) and (man[f]=="man"){
-                god=1;
-                pip.unit_role=ma_role[f];
-            }
-            if (god==0) and (man_sel[f]==1) and (man[f]=="vehicle"){
-                god=1;
-                pip.unit_role=ma_role[f];
-            }
-            if (man_sel[f]==1){
-                if (man[f]=="man"){
-                    nuuum+=1;
-                    checky=1;
-                    if (ma_role[f]==obj_ini.role[100][7]) then checky=0;
-                    if (ma_role[f]==obj_ini.role[100][14]) then checky=0;
-                    if (ma_role[f]==obj_ini.role[100][15]) then checky=0;
-                    if (ma_role[f]==obj_ini.role[100][16]) then checky=0;
-                    if (ma_role[f]==obj_ini.role[100][17]) then checky=0;
-                    if (checky==1) then check_number+=1;
-                }
-                if (man[f]=="vehicle") then nuuum2+=1;
-            }
-        }
-        if (nuuum>1) then pip.unit_role="Marines";
-        if (nuuum2>1) then pip.unit_role="Vehicles";
-        if (nuuum>0) and (nuuum2>0) then pip.unit_role="Units";
-        pip.units=nuuum+nuuum2;
-        if (nuuum>0) and (check_number>0){
-            if (command_set[1]==0){
-                cooldown=8000;
-                with(pip){instance_destroy();}
-            }
-        }
-    }
-}
-
 function toggle_selection_borders(){
     for(var p=0; p<array_length(display_unit); p++){
         if (man_sel[p]==1) and (man[p]=="man"){
         	if (is_struct(display_unit[p])){
-                var unit=display_unit[p];
-                var mar_id = unit.marine_number;
-                if (unit.ship_location>0) and (obj_ini.loc[unit.company][mar_id]!="Mechanicus Vessel"){
-                	unit.is_boarder = !unit.is_boarder;
+                var _unit=display_unit[p];
+                var mar_id = _unit.marine_number;
+                if (_unit.ship_location>-1) and (_unit.controllable()){
+                	_unit.is_boarder = !_unit.is_boarder;
                 }
             }
         }
@@ -501,13 +516,13 @@ function add_bionics_selection(){
     if (bionics_before>0){
     	for(var p=0; p<array_length(display_unit); p++){
     		if (man_sel[p]!=0 && is_struct(display_unit[p])){ 
-    			var unit = display_unit[p];
-    			var comp = unit.company;
-    			var mar_id = unit.marine_number;
-                if (obj_ini.loc[comp][mar_id]!="Terra") and (obj_ini.loc[comp][mar_id]!="Mechanicus Vessel"){
+    			var _unit = display_unit[p];
+    			var comp = _unit.company;
+    			var mar_id = _unit.marine_number;
+                if (_unit.controllable()){
                 	//TODO swap for tag method
                     if (string_count("Dread",ma_armour[p])=0){
-			        	unit.add_bionics();
+			        	_unit.add_bionics();
                         if (ma_promote[p]==10) then ma_promote[p]=0;
                     }
                 }
@@ -518,10 +533,13 @@ function add_bionics_selection(){
 
 function jail_selection(){
     for(var f=0; f<array_length(display_unit); f++){
-        if (man[f]=="man") and (man_sel[f]==1) and (ma_loc[f]!="Terra") and (ma_loc[f]!="Mechanicus Vessel"){
+    	if (man[f] !="man" || !man_sel[f]){
+    	 	continue;
+    	}
+    	_unit = display_unit[f];
+ 		if (_unit.controllable()){
             if (is_struct(display_unit[f])){
-                unit = display_unit[f];
-                obj_ini.god[unit.company][unit.marine_number]+=10;
+                obj_ini.god[_unit.company][_unit.marine_number]+=10;
                 ma_god[f]+=10;
                 man_sel[f]=0;
             }
@@ -533,171 +551,13 @@ function jail_selection(){
     } else if (managing==-1){
     	update_garrison_manage()
     }
-    sel_loading=0;
+    sel_loading=-1;
     unload=0;
     alarm[6]=7;		
 }
 
-function equip_selection(){
-	try {
-		if (instance_number(obj_popup) == 0) {
-			// Initialize variables
-			var unit_type = unit_type_unknown; // 1 - marine, 4 - terminator, 6 - dreadnought, 50+ vehicles
-			var unit_is_vehicle = false;
-			var selected_units = 0;
-			var equipment = {
-				wep1: "",
-				wep2: "",
-				armour: "",
-				gear: "",
-				mobi: ""
-			};
-			var blank_equipment = {
-				wep1: 0,
-				wep2: 0,
-				armour: 0,
-				gear: 0,
-				mobi: 0
-			};
-			var allow_selection = true;
-			var prev_role;
-		
-			// Loop through selected units
-			for (var i = 0; i < array_length(display_unit); i++) {
-				if (man_sel[i]!= 1) continue;
-		
-				// Determine unit type
-				if (unit_type == unit_type_unknown) {
-					if (man[i] == "man" && is_struct(display_unit[i])) {
-						unit_type = get_unit_type(display_unit[i]);
-					} else if (man[i] == "vehicle") {
-						unit_type = get_vehicle_type(ma_role[i]);
-						unit_is_vehicle = true;
-					}
-				}
-		
-				// Check if unit type is consistent
-				if (unit_type != unit_type_unknown) {
-					if (man[i] == "man" && is_struct(display_unit[i])) {
-						if (get_unit_type(display_unit[i])!= unit_type) {
-							allow_selection = false;
-							break;
-						}
-					} else if (man[i] == "vehicle") {
-						if (get_vehicle_type(ma_role[i])!= unit_type) {
-							allow_selection = false;
-							break;
-						}
-					}
-				}
-		
-				// Update equipment and blank equipment counts
-				if (unit_type != unit_type_unknown) {
-					selected_units++;
-					update_equipment(equipment, blank_equipment, ma_wep1[i], ma_wep2[i], ma_armour[i], ma_gear[i], ma_mobi[i]);
-				}
-			}
-		
-			// Check if all units have the same equipment
-			if (blank_equipment.wep1 == selected_units) equipment.wep1 = "";
-			if (blank_equipment.wep2 == selected_units) equipment.wep2 = "";
-			if (blank_equipment.armour == selected_units) equipment.armour = "";
-			if (blank_equipment.gear == selected_units) equipment.gear = "";
-			if (blank_equipment.mobi == selected_units) equipment.mobi = "";
-		
-			// Create popup instance
-			if (unit_type != unit_type_unknown && man_size > 0 && allow_selection) {
-				var pip = instance_create(0, 0, obj_popup);
-				pip.type = 6;
-				pip.o_wep1 = equipment.wep1;
-				pip.o_wep2 = equipment.wep2;
-				pip.o_armour = equipment.armour;
-				pip.o_gear = equipment.gear;
-				pip.o_mobi = equipment.mobi;
-				pip.n_wep1 = equipment.wep1;
-				pip.n_wep2 = equipment.wep2;
-				pip.n_armour = equipment.armour;
-				pip.n_gear = equipment.gear;
-				pip.n_mobi = equipment.mobi;
-				pip.company = managing;
-				pip.units = selected_units;
-				pip.unit_type = unit_type;
-				pip.unit_is_vehicle = unit_is_vehicle;
-			}
-		}
-	} catch(_exception) {
-		log_into_file(_exception.longMessage);
-		log_into_file(_exception.script);
-		log_into_file(_exception.stacktrace);
-		show_debug_message(_exception.longMessage);
-	}
-}
-
-/// Returns the unit type based on the unit's armour.
-function get_unit_type(unit) {
-	var _equip_data;
-	var _unit_type = unit_type_unknown;
-
-	try {
-		_equip_data = gear_weapon_data("armour", unit.armour());
-		if (is_struct(_equip_data)){
-			if (array_length(_equip_data.change_unit) != 0){
-				_unit_type = _equip_data.change_unit[0];
-			}
-		} else {
-			_unit_type = unit.base_group;
-		}
-		return _unit_type;
-	} catch(_exception) {
-		log_into_file(_exception.longMessage);
-		log_into_file(_exception.script);
-		log_into_file(_exception.stacktrace);
-		show_debug_message(_exception.longMessage);
-	}
-
-}
-
-/// Returns the vehicle type based on the role.
-function get_vehicle_type(role) {
-	switch (role) {
-		case "Land Raider":
-			return "land_raider";
-		case "Rhino":
-			return "rhino";
-		case "Predator":
-			return "predator";
-		case "Land Speeder":
-			return "land_speeder";
-		case "Whirlwind":
-			return "whirlwind";
-		default:
-			return unit_type_unknown;
-	}
-}
-
-/// Updates the equipment and blank equipment counts.
-function update_equipment(equipment, blank_equipment, wep1, wep2, armour, gear, mobi) {
-	if (equipment.wep1 == "" && wep1!= "") equipment.wep1 = wep1;
-	if (equipment.wep2 == "" && wep2!= "") equipment.wep2 = wep2;
-	if (equipment.armour == "" && armour!= "") equipment.armour = armour;
-	if (equipment.gear == "" && gear!= "") equipment.gear = gear;
-	if (equipment.mobi == "" && mobi!= "") equipment.mobi = mobi;
-
-	if (wep1 == "") blank_equipment.wep1++;
-	if (wep2 == "") blank_equipment.wep2++;
-	if (armour == "") blank_equipment.armour++;
-	if (gear == "") blank_equipment.gear++;
-	if (mobi == "") blank_equipment.mobi++;
-
-	if ((equipment.wep1!= "" && wep1!= equipment.wep1) || blank_equipment.wep1 == 1) equipment.wep1 = "Assortment";
-	if ((equipment.wep2!= "" && wep2!= equipment.wep2) || blank_equipment.wep2 == 1) equipment.wep2 = "Assortment";
-	if ((equipment.armour!= "" && armour!= equipment.armour) || blank_equipment.armour == 1) equipment.armour = "Assortment";
-	if ((equipment.gear!= "" && gear!= equipment.gear) || blank_equipment.gear == 1) equipment.gear = "Assortment";
-	if ((equipment.mobi!= "" && mobi!= equipment.mobi) || blank_equipment.mobi == 1) equipment.mobi = "Assortment";
-}
-
 function load_selection(){
-    if (man_size>0) and (selecting_location!="Terra") and (selecting_location!="Mechanicus Vessel"){
+    if (man_size>0 && !location_out_of_player_control(selecting_location)){
         scr_company_load(selecting_location);
         menu=30;
         top=1;
@@ -706,13 +566,23 @@ function load_selection(){
 
 function unload_selection(){
 	//show_debug_message("{0},{1},{2}",obj_controller.selecting_ship,man_size,selecting_location);
-    if (man_size>0) and (obj_controller.selecting_ship>=1) and (!instance_exists(obj_star_select)) 
-    and (selecting_location!="Terra") and (selecting_location!="Mechanicus Vessel") and (selecting_location!="Warp"){
+    if (man_size>0 && obj_controller.selecting_ship>=0 && !instance_exists(obj_star_select)&& 
+    	!location_out_of_player_control(selecting_location) && selecting_location!="Warp"){
         cooldown=8000;
         var boba=0;
         var unload_star = star_by_name(selecting_location);
         if (unload_star != "none"){
             if (unload_star.space_hulk!=1){
+                for (var t = 0; t < array_length(display_unit); t++) {
+                    if (man_sel[t] == 1) {
+                    	var _unit = display_unit[t];
+                        if (is_array(_unit)) {
+                        	set_vehicle_last_ship(_unit);
+                        } else {
+                        	_unit.set_last_ship();
+                        }
+                    }
+                }
                 boba=instance_create(unload_star.x,unload_star.y,obj_star_select);
                 boba.loading=1;
                 // selecting location is the ship right now; get it's orbit location
@@ -726,26 +596,26 @@ function unload_selection(){
 }
 
 function reset_selection_equipment(){
-	var unit;
+	var _unit;
     for(var f=0; f<array_length(display_unit); f++){
         // If come across a man, set vih to 1
         if (man[f]="man") and (man_sel[f]=1){
         	if (is_struct(display_unit[f])){
-        		unit = display_unit[f];
-        		unit.set_default_equipment();
+        		_unit = display_unit[f];
+        		_unit.set_default_equipment();
         	}
         }
     }
 }
 
 function add_tag_to_selection(new_tag){
-	var unit;
+	var _unit;
     for(var f=0; f<array_length(display_unit); f++){
         // If come across a man, set vih to 1
         if (man[f]="man") and (man_sel[f]=1){
         	if (is_struct(display_unit[f])){
-        		unit = display_unit[f];
-        		unit[$ new_tag] = !unit[$ new_tag];
+        		_unit = display_unit[f];
+        		_unit[$ new_tag] = !_unit[$ new_tag];
         	}
         }
     }	
@@ -759,7 +629,7 @@ function promote_selection(){
 
         var god=0,nuuum=0;
         for(var f=1; f<array_length(display_unit); f++){
-            if ((ma_promote[f]>=1 || is_specialist(ma_role[f], "rank_and_file")  || is_specialist(ma_role[f], "squad_leaders")) && man_sel[f]==1){
+            if ((ma_promote[f]>=1 || is_specialist(ma_role[f], SPECIALISTS_RANK_AND_FILE)  || is_specialist(ma_role[f], SPECIALISTS_SQUAD_LEADERS)) && man_sel[f]==1){
                 nuuum+=1;
                 if (pip.min_exp==0) then pip.min_exp=ma_exp[f];
                 pip.min_exp=min(ma_exp[f],pip.min_exp);
@@ -790,157 +660,5 @@ function setup_planet_mission_group(){
 	}
 }
 
-
-function planet_selection_action(){
-	var garrison_assignment = (obj_controller.managing>0 && obj_controller.view_squad && loading);
-	var xx=__view_get( e__VW.XView, 0 )+0;
-	var yy=__view_get( e__VW.YView, 0 )+0;
-	if (instance_exists(target)){
-		if (loading){
-			obj_controller.selecting_planet = 0;
-		}
-	    for (var i = 0;i<target.planets;i++){
-	    	var planet_draw = c_white;
-	        if (mouse_distance_less(159+(i*41),287, 22)){
-	            obj_controller.selecting_planet=i+1;
-	            var sel_plan = obj_controller.selecting_planet;
-	            var planet_is_allies = scr_is_planet_owned_by_allies(target, sel_plan);
-	            var garrison_issue = (!planet_is_allies || target.p_pdf[sel_plan]<1);
-	            if (garrison_assignment && (garrison_issue && mission=="garrison")){
-                	planet_draw = c_red;
-                	tooltip_draw("Can't garrison on non-friendly planet or planet with no friendly PDF", 150);	            	
-	            }
-	            if (mouse_check_button_pressed(mb_left)){
-	                if (garrison_assignment){
-	                	if (!(garrison_issue && mission=="garrison")){
-		                    var company_data = obj_controller.company_data;
-		                    var squad_index = company_data.company_squads[company_data.cur_squad];
-		                    var current_squad=obj_ini.squads[squad_index];
-		                    current_squad.set_location(loading_name,0,sel_plan);
-		                    current_squad.assignment={
-		                        type:mission,
-		                        location:target.name,
-		                        ident:sel_plan,
-		                    };
-		                    var operation_data = {
-		                        type:"squad", 
-		                        reference:squad_index,
-		                        job:mission,
-		                        task_time : 0
-		                    };
-		                    array_push(target.p_operatives[sel_plan],operation_data);
-		                    target.garrison = true;
-
-		                    //if there was an outstanding mission to provide the given garrison
-		                    var sel_plan = obj_controller.selecting_planet;
-		                    var garrison_request = find_problem_planet(sel_plan, "provide_garrison", target);
-		                    if (garrison_request>-1){
-		                    	init_garrison_mission(sel_plan, target, garrison_request);
-		                    }
-		                    instance_destroy();
-		                    exit;
-		                }
-	                } else if (!loading){
-	                    garrison = new GarrisonForce(target.p_operatives[sel_plan]);
-	                    target.garrison = garrison.garrison_force;
-	                    feature="";
-	                    buttons_selected=false;                 
-	                } else if (loading){ 
-					    if (sel_plan>0){
-					        obj_controller.cooldown=8000;
-					        obj_controller.unload=sel_plan;
-					        obj_controller.return_object=target;
-					        obj_controller.return_size=obj_controller.man_size;
-					       with(obj_controller.return_object){// This marks that there are forces upon this planet
-					            p_player[obj_controller.unload]+=obj_controller.man_size;
-					        }
-					        
-					        // 135 ; SPECIAL PLANET CRAP HERE
-					        
-					        // Recon Stuff
-					        var recon=0;
-					        if (has_problem_planet(sel_plan, "recon",target)) then recon=1;
-
-					        if (recon==1){
-					            var arti=instance_create(target.x,target.y,obj_temp7);// Unloading / artifact crap
-					            arti.num=sel_plan;
-					            arti.alarm[0]=1;
-					            arti.loc=obj_controller.selecting_location;
-					            arti.managing=obj_controller.managing;
-					            arti.type="recon";
-
-					            with (arti){
-					                setup_planet_mission_group()
-					            }
-					        }else if (planet_feature_bool(target.p_feature[sel_plan], P_features.Artifact) == 1) and (recon=0){
-						
-					            var artifact=instance_create(target.x,target.y,obj_ground_mission);// Unloading / artifact crap
-					            artifact.num=sel_plan;
-					            artifact.alarm[0]=1;
-					            artifact.loc=obj_controller.selecting_location;
-					            artifact.managing=obj_controller.managing;
-
-					            with (artifact){
-					                setup_planet_mission_group();
-					            }
-					        }
-					        
-					        // STC Grab
-					        if (planet_feature_bool(target.p_feature[sel_plan], P_features.STC_Fragment) == 1) and (recon=0){
-					            var frag,tch,mch;frag=0;tch=0;mch=0;
-					            for (var frag=0;frag<array_length(obj_controller.display_unit);frag++){
-					                if (obj_controller.man[frag]!="") and (obj_controller.man_sel[frag]==1){
-					                    if (obj_controller.ma_role[frag]=obj_ini.role[100][16]) or ((obj_controller.ma_role[frag]="Forge Master")){
-					                        tch+=1;
-					                    }
-					                    if (obj_controller.ma_role[frag]="Techpriest"){
-					                        mch+=1;
-					                    }
-					                }
-					            }
-					            if (tch+mch>0){
-					                var arti=instance_create(target.x,target.y,obj_ground_mission);// Unloading / artifact crap
-					                arti.num=sel_plan;
-					                arti.alarm[0]=1;
-					                arti.loc=obj_controller.selecting_location;
-					                arti.managing=obj_controller.managing;
-					                arti.tch=tch;
-					                arti.mch=mch;
-					                // Right here should pass the man_sel variables
-					                // var frag;frag=-1;repeat(150){frag+=1;arti.man_sel[frag]=obj_controller.man_sel[frag];}
-					                with (arti){
-					                    setup_planet_mission_group();
-					                }
-					            }
-					        }
-					        
-					        // Ancient Ruins
-							scr_check_for_ruins_exploration(sel_plan, target); 
-							instance_destroy();
-							exit;
-						}	                	
-	                }                
-	            }
-	        } 
-	        xxx=159+(i*41);
-	        if (target.craftworld=0) and (target.space_hulk=0){
-	        	var sel_plan = i+1;
-	        	var planet_frame=0;
-	            with (target){
-	            	planet_frame = scr_planet_image_numbers(p_type[sel_plan]);
-	            }
-	            draw_sprite_ext(spr_planets,planet_frame,xxx, 287, 1, 1, 0, planet_draw, 0.9)
-	            
-	            draw_set_color(global.star_name_colors[target.p_owner[sel_plan]]);
-
-	            draw_text(xxx,255,scr_roman(sel_plan));
-	            
-	        }	                   
-	    }
-	    if (target.craftworld || target.space_hulk) then obj_controller.selecting_planet=1;
-	    x=target.x;
-	    y=target.y;	    
-	}	
-}
 
 

@@ -39,7 +39,7 @@ function scr_crusade() {
         	good=0;dead=false;
         	if (obj_ini.name[co][i]=="") then continue;
         		unit=fetch_unit([co, i]);
-        		if (unit.ship_location==0) then continue;
+        		if (unit.ship_location==-1) then continue;
             if (array_contains(total_ship_id,unit.ship_location)){
             	unit=obj_ini.TTRPG[co][i];
                 death_determination=floor(random(100))+1;
@@ -47,7 +47,7 @@ function scr_crusade() {
                 //TODO figure out how to quantify and present these risks so the player knows to protect dudes with trait
                 if (unit.has_trait("very_hard_to_kill")) then death_determination-=20;
                 death_determination_2=death_determination;
-                death_determination-=(unit.experience()/2);
+                death_determination-=(unit.experience/2);
 
                 //more generalised trait bonus mainly linked to chapter advantage of same name
                 if (unit.has_trait("slow_and_purposeful")) then death_determination-=10;
@@ -73,12 +73,14 @@ function scr_crusade() {
 	                			array_push(heroics_strings, heroic_death);
 	                		}
 	                	}
-	                }else if (unit.role()==obj_ini.role[100][11] || unit.role()=="Chapter Master") then dead=false;
+	                }else if (unit.role()==obj_ini.role[100][11] || unit.role()==obj_ini.role[100][eROLE.ChapterMaster]) {
+						dead=false;
+					} 
 	           	}
                 if (dead){               	
                     var man_size=0;
                     obj_ini.ship_carrying[unit.ship_location]-=unit.get_unit_size();
-                	if (unit.IsSpecialist("standard",true)){
+                	if (unit.IsSpecialist(SPECIALISTS_STANDARD,true)){
                 		obj_controller.command--;
                 	} else {
                 		obj_controller.marines--;
@@ -89,10 +91,9 @@ function scr_crusade() {
                     scr_kill_unit(co,i);
                     seed+=2;
                 } else {
-                	if (unit.IsSpecialist("apoth")) and (obj_ini.gear[co][i]="Narthecium") then apoth++;
+                	if (unit.IsSpecialist(SPECIALISTS_APOTHECARIES)) and (obj_ini.gear[co][i]="Narthecium") then apoth++;
                 	unit.add_exp(irandom(death_data[3][0])+death_data[3][1]);
                 
-                    if (unit.IsSpecialist("libs")) then unit.update_powers();
                     if (irandom(99)==1 && irandom(20)<unit.luck){
                     	var heroic_deed=choose("still_standing","lone_survivor","beast_slayer");
                     	unit.add_trait(heroic_deed);
@@ -125,7 +126,7 @@ function scr_crusade() {
 	if (roll3<=10) then artifacts+=1;
 	if (artifacts>0) then repeat(artifacts){
 	    if (obj_ini.fleet_type=ePlayerBase.home_world) then scr_add_artifact("random","",4,obj_ini.home_name,2);
-	    if (obj_ini.fleet_type != ePlayerBase.home_world) then scr_add_artifact("random","",4,obj_ini.ship[1],501);
+	    if (obj_ini.fleet_type != ePlayerBase.home_world) then scr_add_artifact("random","",4,obj_ini.ship[0],501);
 	}
 
 
@@ -164,27 +165,27 @@ function scr_crusade() {
 function launch_crusade(){
 	var star_id = scr_random_find(2,true,"","");
 	if(star_id == undefined){
-		debugl("RE: Crusade, couldn't find a star for the crusade");
+		log_error("RE: Crusade, couldn't find a star for the crusade");
 		return false;
 	}
 	else{
-		var assigned_crusade = false;
-		for(var i = 1; i <= star_id.planets;i++){
-			assigned_crusade = add_new_problem(i, "great_crusade", 36,star_id);
-			if (assigned_crusade>0) then break;
-		}
-		if(!assigned_crusade){
-			debugl("RE: Crusade, couldn't assign a crusade at the system");
+
+		//TODO decide the target/purpose of the crusade to create more variety and to help with post crusade rewards
+		var _nearest_player_fleet = get_nearest_player_fleet(star_id.x, star_id.y);
+		if (_nearest_player_fleet == "none"){
 			return false;
 		}
-		else{
-			//TODO decide the target/purpose of the crusade to create more variety and to help with post crusade rewards
-			scr_popup("Crusade","Fellow Astartes legions are preparing to embark on a Crusade to a nearby sector.  Your forces are expected at "+string(star_id.name)+"; 36 turns from now your ships there shall begin their journey.","crusade","");
-			var star_alert = instance_create(star_id.x+16,star_id.y-24,obj_star_event);
-			star_alert.image_alpha=1;
-			star_alert.image_speed=1;
-			scr_event_log("","A Crusade is called; our forces are expected at "+string(star_id.name)+" in 36 months.", star_id.name);
-			return true;	
+		var travel_leeway = 10;
+		if (_nearest_player_fleet.action == "move"){
+			travel_leeway += _nearest_player_fleet.eta;
 		}
+		var _eta = get_viable_travel_time(travel_leeway, _nearest_player_fleet.x, _nearest_player_fleet.y, star_id.x,star_id.y, _nearest_player_fleet,false)
+		scr_popup("Crusade",$"Fellow Astartes legions are preparing to embark on a Crusade to a nearby sector.  Your forces are expected at {star_id.name}; {_eta} months from now your ships there shall begin their journey.","crusade","");
+		var star_alert = instance_create(star_id.x+16,star_id.y-24,obj_star_event);
+		star_alert.image_alpha=1;
+		star_alert.image_speed=1;
+		scr_event_log("",$"A Crusade is called; our forces are expected at {star_id.name} in {_eta} months.", star_id.name);
+		assigned_crusade = add_new_problem(irandom_range(1 ,star_id.planets), "great_crusade", _eta,star_id);
+		return true;	
 	}
 }

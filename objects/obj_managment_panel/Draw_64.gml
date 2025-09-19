@@ -1,7 +1,11 @@
 slate_panel.inside_method = function(){
     draw_set_color(#50a076);
-    var cus,draw_func;
-    cus=false;
+    var cus = false;
+    var draw_func;
+    var sprx = 0;
+    var spry = 0;
+    var sprw = 0;
+    var sprh = 0;
 
     switch(header){
         case 3:
@@ -28,21 +32,16 @@ slate_panel.inside_method = function(){
     }
 
     if (header=3){
+        slate_panel.draw_top_piece = false;
         draw_sprite_stretched(spr_master_title,0,x,y-2,panel_width+2,4);
-        var icon_sprite,icc;icon_sprite=spr_icon;icc=obj_ini.icon;
-        if (icc>20){
-            icon_sprite=spr_icon_chapters;
-            icc-=19;
-        }
-        if (string_pos("custom",obj_ini.icon_name)>0) then cus=true;
-        if (cus=false) and (icc<=20) then scr_image("creation",icc,x+(panel_width/2)-50,y-10,141*0.7,141*0.7);
-        if (cus=false) and (icc>20) then draw_sprite_ext(icon_sprite,icc,x+(panel_width/2)-50,y-10,0.7,0.7,0,c_white,1);
-        if (cus=true){
-            var cusl=string_replace(obj_ini.icon_name,"custom","");
-            cusl=real(cusl);
-            if (obj_cuicons.spr_custom[cusl]>0) and (sprite_exists(obj_cuicons.spr_custom_icon[cusl])){
-                draw_sprite_ext(obj_cuicons.spr_custom_icon[cusl],0,x+(panel_width/2)-50,y-10,0.7,0.7,0,c_white,1);
-            }
+
+        sprx = x+(panel_width/2)-50;
+        spry = y-10;
+        sprw = 141*0.7;
+        sprh = 141*0.7;
+
+        if (sprite_exists(global.chapter_icon.sprite)){
+            draw_sprite_stretched(global.chapter_icon.sprite, 0, sprx, spry, sprw, sprh);
         }
         draw_set_font(fnt_cul_14);
         draw_text(x+(panel_width/2),y+89,string_hash_to_newline(title));
@@ -57,6 +56,7 @@ slate_panel.inside_method = function(){
             if (line[l]!="") then draw_text(x+(panel_width/2),y+112+((l-1)*20),string_hash_to_newline(line[l]));
         }
     } else if (header=2){
+        slate_panel.draw_top_piece = false;
         draw_sprite_stretched(spr_company_title,company,x+40,y-2,panel_width-80,4);
         if (title=="ARMOURY"){
             draw_sprite_ext(spr_tech_area_pad, 0, x+(panel_width/2)-((0.3*180)/2),y-30,0.3,0.3,0,c_white,1)
@@ -67,20 +67,13 @@ slate_panel.inside_method = function(){
         } else if (title=="LIBRARIUM"){
             draw_sprite_ext(spr_lib_area_pad, 0, x+(panel_width/2)-((0.3*180)/2),y-30,0.3,0.3,0,c_white,1)
         }else {      
-            var icon_sprite,icc;icon_sprite=spr_icon;icc=obj_ini.icon;
-            if (icc>20){icon_sprite=spr_icon_chapters;icc-=19;}
+            sprx = x + (wid / 2) - 16;
+            spry = y - 16;
+            sprw = 141 * 0.23;
+            sprh = 141 * 0.23;
             
-            if (string_pos("custom",obj_ini.icon_name)>0) then cus=true;
-            if (cus=false) and (icc<=20) then scr_image("creation",icc,x+(panel_width/2)-16,y-16,141*0.23,141*0.23);
-            if (cus=false) and (icc>20) then draw_sprite_ext(icon_sprite,icc,x+(panel_width/2)-16,y-16,0.23,0.23,0,c_white,1);
-            if (cus=true){
-                var cusl;cusl=string_replace(obj_ini.icon_name,"custom","");cusl=real(cusl);
-                if (obj_cuicons.spr_custom[cusl]>0) and (sprite_exists(obj_cuicons.spr_custom_icon[cusl])){
-                    draw_sprite_ext(obj_cuicons.spr_custom_icon[cusl],0,x+(panel_width/2)-16,y-16,0.23,0.23,0,c_white,1);
-                }
-            }
+            draw_sprite_stretched(global.chapter_icon.sprite, 0, sprx, spry, sprw, sprh);
         }
-        // draw_sprite_ext(icon_sprite,icc,x+(panel_width/2)-16,y-16,0.23,0.23,0,c_white,1);
         draw_set_font(fnt_cul_14);
         draw_text(x+(panel_width/2),y+20,string_hash_to_newline(title));
         draw_set_font(fnt_40k_12);
@@ -118,13 +111,18 @@ slate_panel.inside_method = function(){
 var x_scale = (panel_width/850)
 var y_scale = (panel_height/860)
 
-slate_panel.draw(x, y, x_scale,y_scale);
-// draw_text(x+(panel_width/2),y-60,string(manage)+") "+string(line[1])+"#"+string(line[2])+"#"+string(line[3]));
+try {
+    slate_panel.draw(x, y, x_scale,y_scale);
+    // draw_text(x+(panel_width/2),y-60,string(manage)+") "+string(line[1])+"#"+string(line[2])+"#"+string(line[3]));
 
-if (point_and_click([x, y, x + panel_width, y + panel_height])) {
-    obj_controller.managing = manage;
-    var new_manage = manage;
-    with(obj_controller) {
-        switch_view_company(new_manage);
+    if (point_and_click([x, y, x + panel_width, y + panel_height])) {
+        obj_controller.managing = manage;
+        var new_manage = manage;
+        with(obj_controller) {
+            switch_view_company(new_manage);
+        }
     }
+} catch(_exception){
+    handle_exception(_exception);
+    scr_toggle_manage();
 }

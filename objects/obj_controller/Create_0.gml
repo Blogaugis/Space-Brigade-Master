@@ -72,6 +72,8 @@
     
     The Machine God watches over you.
 */
+show_debug_message("Creating Controller");
+log_message("Creating Controller");
 scr_colors_initialize();
 is_test_map=false;
 target_navy_number=5;
@@ -92,9 +94,13 @@ complex_event=false;
 current_eventing="";
 chaos_rating=0;
 chapter_made = 0;
-obj_cuicons.alarm[1]=1; // Clean up custom icons
+// obj_cuicons.alarm[1]=1; // Clean up custom icons
 map_scale = 1;
 scale_mod = 1;
+unit_manage_constants = {};
+unit_manage_constants.current_data = [-1,-1];
+management_buttons = false;
+
 
 diplomacy_pathway = "";
 option_selections=[];
@@ -116,70 +122,6 @@ function build_chaos_gods(){
 }
 build_chaos_gods()
 
-// ** Resets global vars **
-obj_controller.restart_name="";
-obj_controller.restart_founding="";
-obj_controller.restart_secret="";
-for(var i=0; i<=11; i++){obj_controller.restart_title[i]="";}
-obj_controller.restart_icon=0;
-obj_controller.restart_icon_name="";
-obj_controller.restart_powers="";
-for(var ad=0; ad<5; ad ++){
-    obj_controller.restart_adv[ad]="";
-    obj_controller.restart_dis[ad]="";
-}
-obj_controller.restart_recruiting_type="";
-obj_controller.restart_trial="";
-obj_controller.restart_recruiting_name="";
-obj_controller.restart_home_type="";
-obj_controller.restart_home_name="";
-obj_controller.restart_fleet_type=0;
-obj_controller.restart_recruiting_exists=0;
-obj_controller.restart_homeworld_exists=0;
-obj_controller.restart_homeworld_rule=0;
-obj_controller.restart_battle_cry="";
-obj_controller.restart_main_color="";
-obj_controller.restart_secondary_color="";
-obj_controller.restart_trim_color="";
-obj_controller.restart_pauldron2_color="";
-obj_controller.restart_pauldron_color="";
-obj_controller.restart_lens_color="";
-obj_controller.restart_weapon_color="";
-obj_controller.restart_col_special=0;
-obj_controller.restart_trim=0;
-obj_controller.restart_skin_color=0;
-obj_controller.restart_hapothecary="";
-obj_controller.restart_hchaplain="";
-obj_controller.restart_clibrarian="";
-obj_controller.restart_fmaster="";
-obj_controller.restart_recruiter="";
-obj_controller.restart_admiral="";
-obj_controller.restart_equal_specialists=0;
-obj_controller.restart_load_to_ships=[0,0,0];
-obj_controller.restart_successors=0;
-obj_controller.restart_mutations=0;
-obj_controller.restart_preomnor=0;
-obj_controller.restart_voice=0;
-obj_controller.restart_doomed=0;
-obj_controller.restart_lyman=0;
-obj_controller.restart_omophagea=0;
-obj_controller.restart_ossmodula=0;
-obj_controller.restart_membrane=0;
-obj_controller.restart_zygote=0;
-obj_controller.restart_betchers=0;
-obj_controller.restart_catalepsean=0;
-obj_controller.restart_secretions=0;
-obj_controller.restart_occulobe=0;
-obj_controller.restart_mucranoid=0;
-obj_controller.restart_master_name="";
-obj_controller.restart_master_melee=0;
-obj_controller.restart_master_ranged=0;
-obj_controller.restart_master_specialty=0;
-obj_controller.restart_strength=0;
-obj_controller.restart_cooperation=0;
-obj_controller.restart_purity=0;
-obj_controller.restart_stability=0;
-
 // ** Sets default equipement for roles **
 // 100 is defaults, 101 is the allowable starting equipment
 for(var i=100; i<103; i++){
@@ -193,7 +135,7 @@ for(var i=100; i<103; i++){
     obj_controller.r_role[i,3]="Veteran";
     obj_controller.r_wep1[i,3]="Chainsword";
     obj_controller.r_wep2[i,3]="Bolter";
-    obj_controller.r_armour[i,3]="Power Armour";
+    obj_controller.r_armour[i,3]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_mobi[i,3]="";
     obj_controller.r_gear[i,3]="";
     
@@ -207,13 +149,13 @@ for(var i=100; i<103; i++){
     obj_controller.r_role[i,5]="Captain";
     obj_controller.r_wep1[i,5]="Power Sword";
     obj_controller.r_wep2[i,5]="Bolt Pistol";
-    obj_controller.r_armour[i,5]="Power Armour";
+    obj_controller.r_armour[i,5]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_mobi[i,5]="";
     obj_controller.r_gear[i,5]="Iron Halo";
     
     obj_controller.r_role[i,6]="Dreadnought";
     obj_controller.r_wep1[i,6]="Close Combat Weapon";
-    obj_controller.r_wep2[i,6]="Lascannon";
+    obj_controller.r_wep2[i,6]="Twin Linked Lascannon";
     obj_controller.r_armour[i,6]="Dreadnought";
     obj_controller.r_mobi[i,6]="";
     obj_controller.r_gear[i,6]="";
@@ -221,35 +163,35 @@ for(var i=100; i<103; i++){
     obj_controller.r_role[i,7]="Champion";
     obj_controller.r_wep1[i,7]="Power Sword";
     obj_controller.r_wep2[i,7]="Bolt Pistol";
-    obj_controller.r_armour[i,7]="Power Armour";
+    obj_controller.r_armour[i,7]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_mobi[i,7]="";
     obj_controller.r_gear[i,7]="Combat Shield";
     
     obj_controller.r_role[i,8]="Tactical Marine";
     obj_controller.r_wep1[i,8]="Bolter";
     obj_controller.r_wep2[i,8]="Combat Knife";
-    obj_controller.r_armour[i,8]="Power Armour";
+    obj_controller.r_armour[i,8]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_mobi[i,8]="";
     obj_controller.r_gear[i,8]="";
     
     obj_controller.r_role[i,9]="Devastator Marine";
     obj_controller.r_wep1[i,9]="";
     obj_controller.r_wep2[i,9]="Combat Knife";
-    obj_controller.r_armour[i,9]="Power Armour";
+    obj_controller.r_armour[i,9]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_mobi[i,9]="";
     obj_controller.r_gear[i,9]="";
     
     obj_controller.r_role[i,10]="Assault Marine";
     obj_controller.r_wep1[i,10]="Chainsword";
     obj_controller.r_wep2[i,10]="Bolt Pistol";
-    obj_controller.r_armour[i,10]="Power Armour";
+    obj_controller.r_armour[i,10]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_mobi[i,10]="Jump Pack";
     obj_controller.r_gear[i,10]="";
     
     obj_controller.r_role[i,11]="Ancient";
     obj_controller.r_wep1[i,11]="Company Standard";
     obj_controller.r_wep2[i,11]="Power Sword";
-    obj_controller.r_armour[i,11]="Power Armour";
+    obj_controller.r_armour[i,11]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_mobi[i,11]="";
     obj_controller.r_gear[i,11]="";
 
@@ -263,14 +205,14 @@ for(var i=100; i<103; i++){
     obj_controller.r_role[i,14]="Chaplain";
     obj_controller.r_wep1[i,14]="Power Sword";
     obj_controller.r_wep2[i,14]="Bolt Pistol";
-    obj_controller.r_armour[i,14]="Power Armour";
+    obj_controller.r_armour[i,14]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_gear[i,14]="Rosarius";
     obj_controller.r_mobi[i,14]="";
     
     obj_controller.r_role[i,15]="Apothecary";
     obj_controller.r_wep1[i,15]="Chainsword";
     obj_controller.r_wep2[i,15]="Bolt Pistol";
-    obj_controller.r_armour[i,15]="Power Armour";
+    obj_controller.r_armour[i,15]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_gear[i,15]="Narthecium";
     obj_controller.r_mobi[i,15]="";
     
@@ -284,21 +226,21 @@ for(var i=100; i<103; i++){
     obj_controller.r_role[i,17]="Librarian";
     obj_controller.r_wep1[i,17]="Force Staff";
     obj_controller.r_wep2[i,17]="Storm Bolter";
-    obj_controller.r_armour[i,17]="Power Armour";
+    obj_controller.r_armour[i,17]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_gear[i,17]="Psychic Hood";
     obj_controller.r_mobi[i,17]="";
                 
     obj_controller.r_role[i,18]="Sergeant";
     obj_controller.r_wep1[i,18]="Chainsword";
     obj_controller.r_wep2[i,18]="Storm Bolter";
-    obj_controller.r_armour[i,18]="Power Armour";
+    obj_controller.r_armour[i,18]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_gear[i,18]="";
     obj_controller.r_mobi[i,18]=""; 
 
     obj_controller.r_role[i,19]="Veteran Sergeant";
     obj_controller.r_wep1[i,19]="Chainsword";
     obj_controller.r_wep2[i,19]="Storm Bolter";
-    obj_controller.r_armour[i,19]="Power Armour";
+    obj_controller.r_armour[i,19]=STR_ANY_POWER_ARMOUR;
     obj_controller.r_gear[i,19]="";
     obj_controller.r_mobi[i,19]="";                     
 } // 100 is defaults, 101 is the allowable starting equipment
@@ -323,12 +265,7 @@ if (window_get_fullscreen()=1){
 cheatcode=0;
 cheatyface=0;
 // ** Debugging file created **
-debug_lines=0;
-ini_open("debug_log.ini");
-debug_lines=ini_read_real("Main","lines",0);
-ini_close();
-
-debugl("=========Controller Created");
+log_message("Controller Created");
 // ** Creates saves.ini with default settings **
 ini_open("saves.ini");
 master_volume=ini_read_real("Settings","master_volume",1);
@@ -337,6 +274,7 @@ music_volume=ini_read_real("Settings","music_volume",1);
 large_text=ini_read_real("Settings","large_text",0);
 settings_heresy=ini_read_real("Settings","settings_heresy",0);
 settings_fullscreen=ini_read_real("Settings","fullscreen",1);
+settings_autosave=ini_read_real("Settings","settings_autosave",1);
 settings_window_data=ini_read_string("Settings","window_data","fullscreen");
 if (is_test_map) then global.cheat_debug=true;
 ini_close();
@@ -398,6 +336,7 @@ hide_banner=0;
 // ui stuff
 var xx=__view_get( e__VW.XView, 0 );
 var yy=__view_get( e__VW.YView, 0 );
+menu_lock = false;
 menu_buttons = {
     "chapter_manage":new MainMenuButton(spr_ui_but_1, spr_ui_hov_1,,,ord("M"),scr_toggle_manage),
     "chapter_settings":new MainMenuButton(spr_ui_but_1, spr_ui_hov_1,,,ord("S"),scr_toggle_setting),
@@ -436,18 +375,20 @@ unit_bio=false;
 view_squad=false;
 company_report=false;
 company_data = {};
+unit_focus = false;
 filter_mode = false;
-pauldron_trim=0;
-last_unit=[0,0];
+manage_tags = [];
+pauldron_trim = 0;
+last_unit = [0,0];
 ui_coloring=""; 
-ui_melee_penalty=0;
-ui_ranged_penalty=0;
+ui_melee_penalty = 0;
+ui_ranged_penalty = 0;
+management_tags = [];
 
 // ** Sets default mouse vars **
 current_target=false;
 click=0;
 click2=0;
-mouse_left=0;
 dropdown_open=0;
 scrollbar_engaged=0;
 born_leader=0;
@@ -465,13 +406,13 @@ gene_sold=0;
 gene_xeno=0;
 gene_tithe=24;
 gene_iou=0;
+draw_helms = true;
 
 // ** Sets default views and in game values on creation **
 managing=0;
 formating=0;
 man_current=0;
 man_max=0;
-man_see=0;
 ship_current=0;
 ship_max=0;
 ship_see=0;
@@ -488,7 +429,7 @@ sel_all="";
 sel_promoting=0;
 drag_square=[];
 rectangle_action = -1;
-sel_loading=0;
+sel_loading=-1;
 sel_uid=0;
 
 // ** Sets Chapter events and celebrations **
@@ -542,14 +483,15 @@ command_set[8]=1;
 command_set[9]=1;
 command_set[20]=1;
 command_set[24]=1;
-blandify=0;
+modest_livery=0;
+progenitor_visuals=0;
+tagged_training=0;
 
 // ** Default menu items **
 selecting_planet=0;
-selecting_ship=0;
+selecting_ship=-1;
 fleet_minimized=0;
 fleet_all=1;
-tolerant=0;
 unload=0;
 new_vehicles=1;
 menu=500;
@@ -567,9 +509,8 @@ identifiable=0;
 repair_ships=0;
 forge_points = 0;
 master_craft_chance = 0;
-tech_status = "Cult Mechanicus";
+tech_status = "cult_mechanicus";
 forge_string="";
-forge_queue=[];
 player_forge_data = {
     player_forges : 0,
     vehicle_hanger : [],
@@ -582,6 +523,7 @@ production_research = {
     plasma : [0,{}],
     psi : [0,{}],
     melta : [0,{}],
+    grav : [0,{}],
     chasis : [0,{}],
     chain :[0,{}],
     power_fields:[1,{}],
@@ -595,12 +537,13 @@ production_research = {
     ]
 }
 
-production_research_pathways ={
+production_research_pathways ={ // TODO: Tech tree expansion stuff
     flame : [["Promethium Tank Brazing"],{}],
     bolt : [["Hardened Barrel Boring", "Projectile Propellant Purification"],{}],
     plasma : [[ "Plasma Coil Magnetization"],{}],
     psi : [["Psionic Resonance Valves"],{}],
     melta : [["Atomic Chamber Construction"],{}],
+    grav : [["Gravitic Reaction Principle"],{}],
     chasis : [[],{}],
     chain :[["Adamantine Links"],{}],
     power_fields:[["Power Field Cooling", "Mono-molecular Edge Sheathing"],{}],
@@ -678,47 +621,27 @@ if (instance_exists(obj_ini)){
     if (string_count(obj_ini.spe[0,1],"$")>0) then born_leader=1;
 }
 // ** Resets marines and other vars **
-for(var i=0; i<501; i++){
-    man[i]="";
-    ide[i]=0;
-    man_sel[i]=0;
-    ma_lid[i]=0;
-    ma_wid[i]=0;
-    ma_promote[i]=0;
-    ma_race[i]=0;
-    ma_loc[i]="";
-    ma_name[i]="";
-    ma_role[i]="";
-    ma_wep1[i]="";
-    ma_mobi[i]="";
-    ma_wep2[i]="";
-    ma_armour[i]="";
-    ma_gear[i]="";
-    ma_health[i]=100;
-    ma_chaos[i]=0;
-    ma_exp[i]=0;
-    ma_god[i]=0;
-    sh_ide[i]=0;
-    sh_uid[i]=0;
-    sh_name[i]="";
-    sh_class[i]="";
-    sh_loc[i]="";
-    sh_hp[i]="";
-    sh_cargo[i]=0;
-    sh_cargo_max[i]="";
-    squad[i]=0;
-    display_unit[i]=0;
 
+for(var i=0; i<501; i++){
     
     if (i<=50){
         penit_co[i]=0;
         penit_id[i]=0;
     }
-    if (i<=100){
-        event[i]="";
-        event_duration[i]=0;
-    }
 }
+event = [];
+// ship management arrays
+// they are used to display a paginated subset of ships
+// at a particular location for the load to ship screen.
+sh_ide = []
+sh_uid = []
+sh_name = []
+sh_class = []
+sh_loc = []
+sh_hp = []
+sh_cargo = []
+sh_cargo_max = []
+reset_manage_arrays();
 alll=0;
 //
 popup=0;// 1: fleet, 2: other, 3: system
@@ -727,6 +650,8 @@ sel_owner=0;
 sel_system_x=0;
 sel_system_y=0;
 popup_master_crafted=0;
+close_popups = true;
+unit_manage_image = false;
 // ** Sets starting turn **
 turn=1;
 // turn=40;
@@ -765,50 +690,19 @@ trade_chip=0;
 trade_info=0;
 zui=0;
 // Variables for management
-for(var t=0; i<200; t++){
-    temp[t]="";
-}
-temp[90]=0;
-temp[9000]="";
-for(var t=4700; t<=4719; t++){
-    temp[t]=0;temp[t+100]=0;
-}
+var array_size = 9001;
+temp = array_create(array_size, 0);
+array_set_range(temp, 0, 199, "");
+temp[90] = 0;
+temp[9000] = "";
 // ** Resets all audiences **
+audience_stack = [];
 audiences=0;
-audien[0]=0;
-audien[1]=0;
-audien[2]=0;
-audien[3]=0;
-audien[4]=0;
-audien[5]=0;
-audien[6]=0;
-audien[7]=0;
-audien[8]=0;
-audien[9]=0;
-audien[10]=0;
-audien[11]=0;
-audien[12]=0;
-audien[13]=0;
-audien[14]=0;
-audien_topic[0]="";
-audien_topic[1]="";
-audien_topic[2]="";
-audien_topic[3]="";
-audien_topic[4]="";
-audien_topic[5]="";
-audien_topic[6]="";
-audien_topic[7]="";
-audien_topic[8]="";
-audien_topic[9]="";
-audien_topic[10]="";
-audien_topic[11]="";
-audien_topic[12]="";
-audien_topic[13]="";
-audien_topic[14]="";
+
 // ** Sets default recruiting vars **
 recruits=0;
 recruiting_worlds="";
-recruit_trial=eTrials.BLOODDUEL;
+recruit_trial=eTrials.BLOODDUEL; // I'll want to change this later
 recruit_last=0;
 
 recruit_name[0]="";
@@ -818,34 +712,34 @@ recruit_training[0]=0;
 recruit_exp[0]=0;
 recruit_data[0]={};
 
-for(var i=0; i<501; i++){
-    
-    // For loyalty penalties
-    if (i<=50){
-        loyal[i]="";
-        loyal_num[i]=0;// If less than 1 and greater than 0; that x100 is the chance for discovery
-        loyal_time[i]=0;
-    }
-    if (i<=10){
-        inquisitor_gender[i]=choose(0,0,0,1,1,1,1); // 4:3 chance of male Inquisitor
-        inquisitor_type[i]=choose("Ordo Malleus","Ordo Xenos","Ordo Hereticus","Ordo Hereticus","Ordo Hereticus","Ordo Hereticus","Ordo Hereticus","Ordo Hereticus");
-        inquisitor[i]=global.name_generator.generate_imperial_name(inquisitor_gender[i]);// For 'random inquisitor wishes to inspect your fleet
-    }
-    if (i<60){
-        quest[i]="";// 300req
-        quest_faction[i]=0;// 6
-        quest_end[i]=0;// like 4 or so after the turn this is created
-    }
+// ** Sets loyalty variables **
+loyal = array_create(51, "");
+loyal_num = array_create(51, 0);
+loyal_time = array_create(51, 0);
+
+// ** Sets quest variables **
+quest = array_create(60, "");
+quest_faction = array_create(60, 0);
+quest_end = array_create(60, 0);
+
+// ** Sets inquisitor variables **
+inquisitor_gender = array_create(11, 0);
+inquisitor_type = array_create(11, "");
+inquisitor = array_create(11, "");
+
+for (var i = 0, l = array_length(inquisitor_gender); i < l; i++) {
+    inquisitor_gender[i] = choose(0, 0, 0, 1, 1, 1, 1);
+    inquisitor_type[i] = choose("Ordo Malleus", "Ordo Xenos", "Ordo Hereticus", "Ordo Hereticus", "Ordo Hereticus", "Ordo Hereticus", "Ordo Hereticus", "Ordo Hereticus");
+    inquisitor[i] = global.name_generator.generate_imperial_name(inquisitor_gender[i]);
 }
+
 // ** Sets diplomacy variables **
 diplo_last="";
 diplo_text="";
 diplo_txt="";
 diplo_char=0;
-for(var q=0; q<6; q++){
-    diplo_option[q]="";
-    diplo_goto[q]="";
-}
+diplo_option = [];
+
 diplo_alpha=0;
 // ** Sets combat to not true **
 combat=0;
@@ -890,52 +784,21 @@ inqis_flag_lair=0;
 inqis_flag_gene=0;
 
 faction_justmet=0;
-
-trade_mine[0]="";
-trade_mine[1]="Requisition";
-trade_mine[2]="Gene-Seed";
-trade_mine[3]="STC Fragment";
-trade_mine[4]="Info Chip";
-trade_theirs[0]="";
-trade_theirs[1]="";
-trade_theirs[2]="";
-trade_theirs[3]="";
-trade_theirs[4]="";
-trade_theirs[5]="";
-trade_theirs[6]="";
-trade_disp[0]=0;
-trade_disp[1]=0;
-trade_disp[2]=0;
-trade_disp[3]=0;
-trade_disp[4]=0;
-trade_disp[5]=0;
-trade_disp[6]=0;
-trade_take[0]="";
-trade_take[1]="";
-trade_take[2]="";
-trade_take[3]="";
-trade_take[4]="";
-trade_tnum[0]=0;
-trade_tnum[1]=0;
-trade_tnum[2]=0;
-trade_tnum[3]=0;
-trade_tnum[4]=0;
-trade_give[0]="";
-trade_give[1]="";
-trade_give[2]="";
-trade_give[3]="";
-trade_give[4]="";
-trade_mnum[0]=0;
-trade_mnum[1]=0;
-trade_mnum[2]=0;
-trade_mnum[3]=0;
-trade_mnum[4]=0;
 // ** Sets up starting requisition **
 requisition=5000;
 if (instance_exists(obj_ini)){
-    if (obj_ini.progenitor==0) /*and (obj_creation.custom=0)*/ and (global.chapter_name!="Doom Benefactors") then requisition=10000;
+    if (
+        (obj_ini.progenitor == ePROGENITOR.NONE) &&
+        (global.chapter_name != "Doom Benefactors")
+    ) {
+        requisition=10000;
+    }
 }
 if (is_test_map==true) then requisition=50000;
+
+chapter_master = new scr_chapter_master();
+
+trade_attempt = false;
 // ** Sets income **
 income=0;
 income_last=0;
@@ -946,7 +809,6 @@ income_base=0;
 income_home=0;
 income_forge=0;
 income_agri=0;
-income_recruiting=0;
 income_training=0;
 income_fleet=0;
 income_trade=0;
@@ -975,7 +837,9 @@ for(var i=0; i<16; i++){
     bat_drea_for[i]=5;
     bat_rhin_for[i]=6;
     bat_pred_for[i]=7;
-    bat_land_for[i]=7;
+    bat_landraid_for[i]=7;
+    bat_landspee_for[i]=4;
+    bat_whirl_for[i]=1;
     bat_scou_for[i]=1;
 }
 // ground=1    raid=2
@@ -1000,23 +864,11 @@ bat_dreadnought_column=5;
 bat_rhino_column=6;
 bat_predator_column=7;
 bat_landraider_column=7;
+bat_whirlwind_column=1;
+bat_landspeeder_column=4;
 bat_scout_column=1;
 // ** Sets up disposition per faction **
-enum eFACTION {
-	Player = 1,
-	Imperium,
-	Mechanicus,
-	Inquisition,
-	Ecclesiarchy,
-	Eldar,
-	Ork,
-	Tau,
-	Tyranids,
-	Chaos,
-	Heretics,
-    Genestealer,
-	Necrons = 13
-}
+
 
 imperial_factions = [
     eFACTION.Imperium,
@@ -1064,13 +916,12 @@ faction[12]="";
 disposition[12]=0;
 faction[13]="Necrons";
 disposition[13]=-20;
-// ** Max disposition for imperials **
-disposition_max[0]=0;
-disposition_max[1]=0;
-disposition_max[2]=95;
-disposition_max[3]=95;
-disposition_max[4]=95;
-disposition_max[5]=95;
+// ** Max disposition **
+disposition_max = array_create(14, 0);
+disposition_max[2]=40;
+disposition_max[3]=40;
+disposition_max[4]=40;
+disposition_max[5]=40;
 if (instance_exists(obj_ini)){
     disposition_max[2]=40+obj_ini.imperium_disposition;
     if (disposition_max[2]>100) then disposition_max[2]=100;
@@ -1081,98 +932,62 @@ if (instance_exists(obj_ini)){
     disposition_max[5]=40+obj_ini.ecclesiarchy_disposition;
     if (disposition_max[5]>100) then disposition_max[5]=100;
 }
-// ** Max disposition for non imperials **
-disposition_max[6]=0;
-disposition_max[7]=0;
-disposition_max[8]=0;
-disposition_max[9]=0;
-disposition_max[10]=0;
-disposition_max[11]=0;
-disposition_max[12]=0;
-disposition_max[13]=0;
 // ** Sets up faction leader names as well as player faction stuff **
-faction_leader[0]="";
-faction_title[0]="";
-faction_status[0]="";
-faction_leader[1]="";
-faction_title[1]="";
-faction_status[1]="";
+faction_leader = array_create(14, "");
+faction_title = array_create(14, "");
+faction_status = array_create(14, "");
 // Sector Command faction
 faction_leader[eFACTION.Imperium]=global.name_generator.generate_imperial_name();
-faction_title[2]="Sector Commander";
+faction_title[eFACTION.Imperium]="Sector Commander";
 faction_status[eFACTION.Imperium]="Allied";
 // Mechanicus faction
 faction_leader[eFACTION.Mechanicus]=global.name_generator.generate_imperial_name();
-faction_title[3]="Magos";
+faction_title[eFACTION.Mechanicus]="Magos";
 faction_status[eFACTION.Mechanicus]="Allied";
 if (faction_leader[eFACTION.Mechanicus]==faction_leader[eFACTION.Imperium]) then faction_leader[eFACTION.Mechanicus]=global.name_generator.generate_space_marine_name();
 // Inquisition faction
 faction_leader[eFACTION.Inquisition]=global.name_generator.generate_imperial_name();
 if (faction_leader[eFACTION.Inquisition]==faction_leader[eFACTION.Mechanicus]) then faction_leader[eFACTION.Inquisition]=global.name_generator.generate_imperial_name();
-faction_title[4]="Inquisitor Lord";
+faction_title[eFACTION.Inquisition]="Inquisitor Lord";
 faction_status[eFACTION.Inquisition]="Allied";
 // Sisters faction
 faction_leader[eFACTION.Ecclesiarchy]=global.name_generator.generate_imperial_name(false);
-faction_title[5]="Prioress";
+faction_title[eFACTION.Ecclesiarchy]="Prioress";
 faction_status[eFACTION.Ecclesiarchy]="Allied";
 // Eldar faction
 faction_leader[eFACTION.Eldar]=global.name_generator.generate_eldar_name(2);
-faction_title[6]="Farseer";
+faction_title[eFACTION.Eldar]="Farseer";
 faction_status[eFACTION.Eldar]="Antagonism";// If disposition = 0 then instead set it to "Antagonism"
-if (instance_exists(obj_ini)){if (string_count("Eldar",obj_ini.strin)>0) then faction_status[eFACTION.Eldar]="War";}
 // Orkz faction
 faction_leader[eFACTION.Ork]=global.name_generator.generate_ork_name();
-faction_title[7]="Warboss";
+faction_title[eFACTION.Ork]="Warboss";
 faction_status[eFACTION.Ork]="War";
 // Tau faction
 faction_leader[eFACTION.Tau] = global.name_generator.generate_tau_leader_name();
-faction_title[8]="Diplomat";
+faction_title[eFACTION.Tau]="Diplomat";
 faction_status[eFACTION.Tau]="Antagonism";
 // Other factions unkown to player
-faction_leader[eFACTION.Tyranids]="";
-faction_title[9]="";
 faction_status[eFACTION.Tyranids]="War";
-
-faction_leader[eFACTION.Chaos]=":D";
-faction_title[10]="Chaos Lord";
+faction_title[eFACTION.Chaos]="Chaos Lord";
 faction_status[eFACTION.Chaos]="War";
-
-faction_leader[eFACTION.Heretics]="";
-faction_title[11]="";
 faction_status[eFACTION.Heretics]="War";
-
-faction_leader[12]="";
-faction_title[12]="";
-faction_status[12]="War";
-
-faction_leader[eFACTION.Necrons]="";
-faction_title[13]="";
+faction_status[eFACTION.Genestealer]="War";
 faction_status[eFACTION.Necrons]="War";
 // ** Sets faction gender for names **
-faction_gender[0]=1;
-faction_gender[1]=1;
-faction_gender[2]=1;
-faction_gender[3]=1;
-faction_gender[4]=1;
-faction_gender[10]=1;
-faction_gender[5]=1;
+faction_gender = array_create(14, 1);
 faction_gender[6]=choose(1,2);
-faction_gender[7]=1;
 faction_gender[8]=choose(1,1,2);
-faction_gender[9]=1;
 if (faction_gender[4]=2) then faction_leader[eFACTION.Inquisition]=global.name_generator.generate_imperial_name(false);
 faction_gender[10]=choose(1,1,1,2,2);
 if (faction_gender[10]==1) then faction_leader[eFACTION.Chaos]=choose("1","1","1","2");
 if (faction_gender[10]==2) then faction_leader[eFACTION.Chaos]=choose("1","2","2","2");
 if (faction_leader[eFACTION.Chaos]=="1") then faction_leader[eFACTION.Chaos]=global.name_generator.generate_space_marine_name();
 if (faction_leader[eFACTION.Chaos]=="2") then faction_leader[eFACTION.Chaos]=global.name_generator.generate_chaos_name();
-faction_gender[11]=1;
-faction_gender[12]=1;
-faction_gender[13]=1;
 
+known = array_create(14, 0);
 known[0]=2;
 known[eFACTION.Player]=999;
-known[eFACTION.Imperium]=1;
+known[eFACTION.Imperium]=1; // TODO: tweak these with certain traits in mind
 known[eFACTION.Mechanicus]=0;
 known[eFACTION.Inquisition]=0;
 known[eFACTION.Ecclesiarchy]=0;
@@ -1193,35 +1008,9 @@ known[eFACTION.Necrons]=0;
 // disposition[4]=90;
 // disposition[3]=60;
 // ** Sets diplomacy annoyed status **
-annoyed[0]=0;
-annoyed[eFACTION.Player]=0;
-annoyed[eFACTION.Imperium]=0;
-annoyed[eFACTION.Mechanicus]=0;
-annoyed[eFACTION.Inquisition]=0;
-annoyed[eFACTION.Ecclesiarchy]=0;
-annoyed[eFACTION.Eldar]=0;
-annoyed[eFACTION.Ork]=0;
-annoyed[eFACTION.Tau]=0;
-annoyed[eFACTION.Tyranids]=0;
-annoyed[eFACTION.Chaos]=0;
-annoyed[eFACTION.Heretics]=0;
-annoyed[12]=0;
-annoyed[eFACTION.Necrons]=0;
+annoyed = array_create(14, 0);
 // ** Sets diplomacy ignore status **
-ignore[0]=0;
-ignore[eFACTION.Player]=0;
-ignore[eFACTION.Imperium]=0;
-ignore[eFACTION.Mechanicus]=0;
-ignore[eFACTION.Inquisition]=0;
-ignore[eFACTION.Ecclesiarchy]=0;
-ignore[eFACTION.Eldar]=0;
-ignore[eFACTION.Ork]=0;
-ignore[eFACTION.Tau]=0;
-ignore[eFACTION.Tyranids]=0;
-ignore[eFACTION.Chaos]=0;
-ignore[eFACTION.Heretics]=0;
-ignore[12]=0;
-ignore[eFACTION.Necrons]=0;
+ignore = array_create(14, 0);
 // ** Sets diplomacy turns to be ignored **
 turns_ignored[0]=0;
 turns_ignored[1]=0;
@@ -1265,9 +1054,9 @@ recruiting_type="";
 // ** Sets up chapter colors **
 main_color=0;
 secondary_color=0;
-trim_color=0;
-pauldron2_color=0;
-pauldron_color=0;
+main_trim=0;
+left_pauldron=0;
+right_pauldron=0;
 lens_color=0;
 weapon_color=0;
 col_special=0;
@@ -1275,7 +1064,7 @@ trim=0;
 // ** Sets up names, progenitor, successors and mutations ** 
 adept_name="";
 recruiter_name="";
-progenitor="";
+progenitor=ePROGENITOR.NONE;
 successor_chapters=0;
 mutation="";
 
@@ -1297,14 +1086,17 @@ other1_disposition=0;
 other1="";
 // ** Sets up bonuses once chapter is created **
 if (instance_exists(obj_ini)){
-    // Tolerant trait
-    if (global.load==0) and (string_count("Tolerant",obj_ini.strin2)>0){
-        obj_controller.disposition[6]+=5;
-        obj_controller.disposition[7]+=5;
-        obj_controller.disposition[8]+=10;
-    }
     // General setup
-    if (global.load==0){
+    if (global.load==-1){
+        // Tolerant trait
+        if (scr_has_disadv("Tolerant")) {
+            obj_controller.disposition[6]+=5;
+            obj_controller.disposition[7]+=5;
+            obj_controller.disposition[8]+=10;
+        }
+        if (scr_has_adv("Enemy: Eldar")) {
+            faction_status[eFACTION.Eldar]="War";
+        }
         // Founding Chapter STC Bonuses here
         if (global.chapter_name=="Salamanders"){
             stc_wargear=4;
@@ -1318,7 +1110,9 @@ if (instance_exists(obj_ini)){
             stc_bonus[3]=3;
         }
         if (global.chapter_name=="Blood Ravens"){
-            for(var i=0; i<3; i++){scr_add_artifact("random_nodemon","",0,obj_ini.ship[1],501);}
+            for(var i=0; i<3; i++){
+                scr_add_artifact("random_nodemon","",0,obj_ini.ship[0],501);
+            }
         }
         // TODO should add special bonus to different chapters based on lore
         adept_name=global.name_generator.generate_space_marine_name();
@@ -1328,9 +1122,9 @@ if (instance_exists(obj_ini)){
         mutation="";
         main_color=obj_ini.main_color;
         secondary_color=obj_ini.secondary_color;
-        trim_color=obj_ini.trim_color;
-        pauldron2_color=obj_ini.pauldron2_color;
-        pauldron_color=obj_ini.pauldron_color;
+        main_trim=obj_ini.main_trim;
+        left_pauldron=obj_ini.left_pauldron;
+        right_pauldron=obj_ini.right_pauldron;
         lens_color=obj_ini.lens_color;
         weapon_color=obj_ini.weapon_color;
         col_special=obj_ini.col_special;
@@ -1341,7 +1135,7 @@ if (instance_exists(obj_ini)){
         scr_colors_initialize();
         scr_shader_initialize();
         instance_create(-100,-100,obj_event_log);
-        debugl("New Game");
+        log_message("New Game");
     }
 }
 //Set player colour
@@ -1351,8 +1145,45 @@ try{
 catch(_exception){
     global.star_name_colors[1] = make_color_rgb(col_r[1],col_g[1],col_b[1]);
 }
+
+#region save/load serialization 
+
+/// Called from save function to take all object variables and convert them to a json savable format and return it 
+serialize = function(){
+    var object_controller = self;
+    
+    var save_data = {
+        obj: object_get_name(object_index),
+        x,
+        y,
+        chaos_gods,
+        master_of_forge,
+        stc_research,
+        production_research,
+        player_forge_data,
+        end_turn_insights,
+        recruit_data,
+        marines,
+        loyalty,
+        spec_train_data,
+        forge_queue: specialist_point_handler.forge_queue,
+        chapter_master_data : chapter_master
+
+    }
+    var excluded_from_save = ["temp", "serialize", "deserialize", "build_chaos_gods", "company_data","menu_buttons",
+            "location_viewer", "production_research_pathways", "specialist_point_handler", "spec_train_data", "tooltips", "last_unit", "unit_manage_constants", "unit_manage_image"],
+    var excluded_from_save_start = ["restart_"];
+
+    copy_serializable_fields(object_controller, save_data, excluded_from_save, excluded_from_save_start);
+
+    return save_data;
+}
+
+// Deserialization is done within scr_load
+#endregion
+
 // ** Loads the game **
-if (global.load>0){
+if (global.load>=0){
     load_game=global.load;
     successor_chapters=0;
     instance_create(0,0,obj_saveload);
@@ -1363,17 +1194,29 @@ if (global.load>0){
     obj_saveload.load_part=1;
     obj_cursor.image_alpha=0;
     scr_colors_initialize();
-    if (global.restart==0) then debugl("Loading Game");
-    if (global.restart>0) then debugl("Restarting Game");
+    if (global.restart==0) then log_message("Loading Game");
+    if (global.restart>0) then log_message("Restarting Game");
     exit;
 }
 
+///! ************************************************************ */
+///! ************************************************************ */
+///! ************************************************************ */
+///! NOTHING BEYOND THIS POINT WILL BE SET AFTER A LOAD FROM SAVE */
+///! ************************************************************ */
+///! ************************************************************ */
+///! ************************************************************ */
+///! ************************************************************ */
+
+
+
+
 var xx,yy,me,dist,go,planet;
-global.custom=1;
+global.custom=eCHAPTER_TYPE.RANDOM;
 
 // ** Sets up base training level and trainees at game start **
 training_apothecary=0;
-apothecary_points=0;
+apothecary_recruit_points=0;
 apothecary_aspirant=0;
 training_chaplain=0;
 chaplain_points=0;
@@ -1387,9 +1230,35 @@ tech_aspirant=0;
 recruiting=0;
 penitorium=0;
 end_turn_insights = {};
+spec_train_data = [ // TODO: Found the stuff
+    {
+        name : "Techmarine",
+        min_exp : 30,
+        coord_offset : [0, 0],
+        req : [["technology",34, "exmore"]]
+    },
+    {
+        name : "Librarian",
+        min_exp : 0,
+        coord_offset : [0, -7],
+        req : [["psionic", 1, "exmore"]]
+    },
+    {
+        name : "Chaplain",
+        min_exp : 60,
+        coord_offset : [7, -7],
+        req : [["piety", 34, "exmore"], ["charisma", 29, "exmore"]]
+    },
+    {
+        name : "Apothecary",
+        min_exp : 60,
+        coord_offset : [7, 0],
+        req : [["technology", 29, "exmore"], ["intelligence",44, "exmore"]]
+    },
+];
 // Redefines training based on chapter
 if (instance_exists(obj_ini)){
-    if (string_count("Intolerant",obj_ini.strin2)>0) then training_psyker=0;
+    if (scr_has_disadv("Psyker Intolerant")) then training_psyker=0;
     if (global.chapter_name="Space Wolves") then training_chaplain=0;
 }
 
@@ -1436,7 +1305,7 @@ ork=1;
 eldar=1;
 // if tau = 1 then tau spawn. also does eldar 
 /*
-if (global.custom=1){ 
+if (global.custom==eCHAPTER_TYPE.RANDOM){ 
     tau=choose(0,0,1);
     eldar=choose(0,1);
 }
@@ -1446,19 +1315,24 @@ loyalty=100;
 loyalty_hidden=100;// Updated when inquisitors do an inspection
 // ** Sets up gene seed **
 gene_seed=20;
-if (string_count("Sieged",obj_ini.strin2)>0) then gene_seed=floor(random_range(250,500));
-if (global.chapter_name=="Lamenters") then gene_seed=20;
-if (global.chapter_name=="Soul Drinkers") then gene_seed=150;
+if scr_has_disadv("Sieged") then gene_seed=floor(random_range(250,400));
+if scr_has_disadv("Obliterated") then gene_seed=floor(random_range(300,500));
+if scr_has_disadv("Serpents Delight") then gene_seed=floor(random_range(50,250)); 
+if scr_has_disadv("Enduring Angels") then gene_seed=floor(random_range(50,250)); 
+if scr_has_disadv("Depleted Gene-seed Stocks") then gene_seed=0;
+if (global.chapter_name=="Soul Drinkers") then gene_seed=60;
 
 //   ** sets up the starting squads**
 squads = true;
-game_start_squads()
+game_start_squads();
 squads = false;
-
+system_fleet_strength = 0;
 // **sets up starting forge_points
-calculate_research_points()
+specialist_point_handler = new SpecialistPointHandler();
+specialist_point_handler.calculate_research_points();
 
-//** sets up marine_by_location view
+
+//** sets up marine_by_location views
 location_viewer = new UnitQuickFindPanel();
 
 // ** Sets up the number of marines per company **
@@ -1468,59 +1342,63 @@ marines+=obj_ini.sixths+obj_ini.sevenths+obj_ini.eighths+obj_ini.ninths+obj_ini.
 command=0;
 command=obj_ini.commands;
 // Removes the command marines from marine count
-if (global.load==0) then marines-=command;
+if (global.load==-1) then marines-=command;
 // **** INTRO SCREEN ****
 temp[30]=string(check_number)+" "+string(year_fraction)+" "+string(year)+".M"+string(millenium);// Date
 temp[31]=string_upper(adept_name);// Adept name
-temp[32]=string_upper(obj_ini.name[0,1]);// Master name
+temp[32]=string_upper(obj_ini.name[0][0]);// Master name
 temp[33]=string_upper(scr_thought());// Thought of the day
 
-// Starts the vars for the 4 pages of intro
+//
+// Game start welcoming message
+//
 var njm=34,com=0,vih=0,word="",masta=0,forga=0,chapla=0,apa=0,liba=0,techa=0,libra=0,coda=0,lexa=0,apotha=0,old_dudes=0;
 
-var honoh=0,termi=0,veter=0,capt=0,chap=0,apoth=0,stand=0,dread=0,tact=0,assa=0,deva=0,rhino=0,speeder=0,raider=0,standard=0,bike=0,scou=0,whirl=0,pred=0;
-for(var mm=1; mm<=100; mm++){
-    if (obj_ini.role[com,mm]=="Chapter Master") then masta=1;
+var honoh=0,termi=0,veter=0,capt=0,chap=0,apoth=0,stand=0,dread=0,champ=0,tact=0,assa=0,deva=0,rhino=0,speeder=0,raider=0,standard=0,bike=0,scou=0,whirl=0,pred=0,lib=0,serg=0,vet_serg=0;
+for(var mm=0; mm<=100; mm++){
+    if (obj_ini.role[com,mm]==obj_ini.role[100][eROLE.ChapterMaster]) then masta=1;
     if (obj_ini.role[com,mm]=="Forge Master") then forga=1;
     if (obj_ini.role[com,mm]=="Master of Sanctity") then chapla=1;
     if (obj_ini.role[com,mm]=="Master of the Apothecarion") then apa=1;
-    if (obj_ini.role[com,mm]=="Chief "+string(obj_ini.role[100,17])) then liba=1;
-    if (obj_ini.role[com,mm]==obj_ini.role[100][16]) then techa+=1;
-    if (obj_ini.role[com,mm]==obj_ini.role[100,17]) then libra+=1;
+    if (obj_ini.role[com,mm]=="Chief "+string(obj_ini.role[100][eROLE.Librarian])) then liba=1;
+    if (obj_ini.role[com,mm]==obj_ini.role[100][eROLE.Techmarine]) then techa+=1;
+    if (obj_ini.role[com,mm]==obj_ini.role[100][eROLE.Librarian]) then libra+=1;
     if (obj_ini.role[com,mm]=="Codiciery") then coda+=1;
     if (obj_ini.role[com,mm]=="Lexicanum") then lexa+=1;
-    if (obj_ini.role[com,mm]==obj_ini.role[100][14]) then old_dudes+=1;
-    if (obj_ini.role[com,mm]==obj_ini.role[100][15]) then apotha+=1;
-    if (obj_ini.role[com,mm]==obj_ini.role[100][2]) then honoh+=1;
+    if (obj_ini.role[com,mm]==obj_ini.role[100][eROLE.Chaplain]) then old_dudes+=1;
+    if (obj_ini.role[com,mm]==obj_ini.role[100][eROLE.Apothecary]) then apotha+=1;
+    if (obj_ini.role[com,mm]==obj_ini.role[100][eROLE.HonourGuard]) then honoh+=1;
 }
 
-temp[njm]="Command staff which includes";
+temp[njm]="Command staff made of";
 
-if (masta==1) then temp[njm]+=", your majesty "+string(obj_ini.name[com,1]);
-if (forga==1) then temp[njm]+=",  Forge Master "+string(obj_ini.name[com,2]);
-if (chapla==1) then temp[njm]+=",  Master of Sanctity "+string(obj_ini.name[com,3]);
-if (apa==1) then temp[njm]+=",  Master of the Apothecarion "+string(obj_ini.name[com,4]);
-if (liba==1) then temp[njm]+=",  and Chief Librarian "+string(obj_ini.name[com,5])+".  ";
+// Command staff names start at index 1 rather than 0 to align with the chapter company structure
+if (masta == 1) then temp[njm] += $", your majesty Chapter Master {obj_ini.name[com][0]}";
+if (forga == 1) then temp[njm] += $", Forge Master {obj_ini.name[com][1]}";
+if (chapla == 1) then temp[njm] += $", Master of Sanctity {obj_ini.name[com][2]}";
+if (apa == 1) then temp[njm] += $", Master of the Apothecarion {obj_ini.name[com][3]}";
+if (liba == 1) then temp[njm] += $", and Chief Librarian {obj_ini.name[com][4]}.  ";
+
 
 vih=string_pos(",",temp[njm]);
 temp[njm]=string_delete(temp[njm],vih,1);
 njm+=1;
-temp[njm] = "";
-temp[njm]+="  It has";
-if (techa>0) then temp[njm]+=", "+string(techa)+" "+string(obj_ini.role[100][16])+"s";
-if (old_dudes>0) then temp[njm]+=", "+string(techa)+" "+string(obj_ini.role[100][16])+"s";
-if (apotha>0) then temp[njm]+=", "+string(apotha)+" "+string(obj_ini.role[100][15])+"s";
-if (libra>0) then temp[njm]+=", "+string(libra)+" "+string(obj_ini.role[100,17])+"s";
-if (coda>0) then temp[njm]+=", "+string(coda)+" Codiciery";
-if (lexa>0) then temp[njm]+=", "+string(lexa)+" Lexicanum.";
+temp[njm] = "Specialist branches staffed by";
+if (techa > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][16], techa)}";
+if (old_dudes > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][14], old_dudes)}";
+if (apotha > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][15], apotha)}";
+if (libra > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100,17], libra)}";
+if (coda > 0) then temp[njm] += $", {string_plural_count("Codiciery", coda)}";
+if (lexa > 0) then temp[njm] += $", {string_plural_count("Lexicanum", lexa)}.";
 
 vih=string_pos(",",temp[njm]);
 temp[njm]=string_delete(temp[njm],vih,1);
 
-if (honoh>0) then temp[njm]+="  You have an Honour Guard which contains "+string(honoh)+" souls.";
+if (honoh>0) then temp[njm]+=$"\n\nHonour Guard, having the {honoh} most veteran {string_plural("marine", honoh)} of your chapter serving in it.";
+
 for(var company=0; company<10; company++){
-    njm+=1;
-    com+=1;
+    njm++;
+    com++;
     fisted=0;
     techa=0;
     termi=0;
@@ -1530,6 +1408,7 @@ for(var company=0; company<10; company++){
     apoth=0;
     stand=0;
     dread=0;
+    champ=0;
     tact=0;
     assa=0;
     deva=0;
@@ -1541,20 +1420,29 @@ for(var company=0; company<10; company++){
     scou=0;
     whirl=0;
     pred=0;
+    lib=0;
+    serg=0;
+    vet_serg=0;
     for(var mm=1; mm<=400; mm++){
-        if (obj_ini.role[com,mm]==obj_ini.role[100][4]) then termi+=1;
         if (obj_ini.role[com,mm]==obj_ini.role[100][3]) then veter+=1;
-        if (obj_ini.role[com,mm]=="Venerable "+string(obj_ini.role[100][6])) then dread+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][4]) then termi+=1;
         if (obj_ini.role[com,mm]==obj_ini.role[100][5]) then capt+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][6]) then dread+=1;
+        if (obj_ini.role[com,mm]=="Venerable "+string(obj_ini.role[100][6])) then dread+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][7]) then champ+=1;
+
+        if (obj_ini.role[com,mm]==obj_ini.role[100][8]) then tact+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][9]) then deva+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][10]) then assa+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][11]) then standard+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][12]) then scou+=1;
+
         if (obj_ini.role[com,mm]==obj_ini.role[100][14]) then chap+=1;
         if (obj_ini.role[com,mm]==obj_ini.role[100][15]) then apoth+=1;
         if (obj_ini.role[com,mm]==obj_ini.role[100][16]) then techa+=1;
-        if (obj_ini.role[com,mm]==obj_ini.role[100][11]) then standard+=1;
-        if (obj_ini.role[com,mm]==obj_ini.role[100][8]) then tact+=1;
-        if (obj_ini.role[com,mm]==obj_ini.role[100][10]) then assa+=1;
-        if (obj_ini.role[com,mm]==obj_ini.role[100][9]) then deva+=1;
-        if (obj_ini.role[com,mm]==obj_ini.role[100][6]) then dread+=1;
-        if (obj_ini.role[com,mm]==obj_ini.role[100][12]) then scou+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][17]) then lib+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][18]) then serg+=1;
+        if (obj_ini.role[com,mm]==obj_ini.role[100][19]) then vet_serg+=1;
     }
     for(vih=1; vih<=100; vih++){
         if (obj_ini.veh_role[com,vih]=="Land Raider") then raider+=1;
@@ -1565,50 +1453,35 @@ for(var company=0; company<10; company++){
         if (obj_ini.veh_role[com,vih]=="Whirlwind") then whirl+=1;
     }
     
-    if (com==1) then word="first";
-    if (com==2) then word="second";
-    if (com==3) then word="third";
-    if (com==4) then word="fourth";
-    if (com==5) then word="fifth";
-    if (com==6) then word="sixth";
-    if (com==7) then word="seventh";
-    if (com==8) then word="eighth";
-    if (com==9) then word="ninth";
-    if (com==10) then word="tenth";
-    if (com>=1){
-        if (veter+termi+stand+dread+tact+assa+deva+rhino+raider+standard+scou+whirl>0) then temp[njm]="You have a "+string(word)+" company.  It has";
+    if (com > 0){
+        if (veter+termi+stand+dread+tact+assa+deva+rhino+raider+standard+scou+whirl>0) then temp[njm]=$"{integer_to_words(com, true, true)} company made of";
         else{temp[njm]="";}
     }
     
-    if (capt==1) then temp[njm]+=", "+string(capt)+" "+string(obj_ini.role[100][5]);
-    if (chap==1) then temp[njm]+=", "+string(chap)+" "+string(obj_ini.role[100][14]);
-    if (chap>1) then temp[njm]+=", "+string(chap)+" "+string(obj_ini.role[100][14])+"s";
-    if (apoth==1) then temp[njm]+=", "+string(apoth)+" "+string(obj_ini.role[100][15]);
-    if (apoth>1) then temp[njm]+=", "+string(apoth)+" "+string(obj_ini.role[100][15])+"s";
-    if (techa==1) then temp[njm]+=", "+string(techa)+" "+string(obj_ini.role[100][16]);
-    if (techa>1) then temp[njm]+=", "+string(techa)+" "+string(obj_ini.role[100][16])+"s";
+    if (capt > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][5], capt)}";
+    if (chap > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][14], chap)}";
+    if (apoth > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][15], apoth)}";
+    if (techa > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][16], techa)}";
+    if (standard > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][11], standard)}";
+    if (champ > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][7], champ)}";
+    if (lib > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][17], lib)}";
+
+    if (serg > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][18], serg)}";
+    if (vet_serg > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][19], vet_serg)}";
+    if (termi > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][4], termi)}";
+    if (veter > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][3], veter)}";
+    if (tact > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][8], tact)}";
+    if (assa > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][10], assa)}";
+    if (deva > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][9], deva)}";
+    if (scou > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][12], scou)}";
+    if (dread > 0) then temp[njm] += $", {string_plural_count(obj_ini.role[100][6], dread)}";
     
-    if (standard==1) then temp[njm]+=", "+string(standard)+" "+string(obj_ini.role[100][11])+"s";
-    if (termi>0) then temp[njm]+=", "+string(termi)+" "+string(obj_ini.role[100][4])+"s";
-    if (veter>0) then temp[njm]+=", "+string(veter)+" "+string(obj_ini.role[100][3])+"s";
-    if (tact>0) then temp[njm]+=", "+string(tact)+" "+string(obj_ini.role[100][8])+"s";
-    if (assa>0) then temp[njm]+=", "+string(assa)+" "+string(obj_ini.role[100][10])+"s";
-    if (deva>0) then temp[njm]+=", "+string(deva)+" "+string(obj_ini.role[100][9])+"s";
-    if (scou>0) then temp[njm]+=", "+string(scou)+" "+string(obj_ini.role[100][12])+"s";
-    if (dread==1) then temp[njm]+=", "+string(dread)+" "+string(obj_ini.role[100][6])+"";
-    if (dread>1) then temp[njm]+=", "+string(dread)+" "+string(obj_ini.role[100][6])+"s";
-    if (raider==1) then temp[njm]+=", "+string(raider)+" Land Raider";
-    if (raider>1) then temp[njm]+=", "+string(raider)+" Land Raiders";
-    if (pred==1) then temp[njm]+=", "+string(pred)+" Predator";
-    if (pred>1) then temp[njm]+=", "+string(pred)+" Predators";
-    if (whirl==1) then temp[njm]+=", "+string(whirl)+" Whirlwind";
-    if (whirl>1) then temp[njm]+=", "+string(whirl)+" Whirlwinds";
-    if (rhino==1) then temp[njm]+=", "+string(rhino)+" Rhino";
-    if (rhino>1) then temp[njm]+=", "+string(rhino)+" Rhinos";
-    if (speeder==1) then temp[njm]+=", "+string(speeder)+" Land Speeder";
-    if (speeder>1) then temp[njm]+=", "+string(speeder)+" Land Speeders";
-    if (bike==1) then temp[njm]+=", "+string(bike)+" Attack Bike";
-    if (bike>1) then temp[njm]+=", "+string(raider)+" Attack Bikes";
+    if (raider > 0) then temp[njm] += $", {string_plural_count("Land Raider", raider)}";
+    if (pred > 0) then temp[njm] += $", {string_plural_count("Predator", pred)}";
+    if (whirl > 0) then temp[njm] += $", {string_plural_count("Whirlwind", whirl)}";
+    if (rhino > 0) then temp[njm] += $", {string_plural_count("Rhino", rhino)}";
+    if (speeder > 0) then temp[njm] += $", {string_plural_count("Land Speeder", speeder)}";
+    if (bike > 0) then temp[njm] += $", {string_plural_count("Attack Bike", bike)}";
     
     if (string_length(temp[njm])>0) then temp[njm]+=".";
     
@@ -1618,155 +1491,154 @@ for(var company=0; company<10; company++){
     }
 }
 
-temp[59]="CLASSIFICATION: SECTOR LOGISTICAE#++++++++++DATE: "+string(temp[30])+"#++++++++AUTHOR: MASTER ADEPT "+string(temp[31])+"#++++++++++++RE: INTRODUCTORY MISSIVE#+++++RECIPIENT: CHAPTER MASTER "+string(temp[32])+"##++THOUGHT: "+string(temp[33])+"++##I see you have made it unscathed, your grace.  Death comes with you as it should!  The enemy is on the horizon.  Thy chapter is mighty and only waits for your word to wreak havoc upon our enemies.##Your chapter contains-#";
-temp[60]=string(temp[59])+string(temp[34])+string(temp[35])+"##"+string(temp[36])+"##"+string(temp[37])+"##"+string(temp[38])+"##"+string(temp[39])+"##"+string(temp[40])+"##"+string(temp[41])+"##"+string(temp[42])+"##"+string(temp[43])+"##"+string(temp[44])+"##"+string(temp[45]);
+temp[59] = $"CLASSIFICATION: SECTOR LOGISTICAE#++++++++++DATE: {temp[30]}#++++++++AUTHOR: MASTER ADEPT {temp[31]}#++++++++++++RE: INTRODUCTORY MISSIVE#+++++RECIPIENT: CHAPTER MASTER {temp[32]}##++THOUGHT: {temp[33]}++##I see you have made it unscathed, your grace. Death comes with you as it should! The enemy is on the horizon. Thy chapter is mighty and only waits for your word to wreak havoc upon our enemies.##Your chapter contains-";
 
-temp[61]="##Your armamentarium contains some spare equipment- ";
-for(var u=1; u<=30; u++){
-    if (obj_ini.equipment[u]!="") then temp[61]+=string(obj_ini.equipment_number[u])+" "+string(obj_ini.equipment[u])+", ";
-    if (obj_ini.equipment[u]=="") and (obj_ini.equipment[u-1]!=""){
-        temp[61]=string_delete(temp[61],string_length(temp[61]),3);
-        temp[61]+=".";
-    }
-}
+temp[60] = $"{temp[59]}\n\n{temp[34]}\n\n{temp[35]}##{temp[36]}##{temp[37]}##{temp[38]}##{temp[39]}##{temp[40]}##{temp[41]}##{temp[42]}##{temp[43]}##{temp[44]}##{temp[45]}";
+
+
+temp[61]="\n\nYour armamentarium contains some spare equipment- \n";
+temp[61] += equipment_struct_to_string(obj_ini.equipment, true, true);
+
 
 temp[62]="##Your fleet contains ";
 
-var bb=0,sk=0,glad=0,hunt=0,ships=0,bb_names="",sk_names="",glad_names="",hunt_names="";
+var bb=0,sk=0,glad=0,hunt=0,ships=0,bb_names=[],sk_names=[],glad_names=[],hunt_names=[];
 
 codex[0]="";codex_discovered[0]=0;
-for(var mm=1; mm<=30; mm++){
+for(var mm=0; mm<array_length(obj_ini.ship); mm++){
     if (obj_ini.ship[mm]!=""){
-        ships+=1;
-        if (obj_ini.ship_class[mm]=="Battle Barge"){
-            bb+=1;
-            bb_names+=", "+string(obj_ini.ship[mm]);
+        ships++;
+        if (obj_ini.ship_class[mm] == "Battle Barge") {
+            bb++;
+            array_push(bb_names, string(obj_ini.ship[mm]));
         }
-        if (obj_ini.ship_class[mm]=="Strike Cruiser"){
-            sk+=1;
-            sk_names+=", "+string(obj_ini.ship[mm]);
+        if (obj_ini.ship_class[mm] == "Strike Cruiser") {
+            sk++;
+            array_push(sk_names, string(obj_ini.ship[mm]));
         }
-        if (obj_ini.ship_class[mm]=="Gladius"){
-            glad+=1;
-            glad_names+=", "+string(obj_ini.ship[mm]);
+        if (obj_ini.ship_class[mm] == "Gladius") {
+            glad++;
+            array_push(glad_names, string(obj_ini.ship[mm]));
         }
-        if (obj_ini.ship_class[mm]=="Hunter"){
-            hunt+=1;
-            hunt_names+=", "+string(obj_ini.ship[mm]);
+        if (obj_ini.ship_class[mm] == "Hunter") {
+            hunt++;
+            array_push(hunt_names, string(obj_ini.ship[mm]));
         }
     }
     codex[mm]="";
     codex_discovered[mm]=0;
 }
-temp[62]+=string(ships)+" warships.#";
 
-vih=string_pos(",",bb_names);
-bb_names=string_delete(bb_names,vih,1);
-vih=string_pos(",",sk_names);
-sk_names=string_delete(sk_names,vih,1);
-vih=string_pos(",",glad_names);
-glad_names=string_delete(glad_names,vih,1);
-vih=string_pos(",",hunt_names);
-hunt_names=string_delete(hunt_names,vih,1);
+temp[62]+=$" {string_plural_count("warship", ships)}-\n";
 
-if (obj_ini.fleet_type != ePlayerBase.home_world) or (bb==1) then temp[62]+="Your flagship is the Battle Barge "+string(obj_ini.ship[1])+".  ";
-if (obj_ini.fleet_type==ePlayerBase.home_world) and (bb>1){
-    temp[62]+="There are "+string(bb)+" Battle Barges; "+string(bb_names)+".  ";
+if (obj_ini.fleet_type != ePlayerBase.home_world || bb == 1) {
+    temp[62] += $"Your flagship, Battle Barge {obj_ini.ship[0]}.";
+    temp[62] += "\n";
+    bb--;
 }
-temp[62]+="#";
-if (sk>0){
-    temp[62]+="There are "+string(sk)+" Strike Cruisers; "+string(sk_names)+".  ";
-    temp[62]+="#";
+if (bb > 0) {
+    temp[62] += $"{string_plural_count("Battle Barge", bb)}: {array_to_string_order(bb_names, true)}";
+    temp[62] += "\n";
 }
-if (glad>0){
-    temp[62]+="There are "+string(glad)+" Gladius Escorts; "+string(glad_names)+".  ";
-    temp[62]+="#";
+if (sk > 0) {
+    temp[62] += $"{string_plural_count("Strike Cruiser", sk)}: {array_to_string_order(sk_names, true)}";
+    temp[62] += "\n";
 }
-if (hunt>0){
-    temp[62]+="There are "+string(hunt)+" Hunter Escorts; "+string(hunt_names)+".";
-    temp[62]+="#";
+if (glad > 0) {
+    temp[62] += $"{string_plural_count("Gladius Escort", glad)}: {array_to_string_order(glad_names, true)}";
+    temp[62] += "\n";
 }
+if (hunt > 0) {
+    temp[62] += $"{string_plural_count("Hunter Escort", hunt)}: {array_to_string_order(hunt_names, true)}";
+    temp[62] += "\n";
+}
+
+
 // show_message(temp[61]);
 // show_message(temp[62]);
 // 61 : equipment
 // 62 : ships
-var lol=160;
+var lol=240;
 draw_set_font(fnt_small);
-vih=string_height(string_hash_to_newline(string(temp[60])+string(temp[61])+string(temp[62])));
-vih-=210;vih=(vih/lol)+1;
+welcome_pages=string_height(string_hash_to_newline(string(temp[60])+string(temp[61])+string(temp[62])));
+welcome_pages-=260;
+welcome_pages=(welcome_pages/lol)+1;
 
-if (floor(vih)<vih){
-    vih+=1;
-    vih=floor(vih);
+if (floor(welcome_pages)<welcome_pages){
+    welcome_pages+=1;
+    welcome_pages=floor(welcome_pages);
 }
 
-// show_message(string(vih)+" pages");
+// show_message(string(welcome_pages)+" pages");
 var tman=65;
 temp[65]=string(temp[60])+string(temp[61])+string(temp[62]);
-for(var i=0; i<vih; i++){
+for(var i=0; i<welcome_pages; i++){
     tman+=1;
     temp[tman]=string(temp[60])+string(temp[61])+string(temp[62]);
 }
 
 var lig=0,remov=0,stahp=0;
 
-if (vih>=1){
+if (welcome_pages>=1){
     for(var i=0; i<4000; i++){
-        if (string_height(string_hash_to_newline(temp[65]))>210){
+        if (string_height(string_hash_to_newline(temp[65]))>260){
             lig=string_length(temp[65]);
-            temp[65]=string_delete(temp[65],lig-1,1);
+            temp[65]=string_delete(temp[65],lig,1);
         }
     }
 }
 remov=string_length(string(temp[65]))+1;
 
-if (vih>=2){
+if (welcome_pages>=2){
     temp[66]=string_delete(temp[66],1,remov);
     for(var i=0; i<4000; i++){
-        if (string_height(string_hash_to_newline(temp[66]))>130){
+        if (string_height(string_hash_to_newline(temp[66]))>lol){
             lig=string_length(temp[66]);
-            temp[66]=string_delete(temp[66],lig-1,1);
+            temp[66]=string_delete(temp[66],lig,1);
         }
     }
 }
 remov=string_length(string(temp[65])+string(temp[66]))+1;
 // show_message(remov);
 
-if (vih>=3){
+if (welcome_pages>=3){
     temp[67]=string_delete(temp[67],1,remov);
     for(var i=0; i<4000; i++){
         if (string_height(string_hash_to_newline(temp[67]))>lol){
             lig=string_length(temp[67]);
-            temp[67]=string_delete(temp[67],lig-1,1);
+            temp[67]=string_delete(temp[67],lig,1);
         }
     }
 }
 remov=string_length(string(temp[65])+string(temp[66])+string(temp[67]))+1;
 
-if (vih<4) then temp[68]="";
-if (vih>=4){
+if (welcome_pages<4) then temp[68]="";
+if (welcome_pages>=4){
     temp[68]=string_delete(temp[68],1,remov);
     for(var i=0; i<4000; i++){
         if (string_height(string_hash_to_newline(temp[68]))>lol){
             lig=string_length(temp[68]);
-            temp[68]=string_delete(temp[68],lig-1,1);
+            temp[68]=string_delete(temp[68],lig,1);
         }
     }
 }
 remov=string_length(string(temp[65])+string(temp[66])+string(temp[67])+string(temp[68]))+1;
 
-if (vih<5) then temp[69]="";
-if (vih>=5){
+if (welcome_pages<5) then temp[69]="";
+if (welcome_pages>=5){
     temp[69]=string_delete(temp[69],1,remov);
     for(var i=0; i<4000; i++){
         if (string_height(string_hash_to_newline(temp[69]))>lol){
             lig=string_length(temp[69]);
-            temp[69]=string_delete(temp[69],lig-1,1);
+            temp[69]=string_delete(temp[69],lig,1);
         }
     }
 }
 remov=string_length(string(temp[65])+string(temp[66])+string(temp[67])+string(temp[68])+string(temp[69]))+1;
 
+instance_create(0,0,obj_tooltip );
+
 action_set_alarm(2, 0);
 
-instance_create(0,0,obj_tooltip );
+
+//**! DO NOT PUT THINGS AT THE BOTTOM OF THIS FILE IF YOU NEED THEM TO WORK AFTER LOADING FROM A SAVE, SEE LINE 1550 -ish   */

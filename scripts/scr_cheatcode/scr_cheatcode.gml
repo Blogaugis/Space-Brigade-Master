@@ -47,7 +47,7 @@ function scr_cheatcode(argument0) {
 					}
 					break;
 				case "newapoth":
-					obj_controller.apothecary_points = 50;
+					obj_controller.apothecary_training_points = 50;
 					break;
 				case "newpsyk":
 					obj_controller.psyker_points = 70;
@@ -64,11 +64,12 @@ function scr_cheatcode(argument0) {
 					scr_add_item(name, quantity, quality);
 					break;
 				case "artifact":
-					// Check if the second argument is not provided or is "1"
 					if (cheat_arguments[0] == "1") {
-						scr_add_artifact("random", "", 6, obj_ini.ship[1], 501);
+						scr_add_artifact("random", "", 6, obj_ini.ship[0], 501);
 					} else {
-						scr_add_artifact(cheat_arguments[0], "", 6, obj_ini.ship[1], 501);
+						repeat(real(cheat_arguments[1])){
+							scr_add_artifact(cheat_arguments[0], "", 6, obj_ini.ship[0], 501);
+						}
 					}
 					break;
 				case "sisterhospitaler":
@@ -104,6 +105,10 @@ function scr_cheatcode(argument0) {
 				case "chaosfleetspawn":
 					spawn_chaos_warlord();
 					break;
+				case "waaagh":
+
+					init_ork_waagh(true);
+					break;
 				case "neworkfleet":
 					var p_fleet = get_largest_player_fleet();
 					with (instance_nearest(p_fleet.x, p_fleet.y, obj_star)) {
@@ -112,35 +117,94 @@ function scr_cheatcode(argument0) {
 					break;
 				case "inquisarti":
 					scr_quest(0, "artifact_loan", 4, 10);
-					var last_artifact = scr_add_artifact("good", "inquisition", 0, obj_ini.ship[1], 501);
+					var last_artifact = scr_add_artifact("good", "inquisition", 0, obj_ini.ship[0], 501);
 					break;
 				case "govmission":
+					var problem = "";
+					if (array_length(cheat_arguments)){
+						if (cheat_arguments[0] != "1"){
+							problem = cheat_arguments[0]
+						}
+					} 
 					with (obj_star) {
-						for (i = 1; i <= planets; i++) {
+						for (var i = 1; i <= planets; i++) {
 							var existing_problem = false; //has_any_problem_planet(i);
 							if (!existing_problem) {
 								if (p_owner[i] == eFACTION.Imperium) {
 									show_debug_message("mission");
-									scr_new_governor_mission(i);
+									scr_new_governor_mission(i, problem);
 								}
 							}
 						}
 					}
 					break;
+
+				case "mechmission":
+					show_debug_message("mech_mission");
+
+					if (array_length(cheat_arguments)){
+						spawn_mechanicus_mission(cheat_arguments[0]);
+					} else {
+						spawn_mechanicus_mission();
+					}
+         		 break;
+
+				case "inquismission": 
+					var mission = cheat_arguments[0];
+					switch (mission){
+						case "1": //default 
+							scr_inquisition_mission(EVENT.inquisition_mission);
+						break;
+						case "planet":
+							scr_inquisition_mission(EVENT.inquisition_planet);
+						break;
+						case "spyrer": 
+							scr_inquisition_mission(EVENT.inquisition_mission, INQUISITION_MISSION.spyrer);
+						break;
+						case "artifact": 
+							scr_inquisition_mission(EVENT.inquisition_mission, INQUISITION_MISSION.artifact);
+						break;
+						case "inquisitor": 
+							scr_inquisition_mission(EVENT.inquisition_mission, INQUISITION_MISSION.inquisitor);
+						break;
+						case "purge": 
+							scr_inquisition_mission(EVENT.inquisition_mission, INQUISITION_MISSION.purge);
+						break;
+						case "tomb_world": 
+							scr_inquisition_mission(EVENT.inquisition_mission, INQUISITION_MISSION.tomb_world);
+						break;
+						case "tyranid_organism": 
+							scr_inquisition_mission(EVENT.inquisition_mission, INQUISITION_MISSION.tyranid_organism);
+						break;
+						case "demon": 
+							scr_inquisition_mission(EVENT.inquisition_mission, INQUISITION_MISSION.demon_world);
+						break;
+						default: 
+							scr_inquisition_mission(EVENT.inquisition_mission);
+						break;
+					}
+					break;
 				case "artifactpopulate":
 					with (obj_star) {
-						for (i = 1; i <= planets; i++) {
+						for (var i = 1; i <= planets; i++) {
 							array_push(p_feature[i], new NewPlanetFeature(P_features.Artifact));
 						}
 					}
 					break;
 				case "ruinspopulate":
 					with (obj_star) {
-						for (i = 1; i <= planets; i++) {
+						for (var i = 1; i <= planets; i++) {
 							array_push(p_feature[i], new NewPlanetFeature(P_features.Ancient_Ruins));
 						}
 					}
-					break;					
+					break;		
+				case "stcpopulate":
+					with (obj_star) {
+						for (var i = 1; i <= planets; i++) {
+							array_push(p_feature[i], new NewPlanetFeature(P_features.STC_Fragment));
+						}
+					}
+					break;	
 				case "event":
 					if (cheat_arguments[0] == "crusade") {
 						show_debug_message("crusading");
@@ -161,11 +225,33 @@ function scr_cheatcode(argument0) {
 						new_inquisitor_inspection();
 					} else if (cheat_arguments[0] == "slaughtersong") {
 						create_starship_event();
-					} else {
+					} else if (cheat_arguments[0] == "fallen"){
+						event_fallen();
+					}else if (cheat_arguments[0] == "surfremove"){
+						var _star_id = scr_random_find(0,true,"","");
+			            add_event({
+			                duration : 2,
+			                e_id : "governor_assassination",
+			                variant : 2,
+			                system : _star_id.name,
+			                planet : irandom_range(1, _star_id.planets),
+			            });						
+					} else if (cheat_arguments[0] == "strangebuild"){
+						show_debug_message("strange build");
+						strange_build_event();
+					}else if (cheat_arguments[0] == "factionenemy"){
+						make_faction_enemy_event();
+					}else if (cheat_arguments[0] == "stopall"){
+						obj_controller.last_event = 1000000;
+						show_debug_message($"last event : {obj_controller.last_event}")
+					}else if (cheat_arguments[0] == "startevents"){
+						obj_controller.last_event = 0;
+						show_debug_message($"last event : {obj_controller.last_event}")
+					}else {
 						with (obj_controller) {
 							scr_random_event(false);
 						}
-					}
+					} 
 					break;
 				case "infreq":
 					if (global.cheat_req == 0) {
@@ -279,12 +365,93 @@ function scr_cheatcode(argument0) {
 						scr_alert("green", "recruitment", (string(obj_controller.recruit_name[i]) + "has started training."), 0, 0)
 					}
 					break;
+				case "shiplostevent":
+					loose_ship_to_warp_event();
+					break;
+				case "recoverlostship":
+					return_lost_ship();
+					break;
+				case "gloriana":
+					var _fleet = get_nearest_player_fleet(0,0);
+					add_ship_to_fleet(new_player_ship("Gloriana"),_fleet);
+					break;
+				case "zoom":
+					set_zoom_to_default();
+					break;
+				case "orkinvasion":
+					out_of_system_warboss();
+					break;
+				case "forgemastermeet":
+					var _forge_master = scr_role_count("Forge Master", "", "units");
+					if (array_length(_forge_master)>0){
+						show_debug_message("meet forge master");
+						obj_controller.menu_lock = false;
+						instance_destroy(obj_popup_dialogue);
+						scr_toggle_diplomacy();
+						obj_controller.diplomacy = -1;
+						obj_controller.character_diplomacy = _forge_master[0];
+						diplo_txt="Greetings chapter master";
+					} else {
+						show_debug_message("no forge master");
+					}
+					break;
 			}
 		}
 	} catch(_exception) {
-		log_into_file(_exception.longMessage);
-		log_into_file(_exception.script);
-		log_into_file(_exception.stacktrace);
 		show_debug_message(_exception.longMessage);
+	}
+}
+
+
+function draw_planet_debug_options(){
+	if (debug) {
+	    add_draw_return_values() 
+	    var current_planet = obj_controller.selecting_planet;
+
+	    // Close window if clicked outside
+	    if (!scr_hit([36,174,337,455]) && scr_click_left()) {
+	        debug = 0;
+	        exit;
+	    }
+
+	    // Setup draw area
+	    draw_set_color(c_black);
+	    draw_rectangle(36, 174, 337, 455, 0);
+	    draw_set_font(fnt_40k_14b);
+	    draw_set_color(c_gray);
+	    draw_set_halign(fa_left);
+
+	    // Define factions and their struct keys
+	    var faction_names = [
+	        "Orks", "Tau", "Tyranids", "Traitors",
+	        "CSM", "Daemons", "Necrons", "Sisters"
+	    ];
+	    var faction_keys = [
+	        "p_orks", "p_tau", "p_tyranids", "p_traitors",
+	        "p_chaos", "p_demons", "p_necrons", "p_sisters"
+	    ];
+
+	    // Loop through each faction row
+	    var base_y = 176;
+	    for (var i = 0; i < array_length(faction_names); i++) {
+	        var _y = base_y + i * 20;
+	        var key = faction_keys[i];
+
+	        // Draw faction name and value
+	        draw_text(38, _y, faction_names[i] + ": " + stsring(target[$ key][current_planet]));
+
+	        // Draw [-] [+] controls
+	        draw_text(147, _y, "[-] [+]");
+
+	        // Handle minus click
+	        if (point_and_click([147, _y, 167, _y + 20])) {
+	            target[$ key][current_planet] = clamp(target[$key][current_planet] - 1, 0, 6);
+	        }
+	        // Handle plus click
+	        else if (point_and_click([177, _y, 197, _y + 20])) {
+	            target[$ key][current_planet] = clamp(target[$key][current_planet] + 1, 0, 6);
+	        }
+	    }
+	    pop_draw_return_values();
 	}
 }

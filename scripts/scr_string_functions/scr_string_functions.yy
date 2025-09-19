@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_string_functions",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_string_functions",
+  "parent":{
+    "name":"Text",
+    "path":"folders/Scripts/Helpers/Text.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

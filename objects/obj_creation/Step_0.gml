@@ -1,41 +1,18 @@
-// Chapters to choose from at creation
-if (slide==2) and (scrollbar_engaged>0){
-    var x1,x2,x3,x4,x5,x6,y1,y2,y3,y4,y5,y6,bs,see_size,total_max,current,top;
-    x1=1111;y1=245;x2=1131;y2=671;bs=245;
-    
-    total_max=77+global.custom_icons;
-    see_size=(671-245)/total_max;
-    
-    // bounds of the solid area
-    x3=1111;x4=1131;
-    current=icons_top;
-    top=current*see_size;
-    y3=top;y4=y3+(24*see_size)-see_size;
-    
-    y5=mouse_y-(scrollbar_engaged)-245;
-    y6=round(y5/see_size/6)*6;
-    
-    icons_top=y6;
-    if (icons_top<1) then icons_top=1;
-    if (icons_top>(total_max-24)) then icons_top=total_max-24;   
-}
-
 if (slide==1){
     if (keyboard_string=="137"){
         highlight=18;
         cooldown=8000;
-        chapter="Doom Benefactors";
-        scr_chapter_new(chapter);
+        chapter_name="Doom Benefactors";
+        scr_chapter_new(chapter_name);
         keyboard_string="";
-        if (chapter!="nopw_nopw"){
-            icon=25;
-            custom=0;
+        if (chapter_name!="nopw_nopw"){
+            custom=eCHAPTER_TYPE.PREMADE;
             change_slide=1;
             goto_slide=2;
-            chapter_string=chapter;
+            chapter_string=chapter_name;
         }
         scr_creation(2);
-        scr_creation(3.5);
+        scr_creation(3);
         scr_creation(4);
         scr_creation(5);
         scr_creation(6);
@@ -72,10 +49,8 @@ if (change_slide>0){change_slide+=1;}
 if (change_slide>=100) then change_slide=-1;
 if (change_slide>=100) then change_slide=-1;
 // Sets up a new chapter with default options
-if (change_slide==35) or (change_slide==36) or (chapter=="Doom Benefactors") or (chapter_string=="Doom Benefactors"){
+if (change_slide==35) or (change_slide==36) or (chapter_name=="Doom Benefactors") or (chapter_string=="Doom Benefactors"){
     if (goto_slide==1){
-        mouse_left=0;
-        mouse_right=0;
         highlight=0;
         highlighting=0;
         old_highlight=0;
@@ -89,19 +64,17 @@ if (change_slide==35) or (change_slide==36) or (chapter=="Doom Benefactors") or 
         target_gear=0;
         tab=0;
         
-        chapter="Unnamed";
+        chapter_name="Unnamed";
         chapter_string="Unnamed";
-        icon=1;
-        icon_name="da";
-        custom=0;
-        founding=1;
+        custom=eCHAPTER_TYPE.PREMADE;
+        founding=ePROGENITOR.NONE;
         points=0;
         maxpoints=200;
         fleet_type=1;
         strength=5;
         cooperation=5;
         purity=5;
-        stability=5;
+        stability=90;
         for(var i=0; i<16; i++){
             adv[i]="";
             adv_num[i]=0;
@@ -114,16 +87,17 @@ if (change_slide==35) or (change_slide==36) or (chapter=="Doom Benefactors") or 
         recruiting_name=global.name_generator.generate_star_name();
         flagship_name=global.name_generator.generate_imperial_ship_name();
         recruiting_exists=1;
-        homeworld_exists=1;homeworld_rule=1;
+        homeworld_exists=1;
+        homeworld_rule=1;
         aspirant_trial=eTrials.BLOODDUEL;
-        discipline="default";
+        discipline="librarius";
         battle_cry="For the Emperor";
         main_color=1;
         secondary_color=1;
-        trim_color=1;
+        main_trim=1;
         // Left/Right pauldron
-        pauldron2_color=1;
-        pauldron_color=1;
+        left_pauldron=1;
+        right_pauldron=1;
         lens_color=1;
         weapon_color=1;
         col_special=0;
@@ -183,95 +157,83 @@ if (text_bar>60) then text_bar=1;
 
 if (cooldown>0) and (cooldown<=5000) then cooldown-=1;
 // Checks if the name already exists
-if (custom==2){
+if (custom==eCHAPTER_TYPE.CUSTOM){
     name_bad=0;
-    if (chapter=="") then name_bad=1;
-    if (chapter=="Dark Angels") then name_bad=1;
-    if (chapter=="White Scars") then name_bad=1;
-    if (chapter=="Space Wolves") then name_bad=1;
-    if (chapter=="Imperial Fists") then name_bad=1;
-    if (chapter=="Blood Angels") then name_bad=1;
-    if (chapter=="Iron Hands") then name_bad=1;
-    if (chapter=="Ultramarines") then name_bad=1;
-    if (chapter=="Salamanders") then name_bad=1;
-    if (chapter=="Raven Guard") then name_bad=1;
-    if (chapter=="Blood Ravens") then name_bad=1;
-    if (chapter=="Doom Benefactors") then name_bad=1;
-	if (chapter=="Crimson Fists") then name_bad=1;
-	if (chapter=="Minotaurs") then name_bad=1;
-	if (chapter=="Black Templars") then name_bad=1;
-	if (chapter=="Soul Drinkers") then name_bad=1;
+    if (chapter_name=="") then name_bad=1;
+    if (chapter_name=="Dark Angels") then name_bad=1;
+    if (chapter_name=="White Scars") then name_bad=1;
+    if (chapter_name=="Space Wolves") then name_bad=1;
+    if (chapter_name=="Imperial Fists") then name_bad=1;
+    if (chapter_name=="Blood Angels") then name_bad=1;
+    if (chapter_name=="Iron Hands") then name_bad=1;
+    if (chapter_name=="Ultramarines") then name_bad=1;
+    if (chapter_name=="Salamanders") then name_bad=1;
+    if (chapter_name=="Raven Guard") then name_bad=1;
+    if (chapter_name=="Blood Ravens") then name_bad=1;
+    if (chapter_name=="Doom Benefactors") then name_bad=1;
+	if (chapter_name=="Crimson Fists") then name_bad=1;
+	if (chapter_name=="Minotaurs") then name_bad=1;
+	if (chapter_name=="Black Templars") then name_bad=1;
+	if (chapter_name=="Soul Drinkers") then name_bad=1;
 }
 var good=0;
-if (color_to_main!=""){
-    good=0;
-    for(var q=0; q<global.colors_count; q++){
-        if (color_to_main=col[q]) and (good=0){
-            good=q;
-            color_to_main="";
-            main_color=q;
-        }
+if (array_length(col)>0){
+    if (color_to_main!=""){
+        main_color = max(array_find_value(col,color_to_main),0);
+        color_to_main = "";
+    }
+    if (color_to_secondary!=""){
+        secondary_color = max(array_find_value(col,color_to_secondary),0);
+        color_to_secondary = "";
+    }
+    if (color_to_trim!=""){
+        main_trim = max(array_find_value(col,color_to_trim),0);
+        color_to_trim = "";
+    }
+    if (color_to_pauldron!=""){
+        right_pauldron = max(array_find_value(col,color_to_pauldron),0);
+        color_to_pauldron = "";   
+    }
+    if (color_to_pauldron2!=""){
+        left_pauldron = max(array_find_value(col,color_to_pauldron2),0);
+        color_to_pauldron2 = "";
+    }
+    if (color_to_lens!=""){
+        lens_color = max(array_find_value(col,color_to_lens),0);
+        color_to_lens = ""; 
+    }
+    if (color_to_weapon!=""){
+        weapon_color = max(array_find_value(col,color_to_weapon),0);
+        color_to_weapon = "";
     }
 }
-if (color_to_secondary!=""){
-    good=0;
-    for(var q=0; q<global.colors_count; q++){
-        if (color_to_secondary=col[q]) and (good=0){
-            good=q;
-            color_to_secondary="";
-            secondary_color=q;
-        }
-    }
+if (company_liveries == ""){
+    livery_picker.scr_unit_draw_data(-1);
+    company_liveries = array_create(11,variable_clone(livery_picker.map_colour));
 }
-if (color_to_trim!=""){
-    good=0;
-    for(var q=0; q<global.colors_count; q++){
-        if (color_to_trim=col[q]) and (good=0){
-            good=q;
-            color_to_trim="";
-            trim_color=q;
-        }
+
+if (full_liveries == ""){
+    var struct_cols = {
+        main_color :main_color,
+        secondary_color:secondary_color,
+        main_trim:main_trim,
+        right_pauldron:right_pauldron,
+        left_pauldron:left_pauldron,
+        lens_color:lens_color,
+        weapon_color:weapon_color
     }
-}
-if (color_to_pauldron!=""){
-    good=0;
-    for(var q=0; q<global.colors_count; q++){
-        if (color_to_pauldron=col[q]) and (good=0){
-            good=q;
-            color_to_pauldron="";
-            pauldron_color=q;
-        }
-    }
-}
-if (color_to_pauldron2!=""){
-    good=0;
-    for(var q=0; q<global.colors_count; q++){
-        if (color_to_pauldron2=col[q]) and (good=0){
-            good=q;
-            color_to_pauldron2="";
-            pauldron2_color=q;
-        }
-    }
-}
-if (color_to_lens!=""){
-    good=0;
-    for(var q=0; q<global.colors_count; q++){
-        if (color_to_lens=col[q]) and (good=0){
-            good=q;
-            color_to_lens="";
-            lens_color=q;
-        }
-    }
-}
-if (color_to_weapon!=""){
-    good=0;
-    for(var q=0; q<global.colors_count; q++){
-        if (color_to_weapon=col[q]) and (good=0){
-            good=q;
-            color_to_weapon="";
-            weapon_color=q;
-        }
-    }
+    livery_picker.scr_unit_draw_data();
+    livery_picker.set_default_armour(struct_cols,col_special);
+    full_liveries = array_create(21,variable_clone(livery_picker.map_colour));
+    full_liveries[eROLE.Librarian] = livery_picker.set_default_librarian(struct_cols);
+
+    full_liveries[eROLE.Chaplain] = livery_picker.set_default_chaplain(struct_cols);
+
+    full_liveries[eROLE.Apothecary] = livery_picker.set_default_apothecary(struct_cols);
+
+    full_liveries[eROLE.Techmarine] = livery_picker.set_default_techmarines(struct_cols);
+    livery_picker.scr_unit_draw_data();
+    livery_picker.set_default_armour(struct_cols,col_special);    
 }
 
 // on left mouse release, if greater than 5000 and less than 9000, set cooldown to 0

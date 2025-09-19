@@ -27,7 +27,7 @@ if (debug!=0) then exit;
 
     //TODO centralise this logic
     if (instance_exists(obj_fleet_select)){
-         if (obj_fleet_select.currently_entered) then exit;
+         if (obj_fleet_select.currently_entered)  then exit;
     }
 
 
@@ -43,7 +43,7 @@ if (mouse_x>=xx+274) and (mouse_y>=yy+426) and (mouse_x<xx+337) and (mouse_y<yy+
     } else {
         sel_plan=0;
         obj_controller.cooldown=8000;
-        if (obj_controller.menu=1 && obj_controller.managing>0 && obj_controller.view_squad){
+        if (obj_controller.menu=1 && obj_controller.view_squad){
             var company_data = obj_controller.company_data;
             var squad_index = company_data.company_squads[company_data.cur_squad];
             var current_squad=obj_ini.squads[squad_index];
@@ -137,8 +137,10 @@ if (player_fleet>0) and (imperial_fleet+mechanicus_fleet+inquisitor_fleet+eldar_
                             en_capitals+=capital_number;
                             en_frigates+=frigate_number;
                             en_escorts+=escort_number;
-                            if (string_count("BLOOD",trade_goods)>0) then khorne_count++;
-                            if (string_lower(trade_goods)="csm") then chaos_space_marine_count++;
+                            if (fleet_has_cargo("warband")) then khorne_count++;
+                            if (fleet_has_cargo("csm")){
+                                chaos_space_marine_count++;
+                            }
                         }
                     }
                     
@@ -205,20 +207,8 @@ if (player_fleet>0) and (imperial_fleet+mechanicus_fleet+inquisitor_fleet+eldar_
             }
             instance_deactivate_object(obj_star);
             
-            
-            
-            
-            
-            // 
-            
-            var fleet_ships = fleet_full_ship_array(p_fleet);
-            var p_ship_id;
-            for (i=0;i<array_length(fleet_ships);i++){
-                p_ship_id = fleet_ships[i];
-                if (obj_ini.ship[p_ship_id] != ""){
-                    obj_fleet.fighting[p_ship_id] = 1;
-                }
-            }
+
+            add_fleet_ships_to_combat(p_fleet, obj_fleet);
 
             // instance_deactivate_object(battle_object[current_battle]);
             instance_deactivate_object(p_fleet);

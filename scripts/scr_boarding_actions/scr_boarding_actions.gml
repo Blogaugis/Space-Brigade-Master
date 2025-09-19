@@ -1,8 +1,7 @@
 function create_boarding_craft(target_ship){
     var first=0,o=1;
     
-    repeat(500){
-        o+=1;
+    for (var o=0;o<array_length(board_id);o++){
         if (first=0) and (board_id[o]!=0) and (board_location[o]=0) then first=o;
     }
     
@@ -12,18 +11,20 @@ function create_boarding_craft(target_ship){
     bear.apothecary=0;
     o=first;
     
-    while(o<500 && o<first+20){
-        if (board_id[o]!=0) and (board_location[o]=0){
+     for (var o=0;o<array_length(board_id);o++){
+        if (board_id[o]!=0) and (board_location[o]==0){
             board_raft[o]=bear;
             board_location[o]=-1;
             boarders-=1;
             bear.boarders+=1;
             unit = fetch_unit([board_co[o] , board_id[o]]);
-            if (unit.IsSpecialist("apoth")){
+            if (unit.IsSpecialist(SPECIALISTS_APOTHECARIES)){
                 if (unit.gear()=="Narthecium") and (unit.hp()>=10) then bear.apothecary+=1;
             }
         }
-        o+=1;
+        if (bear.boarders>=20){
+            break;
+        }
     }
     
     bear.apothecary_had=bear.apothecary;
