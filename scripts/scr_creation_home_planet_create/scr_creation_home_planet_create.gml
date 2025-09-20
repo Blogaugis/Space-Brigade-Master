@@ -208,7 +208,7 @@ function scr_creation_home_planet_create(){
     draw_line(445,457,1125,457);
     
     // homeworld_rule=0;
-    // aspirant_trial=eTrials.BLOODDUEL;
+    // aspirant_trial=eTrials.CHALLENGE;
     
     draw_set_halign(fa_left);
     

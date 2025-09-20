@@ -702,7 +702,7 @@ audiences=0;
 // ** Sets default recruiting vars **
 recruits=0;
 recruiting_worlds="";
-recruit_trial=eTrials.BLOODDUEL; // I'll want to change this later
+recruit_trial=eTrials.CHALLENGE;
 recruit_last=0;
 
 recruit_name[0]="";
@@ -1233,7 +1233,7 @@ end_turn_insights = {};
 spec_train_data = [ // TODO: Found the stuff
     {
         name : "Techmarine",
-        min_exp : 30,
+        min_exp : 60,
         coord_offset : [0, 0],
         req : [["technology",34, "exmore"]]
     },

@@ -29,11 +29,11 @@ function find_recruit_success_chance(local_apothecary_points, system, planet, ui
         "Hive": 30,
         "Temperate": 20,
         "Feudal": 20,
-        "Forge": 15,
-        "Shrine": 15,
+        "Forge": 25,
+        "Shrine": 20,
         "Desert": 15,
         "Ice": 15,
-        "Agri": 15,
+        "Agri": 20,
         "Death": 15,
         "Lava": 15,
     };
@@ -303,21 +303,22 @@ function scr_trial_data(wanted=-1){
 		{
 			name : "Hunting the Hunter",
 			train_time : {
-				base : [72, 80],
+				base : [72, 84],
 			},
 			exp_bonus : {
 				base:[0,0],
 				planets : {
 					Ice : [7,10],
 					Desert : [7,10],
-					Death : [7,10]
+					Death : [7,10],
+					Feudal : [5,10]
 				}
 			},
 			recruit_count_modifier : {
 				base : 1,
 				planets : {
 					Ice :2,
-					Desert : 1.25,
+					Desert : 2,
 					Death : 3,
 					Feudal : 1.5
 				}				
@@ -327,7 +328,7 @@ function scr_trial_data(wanted=-1){
 		{
 			name : "Survival of the Fittest",
 			train_time : {
-				base : [72, 80],
+				base : [72, 84],
 			},
 			recruit_count_modifier : {
 				base : 1.0,
@@ -335,7 +336,8 @@ function scr_trial_data(wanted=-1){
 					Ice :3,
 					Desert : 3,
 					Death : 3,
-					Feudal : 3
+					Lava : 3,
+					Feudal : 2
 				}
 			},
 			exp_bonus : {
@@ -347,11 +349,12 @@ function scr_trial_data(wanted=-1){
 		{
 			name : "Exposure",
 			train_time : {
-				base : [72, 80],
+				base : [72, 84],
 				planets : {
 					Desert :[36, 60],
 					Ice :[36, 60],
 					Forge :[36, 60],
+					Hive :[36, 60],
 					Lava :[36, 60],
 					Death :[36, 60],
 				}
@@ -362,6 +365,7 @@ function scr_trial_data(wanted=-1){
 					Ice : [2,4],
 					Desert : [2,4],
 					Death : [2,4],
+					Lava :[2,5],
 				}
 			},
 			recruit_count_modifier : {
@@ -372,15 +376,19 @@ function scr_trial_data(wanted=-1){
 		{
 			name : "Knowledge of self",
 			train_time : {
-				base : [90, 108],
+				base : [96, 108],
 				planets : {
-					Shrine :[70, 108],
+					Shrine :[72, 108],
+					Feudal :[72, 108],
+					Forge :[72, 108],
 				}
 			},
 			exp_bonus : {
 				base: [15,25],
 				planets : {
-					Temperate : [20,35],
+					Shrine :[20,35],
+					Feudal : [20,35],
+					Forge :[20,35],
 				}
 			},
 			recruit_count_modifier : {
@@ -390,11 +398,12 @@ function scr_trial_data(wanted=-1){
 			long_description :$"An Aspirant’s spiritual and mental capability is every bit as important as his physical characteristics.  It is wise to impose Trials not upon their body, but on the mind.  Either through psychic powers, chemical agents, or endurance trials, the Aspirant’s willpower is tested.  Those unworthy do not survive the stress and trauma placed upon their hearts- only those whose minds are proven to be unbreakable are welcomed into our ranks.",							
 		},
 		{
-			name : "Combat Challange",
+			name : "Combat Challenge",
 			train_time : {
-				base : [66, 80],
+				base : [66, 84],
 				planets : {
-					Shrine :[70, 108],
+					Shrine :[72, 108],
+					Feudal :[60, 84],
 				}
 			},
 			exp_bonus : {
@@ -406,9 +415,11 @@ function scr_trial_data(wanted=-1){
 		{
 			name : "Apprenticeship",
 			train_time : {
-				base : [120, 140],
+				base : [120, 144],
 				planets : {
-					Shrine :[70, 108],
+					Shrine :[96, 120],
+					Feudal :[96, 120],
+					Forge :[96, 120],
 				}
 			},
 			exp_bonus : {
@@ -418,6 +429,7 @@ function scr_trial_data(wanted=-1){
 				base : 1,
 				planets : {
 					Lava :2,
+					Feudal : 2,
 				},			
 			},
 			corruption_bonus: [-10, 1],

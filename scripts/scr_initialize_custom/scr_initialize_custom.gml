@@ -614,7 +614,7 @@ function trial_map(trial_name){
 		case "KNOWLEDGE":
 			return eTrials.KNOWLEDGE;
 		default: 
-			return eTrials.BLOODDUEL;
+			return eTrials.CHALLENGE;
 	}
 }
 

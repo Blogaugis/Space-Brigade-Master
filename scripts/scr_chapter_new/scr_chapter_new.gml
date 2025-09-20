@@ -10,7 +10,7 @@ function ChapterData() constructor {
 	successors = 0;
 	splash = 0;
 	icon_name = "unknown";
-	aspirant_trial = eTrials.BLOODDUEL;
+	aspirant_trial = eTrials.CHALLENGE;
 	fleet_type = ePlayerBase.none;
 	strength = 0;
 	purity = 0;

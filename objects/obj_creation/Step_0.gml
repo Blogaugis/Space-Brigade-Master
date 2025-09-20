@@ -89,7 +89,7 @@ if (change_slide==35) or (change_slide==36) or (chapter_name=="Doom Benefactors"
         recruiting_exists=1;
         homeworld_exists=1;
         homeworld_rule=1;
-        aspirant_trial=eTrials.BLOODDUEL;
+        aspirant_trial=eTrials.CHALLENGE;
         discipline="librarius";
         battle_cry="For the Emperor";
         main_color=1;

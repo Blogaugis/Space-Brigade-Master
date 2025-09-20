@@ -41,7 +41,7 @@ function scr_chapter_random(custom_or_random) {
 	recruiting_exists = 1;
 	homeworld_exists = 1;
 	homeworld_rule = 1;
-	aspirant_trial = eTrials.BLOODDUEL;
+	aspirant_trial = eTrials.CHALLENGE;
 	discipline = "librarius";
 	battle_cry = "For the Emperor";
 

@@ -326,7 +326,7 @@ flagship_name=global.name_generator.generate_imperial_ship_name();
 recruiting_exists=1;
 homeworld_exists=1;
 homeworld_rule=1;
-aspirant_trial=eTrials.BLOODDUEL;
+aspirant_trial=eTrials.CHALLENGE;
 discipline="librarius";
 
 battle_cry="For the Emperor";
