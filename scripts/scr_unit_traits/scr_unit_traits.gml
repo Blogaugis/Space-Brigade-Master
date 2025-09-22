@@ -17,13 +17,14 @@ global.astartes_trait_dist = [
 					["Desert", -2],
 					["Feudal", -1],
 					["Lava", 1],
-					["Forge",1],
 				],
 				recruit_trial : [
 					[eTrials.EXPOSURE, -1],
-					[eTrials.SURVIVAL, -2],
+					[eTrials.SURVIVAL, -1],
 					[eTrials.HUNTING, -3],
-					[eTrials.APPRENTICESHIP, 1],
+					[eTrials.APPRENTICESHIP, -1],
+					[eTrials.CHALLENGE, 1],
+					[eTrials.BLOODDUEL, 2],
 					[eTrials.KNOWLEDGE, 1]
 				]				
 			}				
@@ -42,6 +43,7 @@ global.astartes_trait_dist = [
 				recruit_trial : [
 					[eTrials.EXPOSURE, -3],
 					[eTrials.SURVIVAL, -2],
+					[eTrials.APPRENTICESHIP, -1],
 				]
 			}					
 		],
@@ -51,7 +53,7 @@ global.astartes_trait_dist = [
 			{
 				recruit_world_type: [
 					["Ice", -2],
-					["Lava", -2],
+					["Lava", -1],
 					["Desert", -2],
 					["Death", -3],
 					["Forge",1],
@@ -98,7 +100,7 @@ global.astartes_trait_dist = [
 					["Shrine",2]					
 				],
 				recruit_trial : [
-					[eTrials.KNOWLEDGE, 3],
+					[eTrials.KNOWLEDGE, 5],
 					[eTrials.APPRENTICESHIP, 10],
 					[eTrials.EXPOSURE, -1],
 					[eTrials.BLOODDUEL, -1],	
@@ -115,6 +117,7 @@ global.astartes_trait_dist = [
 				],
 				recruit_trial : [
 					[eTrials.BLOODDUEL, -2],
+					[eTrials.CHALLENGE, -1],
 				]			
 			}
 		],
@@ -128,7 +131,9 @@ global.astartes_trait_dist = [
 					["Death", -1],				
 				],
 				recruit_trial : [
-					[eTrials.BLOODDUEL, -1],
+					[eTrials.BLOODDUEL, -2],
+					[eTrials.CHALLENGE, -1],
+					[eTrials.KNOWLEDGE, 1],
 					[eTrials.APPRENTICESHIP, 1],
 				]				
 			}					
@@ -141,7 +146,8 @@ global.astartes_trait_dist = [
 					["Shrine", -3],
 					["Temperate", -2],
 					["Agri", -1],
-					["Hive", -1],
+					["Hive", -2],
+					["Forge", -1],
 				],
 				recruit_trial : [
 					[eTrials.KNOWLEDGE, -1],
@@ -149,10 +155,18 @@ global.astartes_trait_dist = [
 				]				
 			}
 		],
-		["skeptic", [99,98]],
+		[
+			"skeptic",
+			[99,98]
+		],
 		[
 			"blunt", 
-			[99,98]
+			[99,98],
+			{
+				recruit_trial : [
+					[eTrials.BLOODDUEL, -1],
+				],
+			}
 		],
 		[
 			"nimble", 
@@ -160,6 +174,11 @@ global.astartes_trait_dist = [
 			{
 				recruit_trial : [
 					[eTrials.HUNTING, -1],
+					[eTrials.EXPOSURE, -1],
+					[eTrials.BLOODDUEL, -1],	
+					[eTrials.SURVIVAL, -1],
+					[eTrials.CHALLENGE, -1],
+					[eTrials.APPRENTICESHIP, -1],
 				]
 			}
 		],
@@ -179,9 +198,13 @@ global.astartes_trait_dist = [
 			"perfectionist", 
 			[99,98],
 			{
+				// progenitor:[ePROGENITOR.EMPERORS_CHILDREN,[1000,800],"required"],
 				recruit_trial : [
-					[eTrials.KNOWLEDGE, -3],
-					[eTrials.HUNTING, -1],
+					[eTrials.KNOWLEDGE, -1],
+					[eTrials.APPRENTICESHIP, -3],
+					[eTrials.HUNTING, -2],
+					[eTrials.EXPOSURE, -1],
+					[eTrials.SURVIVAL, -1],
 				]	
 			}				
 		],
@@ -191,6 +214,7 @@ global.astartes_trait_dist = [
 			{
 				recruit_trial : [
 					[eTrials.KNOWLEDGE, -1],
+					[eTrials.APPRENTICESHIP, -1],
 					[eTrials.HUNTING, -1],
 				]	
 			}			
@@ -219,7 +243,7 @@ global.astartes_trait_dist = [
 					ePROGENITOR.IRON_HANDS,[1000,999]
 				],
 				recruit_world_type : [
-					["Ice", -5],
+					["Ice", -1],
 					["Death", -2],
 					["Desert", -1],
 					["Feudal", -1],
@@ -257,6 +281,12 @@ global.astartes_trait_dist = [
 		[
 			"fast_learner", 
 			[149,148],
+			{
+				recruit_trial : [
+					[eTrials.KNOWLEDGE, -1],
+					[eTrials.APPRENTICESHIP, -1],
+				],
+			}
 		],
 		[
 			"feet_floor", 
@@ -270,6 +300,11 @@ global.astartes_trait_dist = [
 		[
 			"paragon", 
 			[999,998],
+			{
+				recruit_trial : [
+					[eTrials.APPRENTICESHIP, -1],
+				],
+			}
 		],
 		[
 			"favoured_by_the_warp",
@@ -317,7 +352,11 @@ global.astartes_trait_dist = [
 					["Forge", -1],
 					["Shrine", -2],
 					["Hive", -2],
-				],					
+				],
+				recruit_trial : [
+					[eTrials.KNOWLEDGE, -1],
+					[eTrials.APPRENTICESHIP, -2],
+				]
 			}
 		],
 		[
@@ -372,15 +411,28 @@ global.astartes_trait_dist = [
 			{
 				"disadvantage":[
 					"Small Reclusiam",[1000,50],"required"
-				]									
+				],
+				recruit_world_type: [
+					["Shrine", 15],
+					["Forge", -1],
+				],
 			}
 		],
-		["flesh_is_weak",[1000,999],{
+		[
+			"flesh_is_weak",
+			[1000,999],
+			{
 				chapter_name:["Iron Hands",[1000,600],"required"],
+				// chapter_name:["Iron Warriors",[1000,600],"required"],
 				progenitor:[ePROGENITOR.IRON_HANDS,[1000,800],"required"],
+				// progenitor:[ePROGENITOR.IRON_WARRIORS,[1000,800],"required"],
 				recruit_world_type: [
-					["Forge", -300],
+					["Forge", -30],
+					["Hive", -4],
+					["Temperate", -2],
+					["Agri", -1],
 					["Lava", -15],
+					["Feudal", 1],
 				],						
 			}
 		],
@@ -389,6 +441,9 @@ global.astartes_trait_dist = [
 			[199,198],
 			{
 				chapter_name:["Iron Hands",[49,47]],
+				// chapter_name:["Iron Warriors",[49,47]],
+				progenitor:[ePROGENITOR.IRON_HANDS,[25,24]],
+				// progenitor:[ePROGENITOR.IRON_WARRIORS,[25,24]],
 				recruit_world_type: [
 					["Forge", -5],
 					["Hive", -4],
@@ -436,9 +491,9 @@ global.astartes_trait_dist = [
 				recruit_trial : [
 					[eTrials.BLOODDUEL, 2],
 					[eTrials.SURVIVAL, 1],
-					[eTrials.CHALLENGE, -2],
+					[eTrials.CHALLENGE, -1],
 					[eTrials.KNOWLEDGE, -1],
-					[eTrials.APPRENTICESHIP, -1],
+					[eTrials.APPRENTICESHIP, -2],
 				],
 			}
 		],
@@ -462,6 +517,8 @@ global.astartes_trait_dist = [
 			"siege_master",
 			[299,297],
 			{
+				// progenitor:[ePROGENITOR.IMPERIAL_FISTS,[1000,800],"required"],
+				// progenitor:[ePROGENITOR.IRON_WARRIORS,[1000,800],"required"],
 				recruit_world_type: [
 					["Feudal", -3],
 					["hive", -2],

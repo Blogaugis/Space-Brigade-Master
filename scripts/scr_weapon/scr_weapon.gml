@@ -406,6 +406,51 @@ global.weapons={
         "arp": 0,
         "tags":["chain", "axe", "dual"],
     },
+	"Crozius Arcanum": {
+       "abbreviation": "Crzus",       
+        "attack": {
+            "standard": 550,
+            "master_crafted": 650,
+            "artifact": 800
+        },
+        "melee_mod": {
+            "standard": 1,
+            "master_crafted": 1,
+            "artifact": 1
+        },
+        "description": "The Crozius Arcanum serves as both a sacred staff of office and a close combat weapon for Astartes Chaplains.",
+        "melee_hands": 1,
+        "ranged_hands": 0,
+        "ammo": 0,
+        "range": 1,
+        "spli": 6,
+        "arp": 1,
+        "tags":["power", "mace", "pious"],
+    },
+	"Mace of Absolution": {
+		"abbreviation": "AbsltMace",
+		"attack": {
+			"standard": 600,
+			"master_crafted": 700,
+			"artifact": 800
+		},
+		"melee_mod": {
+			"standard": 1.3,
+			"master_crafted": 1.3,
+			"artifact": 1.3,
+		},
+		"description": "Wreathed in glowing smoke, these massive weapons are as sinister in aspect as they are lethal in application, and are capable of obliterating even the mightiest heretics in a blaze of killing light.",
+		"special_description": "Dark Angels exclusive",
+		"melee_hands": 2.25,
+		"ranged_hands": 2,
+		"ammo": 0,
+		"range": 1,
+		"spli": 10,
+		"arp": 1,
+		"tags": ["power", "mace", "siege", "pious"],
+		"units_whitelist": ["astartes", "terminator"],
+		"req_exp": 100,
+	},
     "Eviscerator": {
          "abbreviation": "Evisc",
         "attack": {
@@ -426,6 +471,48 @@ global.weapons={
         "spli": 10,
         "arp": 1,
         "tags":["chain", "sword"],
+    },
+    "Executioner Power Axe": {
+        "abbreviation": "ExPwrAxe",
+        "attack": {
+            "standard": 950,
+            "master_crafted": 1150,
+            "artifact": 1300
+        },
+        "melee_mod": {
+            "standard": 10,
+            "master_crafted": 15,
+            "artifact": 20
+        },
+        "description": "A heavy two-handed power axe used to rend armor and tear through multiple infantry at once.",
+        "melee_hands": 2.5,
+        "ranged_hands": 2,
+        "ammo": 0,
+        "range": 1,
+        "spli": 8,
+        "arp": 1,
+        "tags": ["power", "axe"],
+    },
+    "Power Axe": {
+        "abbreviation": "PwrAxe",
+        "attack": {
+            "standard": 550,
+            "master_crafted": 600,
+            "artifact": 675
+        },
+        "melee_mod": {
+            "standard": 0,
+            "master_crafted": 5,
+            "artifact": 10
+        },
+        "description": "This weapon's power systems can be activated with the press of a button to sheathe the axe-head in a lethal haze of disruptive energy. Those fortunate enough to get their hands on two tend to duel-wield them.",
+        "melee_hands": 1,
+        "ranged_hands": 0,
+        "ammo": 0,
+        "range": 1,
+        "spli": 6,
+        "arp": 1,
+        "tags": ["power", "axe", "dual"],
     },
     "Power Sword": {
          "abbreviation": "PwrSwrd",
@@ -471,21 +558,50 @@ global.weapons={
         "special_properties": ["Parry"],
         "tags":["power", "spear"],
     },
-    "Chainfist": {
-     "abbreviation": "ChFst",
+    "Power Mace": {
+        "abbreviation": "PwrMace",
         "attack": {
-           "standard": 550,
-            "master_crafted": 600,
-            "artifact": 700
+            "standard": 450,
+            "master_crafted": 500,
+            "artifact": 600
         },
-        "description": "Created by mounting a chainsword to a power fist, this weapon is easily able to carve through armoured bulkheads.",
-        "melee_hands": 1.25,
-        "ranged_hands": 1,
+        "melee_mod": {
+            "standard": 0,
+            "master_crafted": 5,
+            "artifact": 10
+        },
+        "description": "Wreathed in glowing smoke, these massive weapons are as sinister in aspect as they are lethal in application, and are capable of obliterating even the mightiest heretics in a blaze of killing light.",
+        "melee_hands": 2.25,
+        "ranged_hands": 2,
+        "ammo": 0,
         "range": 1,
-        "spli": 4,
+        "spli": 10,
         "arp": 1,
-        "tags":["power", "chain", "fist", "dual", "siege"],
+        "tags":["power", "mace", "siege", "pious"],
     },
+    "Power Weapon": {
+        "abbreviation": "PwrWpn",
+        "attack": {
+            "standard": 635,
+            "master_crafted": 745,
+            "artifact": 855
+        },
+        "melee_mod": {
+            "standard": 0,
+            "master_crafted": 5,
+            "artifact": 10
+        },
+        "description": "An alternative kind of power weapon that does not fit other, more conventional weapon types.",
+        "melee_hands": 1,
+        "ranged_hands": 0,
+        "ammo": 0,
+        "range": 1,
+        "spli": 5,
+        "arp": 1,
+        "special_properties": ["Parry"],
+        "tags":["power"],
+    },
+
     "Lascutter": {
        "abbreviation": "Lasct",
         "attack": {
@@ -497,73 +613,10 @@ global.weapons={
         "melee_hands": 1,
         "range": 1,
         "arp": 1,
-        "tags":["laser", "siege"],
+        "tags":["las","boarding", "siege"],
     },
 
-    "Power Weapon": {
-        "abbreviation": "PwrWpn",
-        "attack": {
-            "standard": 635,
-            "master_crafted": 745,
-            "artifact": 855
-        },
-        "melee_mod": {
-            "standard": 1.1,
-            "master_crafted": 1.1,
-            "artifact": 1.1
-        },
-        "description": "Often the signature weapons of elite warriors, power swords are perhaps the most dangerous of melee weapons in the galaxy.",
-        "melee_hands": 1,
-        "ranged_hands": 0,
-        "ammo": 0,
-        "range": 1,
-        "spli": 3,
-        "arp": 1,
-        "special_properties": ["Parry"],
-        "tags":["power"],
-    },
-    "Power Axe": {
-       "abbreviation": "PwrAxe",       
-        "attack": {
-            "standard": 550,
-            "master_crafted": 650,
-            "artifact": 700
-        },
-        "melee_mod": {
-            "standard": 1,
-            "master_crafted": 1,
-            "artifact": 1
-        },
-        "description": "This weapon's power systems can be activated with the press of a button to sheathe the axe-head in a lethal haze of disruptive energy. Those fortunate enough to get their hands on two tend to duel-wield them.",
-        "melee_hands": 1,
-        "ranged_hands": 0,
-        "ammo": 0,
-        "range": 1,
-        "spli": 5,
-        "arp": 1,
-        "tags":["power", "axe", "dual"],
-    },
-    "Executioner Power Axe": {
-       "abbreviation": "ExPwrAxe",       
-        "attack": {
-            "standard": 300,
-            "master_crafted": 350,
-            "artifact": 400
-        },
-        "melee_mod": {
-            "standard": 10,
-            "master_crafted": 15,
-            "artifact": 20
-        },
-        "description": "A heavy two-handed power axe used to rend armor and tear through multiple infantry at once.",
-        "melee_hands": 2.5,
-        "ranged_hands": 2,
-        "ammo": 0,
-        "range": 1,
-        "spli": 6,
-        "arp": 1,
-        "tags":["power", "axe"],
-    },
+
 	"Storm Shield": {
 		"description": "Protects twice as well when boarding. A powered shield that must be held with a hand.  While powered by the marines armour it shimmers with blue energy.",
 		"abbreviation": "StrmShld",
@@ -602,160 +655,26 @@ global.weapons={
 			"artifact": 20
 		},
 	},
-	"Archeotech Laspistol": {
-		"attack": {
-			"standard": 40,
-			"master_crafted": 60,
-			"artifact": 80
-		},
-		"description": "Known as a Lasrod or Gelt Gun, this pistol is an ancient design of Laspistol with much greater power.",
-		"abbreviation": "ArchLpstl",
-		"melee_hands": 0,
-		"ranged_hands": 0.5,
-		"ammo": 30,
-		"range": 3.1,
-		"spli": 1,
-		"arp": 0,
-		"tags": ["pistol", "ancient", "las", "energy"],
-	},
-	"Combat Knife": {
-		"abbreviation": "CbKnf",
-		"attack": {
-			"standard": 25,
-			"master_crafted": 30,
-			"artifact": 35
-		},
-		"description": "More of a sword than a knife, this tough and thick blade becomes a deadly weapon in the hand of an Astartes.",
-		"melee_hands": 0,
-		"ranged_hands": 0,
-		"ammo": 0,
-		"range": 1,
-		"spli": 1,
-		"arp": 0,
-		"tags": ["knife"],
-	},
-	"Chainsword": {
-		"abbreviation": "ChSwrd",
-		"attack": {
-			"standard": 50,
-			"master_crafted": 60,
-			"artifact": 70
-		},
-		"description": "A standard Chainsword. It is popular among Assault Marines due to their raw power while maintaining speed.",
-		"melee_hands": 1,
-		"ranged_hands": 0,
-		"ammo": 0,
-		"range": 1,
-		"spli": 4,
-		"arp": 0,
-		"tags": ["chain", "sword"],
-	},
-	"Chainaxe": {
-		"abbreviation": "ChAxe",
-		"attack": {
-			"standard": 90,
-			"master_crafted": 100,
-			"artifact": 110
-		},
-		"melee_mod": {
-			"standard": 5,
-			"master_crafted": 10,
-			"artifact": 15
-		},
-		"description": "A weapon most frequently seen in the hands of Traitor Astartes, the Chainaxe uses motorized chainsaw teeth to maim and tear. Astartes often duel-wield them to increase frequency of attacks.",
-		"melee_hands": 1,
-		"ranged_hands": 0,
-		"ammo": 0,
-		"range": 1,
-		"spli": 6,
-		"arp": 0,
-		"tags": ["chain", "axe", "dual"],
-	},
 	"Company Standard": {
 		"abbreviation": "CmpStnd",
 		"special_properties": ["Morale Boost"],
-		"description": "A banner that represents the honor of a particular company and will bolster the morale of nearby Astartes.",
+		"description": "A banner that represents the honor of a particular company and will bolster the morale abilities of nearby Space Marines.",
 		"attack": {
-			"standard": 45,
-			"master_crafted": 60,
-			"artifact": 100
-		},
-		"hp_mod": {
-			"standard": 20,
-			"master_crafted": 20,
-			"artifact": 20
-		},
-		"melee_hands": 1,
-		"ranged_hands": 1,
-		"range": 1,
-		"spli": 1,
-		"tags": ["banner"],
-	},
-	"Eviscerator": {
-		"abbreviation": "Evisc",
-		"attack": {
-			"standard": 180,
-			"master_crafted": 190,
-			"artifact": 200
-		},
-		"melee_mod": {
-			"standard": 2,
-			"master_crafted": 2,
-			"artifact": 2
-		},
-		"description": "An obscenely large Chainsword, this two-handed weapon can carve through flesh and plasteel with equal ease.",
-		"melee_hands": 2,
-		"ranged_hands": 1,
-		"ammo": 0,
-		"range": 1,
-		"spli": 3,
-		"arp": 1,
-		"tags": ["chain", "sword"],
-	},
-	"Power Sword": {
-		"abbreviation": "PwrSwrd",
-		"attack": {
-			"standard": 180,
-			"master_crafted": 200,
-			"artifact": 240
-		},
-		"melee_mod": {
-			"standard": 1,
-			"master_crafted": 1.1,
-			"artifact": 1.2
-		},
-		"description": "The most common kind of Power Weapon. When active, the blade becomes sheathed in a lethal haze of disruptive energy that seamlessly cuts through ceramite and flesh.",
-		"melee_hands": 1,
-		"ranged_hands": 0,
-		"ammo": 0,
-		"range": 1,
-		"spli": 4,
-		"arp": 1,
-		"special_properties": ["Parry"],
-		"tags": ["power", "sword"],
-	},
-	"Power Spear": {
-		"abbreviation": "PwrSpear",
-		"attack": {
-			"standard": 200,
-			"master_crafted": 220,
-			"artifact": 260
-		},
-		"melee_mod": {
-			"standard": 1,
-			"master_crafted": 1.1,
-			"artifact": 1.2
-		},
-		"description": "A rare kind of Power Weapon, a power blade mounted on the end of a long shaft, requires great skill to wield. When active, the blade becomes sheathed in a lethal haze of disruptive energy and can tear through all manners of material with ease.",
-		"melee_hands": 1,
-		"ranged_hands": 0,
-		"ammo": 0,
-		"range": 1,
-		"spli": 6,
-		"arp": 1,
-		"special_properties": ["Parry"],
-		"tags": ["power", "spear"],
-	},
+            "standard": 45,
+            "master_crafted": 60,
+            "artifact": 100
+        },
+		"damage_resistance_mod": {
+        "standard": 5, 
+        "master_crafted": 10, 
+        "artifact": 20 
+      },
+        "melee_hands": 1,
+        "ranged_hands": 1,
+        "range": 1,
+        "spli": 1,
+        "tags":["banner"],
+    },
 	"Xenophase Blade": {
 		"abbreviation": "XenoPhs",
 		"attack": {
@@ -789,85 +708,9 @@ global.weapons={
 		"melee_hands": 1.25,
 		"ranged_hands": 1,
 		"range": 1,
-		"spli": 2,
+		"spli": 4,
 		"arp": 1,
 		"tags": ["power","boarding", "chain", "fist", "dual", "siege"],
-	},
-	"Lascutter": {
-		"abbreviation": "Lasct",
-		"attack": {
-			"standard": 100,
-			"master_crafted": 150,
-			"artifact": 200
-		},
-		"description": "Origonally industrial tools used for breaking through bulkheads, this laser weapon is devastating in close combat.",
-		"melee_hands": 1,
-		"range": 1,
-		"arp": 1,
-		"tags": ["las","boarding", "siege"],
-	},
-	"Power Weapon": {
-		"abbreviation": "PwrWpn",
-		"attack": {
-			"standard": 135,
-			"master_crafted": 145,
-			"artifact": 155
-		},
-		"melee_mod": {
-			"standard": 1.1,
-			"master_crafted": 1.1,
-			"artifact": 1.1
-		},
-		// "description": "An makeshift power weapon made by Astartes during long term deployment behind enemy lines or when cut from supply lines for long periods of time.",
-		"melee_hands": 1.1,
-		"ranged_hands": 0,
-		"ammo": 0,
-		"range": 1,
-		"spli": 3,
-		"arp": 1,
-		"tags": ["power"],
-	},
-	"Power Axe": {
-		"abbreviation": "PwrAxe",
-		"attack": {
-			"standard": 190,
-			"master_crafted": 220,
-			"artifact": 260
-		},
-		"melee_mod": {
-			"standard": 1,
-			"master_crafted": 1.1,
-			"artifact": 1.2
-		},
-		"description": "This weapon's power systems can be activated with the press of a button to sheathe the axe-head in a lethal haze of disruptive energy. Those fortunate enough to get their hands on two tend to duel-wield them.",
-		"melee_hands": 1,
-		"ranged_hands": 0,
-		"ammo": 0,
-		"range": 1,
-		"spli": 5,
-		"arp": 1,
-		"tags": ["power", "axe", "dual"],
-	},
-	"Executioner Power Axe": {
-		"abbreviation": "ExPwrAxe",
-		"attack": {
-			"standard": 300,
-			"master_crafted": 350,
-			"artifact": 400
-		},
-		"melee_mod": {
-			"standard": 10,
-			"master_crafted": 15,
-			"artifact": 20
-		},
-		"description": "A heavy two-handed power axe used to rend armor and tear through multiple infantry at once.",
-		"melee_hands": 2.5,
-		"ranged_hands": 2,
-		"ammo": 0,
-		"range": 1,
-		"spli": 2,
-		"arp": 1,
-		"tags": ["power", "axe"],
 	},
 	"Power Fist": {
 		"abbreviation": "PwrFst",
@@ -877,17 +720,18 @@ global.weapons={
 			"artifact": 600
 		},
 		"melee_mod": {
-			"standard": 1,
-			"master_crafted": 1,
-			"artifact": 1
+			"standard": 0,
+			"master_crafted": 5,
+			"artifact": 10
 		},
 		"description": "A large, ceramite clad gauntlet surrounded by an power energy field. Though cumbersome to use, it dishes out tremendous damage to enemies, leaving very little behind.",
 		"melee_hands": 1,
 		"ranged_hands": 1,
 		"ammo": 0,
 		"range": 1,
-		"spli": 2,
+		"spli": 3,
 		"arp": 1,
+		"special_properties": ["Parry"],
 		"tags": ["power", "dual", "fist"],
 	},
 	"Power Fists": {
@@ -907,28 +751,6 @@ global.weapons={
 		"tags": ["power", "fist", "pair"],
 		"units_whitelist": ["astartes", "terminator"],
 	},
-    "Power Fist": {
-       "abbreviation": "PwrFst",       
-        "attack": {
-            "standard": 450,
-            "master_crafted": 525,
-            "artifact": 600
-        },
-        "melee_mod": {
-            "standard": 1,
-            "master_crafted": 1,
-            "artifact": 1
-        },
-        "description": "A large, metal gauntlet surrounded by an energy field. Though large and slow, it dishes out tremendous damage.",
-        "melee_hands": 1,
-        "ranged_hands": 1,
-        "ammo": 0,
-        "range": 1,
-        "spli": 4,
-        "arp": 1,
-        "special_properties": ["Parry"],
-        "tags":["power", "dual", "fist"],
-    },
     "Lightning Claw": {
     "abbreviation": "LghtClw",             
         "attack": {
@@ -1011,49 +833,6 @@ global.weapons={
         "tags":["heavy_melee","power", "hammer", "siege"],
         "req_exp":140,
     },
-    "Power Mace": {
-        "abbreviation": "PwrMace",                
-        "attack": {
-            "standard": 700,
-            "master_crafted": 800,
-            "artifact": 950
-        },
-        "melee_mod": {
-            "standard": 1.3,
-            "master_crafted": 1.3,
-            "artifact": 1.3
-        },
-        "description": "Wreathed in glowing smoke, these massive weapons are as sinister in aspect as they are lethal in application, and are capable of obliterating even the mightiest heretics in a blaze of killing light.",
-        "melee_hands": 2.25,
-        "ranged_hands": 2,
-        "ammo": 0,
-        "range": 1,
-        "spli": 10,
-        "arp": 1,
-        "tags":["power", "mace", "siege", "pious"],
-        "req_exp":200,
-    },
-	 "Crozius Arcanum": {
-       "abbreviation": "Crzus",       
-        "attack": {
-            "standard": 220,
-            "master_crafted": 250,
-            "artifact": 300
-        },
-        "melee_mod": {
-            "standard": 1,
-            "master_crafted": 1,
-            "artifact": 1
-        },
-        "description": "The Crozius Arcanum serves as both a sacred staff of office and a close combat weapon for Astartes Chaplains.",
-        "melee_hands": 1,
-        "ranged_hands": 0,
-        "ammo": 0,
-        "range": 1,
-        "spli": 6,
-        "arp": 1,
-        "tags":["power", "mace", "pious"],
-    },
     "Relic Blade": {
       "abbreviation": "RlcBld",               
         "attack": {
@@ -1093,9 +872,9 @@ global.weapons={
     "Close Combat Weapon":{
         "abbreviation": "CCW",               
         "attack": {
-            "standard": 450,
-            "master_crafted": 550,
-            "artifact": 650
+            "standard": 1050,
+            "master_crafted": 1550,
+            "artifact": 2050
         },
         "description": "While a variety of melee weapons are used by dreadnoughts, this power fist with an integrated flamer is the most common.",
         "melee_hands": 5, 
@@ -1162,30 +941,6 @@ global.weapons={
 		"second_profiles": ["Integrated Bolter"],
 		"tags": ["power", "fist"],
 		"units_whitelist": ["astartes", "terminator"],
-	},
-	"Mace of Absolution": {
-		"abbreviation": "AbsltMace",
-		"attack": {
-			"standard": 600,
-			"master_crafted": 700,
-			"artifact": 800
-		},
-		"melee_mod": {
-			"standard": 1.3,
-			"master_crafted": 1.3,
-			"artifact": 1.3,
-		},
-		"description": "Wreathed in glowing smoke, these massive weapons are as sinister in aspect as they are lethal in application, and are capable of obliterating even the mightiest heretics in a blaze of killing light.",
-		"special_description": "Dark Angels exclusive",
-		"melee_hands": 2.25,
-		"ranged_hands": 2,
-		"ammo": 0,
-		"range": 1,
-		"spli": 10,
-		"arp": 1,
-		"tags": ["power", "mace", "siege", "pious"],
-		"units_whitelist": ["astartes", "terminator"],
-		"req_exp": 100,
 	},
 	"Force Staff": {
 		"attack": {
@@ -1298,8 +1053,8 @@ global.weapons={
             "artifact": 1700
         },
         "description": "A standard Bolter, a 2-handed firearm that launches bolts of explosive material. It's a versatile and iconic weapon of Space Marines.",
-        "melee_hands": 0,
-        "ranged_hands": 1.1,
+        "melee_hands": 0.5,
+        "ranged_hands": 1.25,
         "ammo": 16,
         "range": 12,
         "spli": {
@@ -1318,8 +1073,8 @@ global.weapons={
             "artifact": 850
         },
         "description": "The Stalker Bolter is a scoped long-range variant of the standard Bolter. Depending on the specific modifications made by the wielder, the Stalker Bolter can serve as a precision battle rifle or a high-powered sniper weapon.",
-        "melee_hands": 0,
-        "ranged_hands": 1.9,
+        "melee_hands": 0.5,
+        "ranged_hands": 1.5,
         "ammo": 14,
         "range": 14,
         "spli": 5,
@@ -1380,8 +1135,8 @@ global.weapons={
             "master_crafted": 925,
             "artifact": 975
         },
-        "description": "Compact, and double-barreled, this bolt weapon is inaccurate but grants an enormous amount of firepower.",
-        "melee_hands": 0,
+        "description": "A compact, double-barreled variant of the bolter. It sacrifices accuracy and range for greater volume of firepower.",
+        "melee_hands": 0.4,
         "ranged_hands": 1.1,
         "ammo": 10,
         "range": 10,
@@ -1592,7 +1347,7 @@ global.weapons={
         },
         "description": "The Infernus Pistol is a compact and portable flamethrower-style weapon. It unleashes a torrent of fiery promethium, which engulfs its targets in flames.",
         "melee_hands": 0,
-        "ranged_hands": 1,
+        "ranged_hands": 0.75,
         "ammo": 4,
         "range": 5,
         "spli": 50,
@@ -1636,6 +1391,23 @@ global.weapons={
         "arp": -1,
         "tags":["flame"]
     },
+	"Hand Flamer": {
+		"abbreviation": "HndFlmr",
+		"attack": {
+			"standard": 1000,
+			"master_crafted": 1500,
+			"artifact": 2100
+		},
+		"description": "A flamer in a pistol form.",
+		"melee_hands": 0,
+		"ranged_hands": 0.5,
+		"ammo": 2,
+		"range": 5, 
+		"spli": 50, 
+		"arp": -1,
+		"tags": ["pistol", "flame"] //,
+		// "maintenance" : 0.01, - decide on the value you prefer
+	},
     "Incinerator": {
         "attack": {
             "standard": 2100,
@@ -1897,6 +1669,59 @@ global.weapons={
         "tags":["plasma", "vehicle", "turret"]
     },
 
+	 // Grav weapons
+	"Grav-Pistol": {
+		"abbreviation": "GrvPstl",
+		"attack": {
+			"standard": 1500,
+			"master_crafted": 2000,
+			"artifact": 2500
+		},
+		"description": "A smaller version of the Grav-Gun which utilises the gravitic reaction principle most commonly seen powering grav-vehicles such as the Land Speeder.",
+		"melee_hands": 0,
+		"ranged_hands": 0.75,
+		"ammo": 4,
+		"range": 5,
+		"spli": 2,
+		"arp": 1,
+		"tags": ["grav", "pistol"],
+		"maintenance" : 0.08,
+	},
+	"Grav-Gun": {
+		"abbreviation": "GrvGn",
+		"attack": {
+			"standard": 4500,
+			"master_crafted": 4750,
+			"artifact": 5000
+		},
+		"description": "A medium-sized weapon which utilises the gravitic reaction principle most commonly seen powering grav-vehicles such as the Land Speeder.",
+		"melee_hands": 0.5,
+		"ranged_hands": 1.5,
+		"ammo": 6,
+		"range": 5,
+		"spli": 3,
+		"arp": 1,
+		"tags": ["grav"],
+		"maintenance" : 0.1,
+	},
+	"Grav-Cannon": {
+		"abbreviation": "GrvCan",
+		"attack": {
+			"standard": 8000,
+			"master_crafted": 8500,
+			"artifact": 9000
+		},
+		"description": "A bigger version of the Grav-Gun which utilises the gravitic reaction principle most commonly seen powering grav-vehicles such as the Land Speeder.",
+		"melee_hands": 1,
+		"ranged_hands": 2,
+		"ammo": 8,
+		"range": 8,
+		"spli": 6,
+		"arp": 1,
+		"tags": ["grav", "heavy_weapon"],
+		"maintenance" : 0.2,
+	},
+
 	 // Cannons
     "Assault Cannon": {
         "abbreviation": "AssCann",       
@@ -2096,6 +1921,22 @@ global.weapons={
     },
 
 	 // Other
+    "Archeotech Laspistol": {
+        "attack": {
+            "standard": 320,
+            "master_crafted": 430,
+            "artifact": 540
+        },
+        "description": "Known as a Lasrod or Gelt Gun, this pistol is an ancient design of Laspistol with much greater range and power.",
+        "abbreviation": "ArchLpstl",
+        "melee_hands": 0,
+        "ranged_hands": 1,
+        "ammo": 0,
+        "range": 7,
+        "spli": 5,
+        "arp": 0,
+        "tags":["pistol", "ancient","las"],
+    },
   "Hellgun": {
     "abbreviation": "HllGun",
     "attack": {
@@ -2114,17 +1955,17 @@ global.weapons={
   },
 	"Laspistol": {
 		"attack": {
-			"standard": 20,
-			"master_crafted": 30,
-			"artifact": 40
+			"standard": 30,
+			"master_crafted": 40,
+			"artifact": 50
 		},
-		"description": "The Laspistol is the pistol version of the Lasgun and like that weapon fires a coherent beam of energetic photons that can burn through most materials. The Laspistol is powered by a miniature power pack that is usually placed within the grip.",
+		"description": "The pistol version of the Lasgun, it fires a coherent beam of energetic photons that can burn through most materials.",
 		"abbreviation": "Lpstl",
 		"melee_hands": 0,
 		"ranged_hands": 0.25,
 		"ammo": 30,
-		"range": 3.1,
-		"spli": 0,
+		"range": 4.1,
+		"spli": 5,
 		"arp": 0,
 		"tags": ["pistol", "las"],
 	},
@@ -2182,16 +2023,17 @@ global.weapons={
     "description":"Normally used by Radical Inquisitors, it appears an antiquated rifle but fires razor-sharp shards of Daemonic matter.",
     "abbreviation": "HllRifle",
     "attack": {
-      "standard": 150,
-      "master_crafted": 160,
-      "artifact": 170
+      "standard": 350,
+      "master_crafted": 460,
+      "artifact": 570
     },
     "ammo": 10,
     "range": 8,
-    "spli": 3,
-    "arp": 0,
+    "spli": 5,
+    "arp": 1,
     "tags":["rifle","arcane"],
-    "ranged_hands":2,    
+	"melee_hands": 0.5,
+    "ranged_hands": 1.25,
     // ... (other attributes)
   },
 
@@ -2233,18 +2075,19 @@ global.weapons={
     },
   "Shuriken Pistol": {
     "abbreviation": "ShurikP",
+	"description":"An exotic kind of pistol, not imperial origin.",
     "attack": {
       "standard": 250,
       "master_crafted": 280,
       "artifact": 310
     },
-    "melee_hands": 1,
-    "ranged_hands": 0,
-    "ammo": 6,
-    "range": 5,
+    "melee_hands": 0,
+    "ranged_hands": 0.5,
+    "ammo": 10,
+    "range": 6,
     "spli": 5,
     "arp": 0,
-    "tags":["pistol"]
+    "tags":["pistol","elder","xenos"]
   },
 
   "Choppa": {
@@ -2289,42 +2132,6 @@ global.weapons={
     "tags":["rifle", "ork"]
   },
 
-    "Archeotech Laspistol": {
-        "attack": {
-            "standard": 320,
-            "master_crafted": 430,
-            "artifact": 540
-        },
-        "description": "Known as a Lasrod or Gelt Gun, this pistol is an ancient design of Laspistol with much greater range and power.",
-        "abbreviation": "ArchLpstl",
-        "melee_hands": 0,
-        "ranged_hands": 1,
-        "ammo": 0,
-        "range": 7,
-        "spli": 2,
-        "arp": 0,
-        "tags":["pistol", "ancient","las"],
-    },
-    "Company Standard": {
-       "abbreviation": "CmpStnd",
-      "special_properties": ["Morale Boost"],
-      "description": "A banner that represents the honor of a particular company and will bolster the morale abilities of nearby Space Marines.",
-        "attack": {
-            "standard": 45,
-            "master_crafted": 60,
-            "artifact": 100
-        },      
-      "damage_resistance_mod": {
-        "standard": 5, 
-        "master_crafted": 10, 
-        "artifact": 20 
-      },
-        "melee_hands": 1,
-        "ranged_hands": 1,
-        "range": 1,
-        "spli": 1,
-        "tags":["banner"],   
-    },
     "Tome":{
         "abbreviation": "Tome",                
         "attack": {
@@ -2402,14 +2209,65 @@ global.weapons={
         },
         "description": "A standard bolter with a single shot flamer attached for tactical use",
         "melee_hands": 1,
-        "ranged_hands": 1.5,
+        "ranged_hands": 1.75,
         "ammo": 15,
         "range": 10,
         "spli": 10,
         "arp": 0,
         "second_profiles":["Flamer"],
         "tags":["combi", "bolt"]
-    },    
+    },
+	"Combiplasma": {
+		"abbreviation": "CmbPlsm",
+		"attack": {
+			"standard": 750,
+			"master_crafted": 800,
+			"artifact": 850
+		},
+		"description": "A standard Bolter with an underbarrel Plasma Gun for expanded tactical utility.",
+		"melee_hands": 1,
+		"ranged_hands": 1.75,
+		"ammo": 15,
+		"range": 10,
+		"spli": 10,
+		"arp": 0,
+		"second_profiles": ["Plasma Gun"],
+		"tags": ["combi", "bolt"]
+	},
+	"Combigrav": {
+		"abbreviation": "CmbGrv",
+		"attack": {
+			"standard": 750,
+			"master_crafted": 800,
+			"artifact": 850
+		},
+		"description": "A standard Bolter with an underbarrel Grav-Gun for expanded tactical utility.",
+		"melee_hands": 1,
+		"ranged_hands": 1.75,
+		"ammo": 15,
+		"range": 10,
+		"spli": 10,
+		"arp": 0,
+		"second_profiles": ["Grav-Gun"],
+		"tags": ["combi", "bolt"]
+	},
+	"Combimelta": {
+		"abbreviation": "CmbMlt",
+		"attack": {
+			"standard": 750,
+			"master_crafted": 800,
+			"artifact": 850
+		},
+		"description": "A standard Bolter with an underbarrel Meltagun for expanded tactical utility.",
+		"melee_hands": 1,
+		"ranged_hands": 1.75,
+		"ammo": 15,
+		"range": 10,
+		"spli": 10,
+		"arp": 0,
+		"second_profiles": ["Meltagun"],
+		"tags": ["combi", "bolt"]
+	},
     "Heavy Conversion Beamer Turret": {
         "abbreviation": "HvyCnvBmr", 
         "attack": {
@@ -2446,6 +2304,7 @@ global.weapons={
 }
 global.gear = {
   "armour": {
+ // Dreadnought Armours
     "Dreadnought": {
          "abbreviation": "Drdnght", 
       "armour_value": {
@@ -2467,6 +2326,28 @@ global.gear = {
       "ranged_hands":8,      
       "description": "A massive war-machine that can be piloted by an honored Astarte, who otherwise would have fallen in combat. Some of the Astartes consider this a fate worse than death"
     },
+		"Contemptor Dreadnought": { 
+			"abbreviation": "Cntmptr",
+			"armour_value": {
+				"standard": 60,
+				"master_crafted": 65,
+				"artifact": 70
+			},
+			"ranged_mod": {
+				"standard": 0,
+				"master_crafted": 5, // Augmented
+				"artifact": 10 // Augmented
+			},
+			"melee_mod": {
+				"standard": 0,
+				"master_crafted": 5, // Augmented
+				"artifact": 10 // Augmented
+			},
+			"melee_hands": 8,
+			"ranged_hands": 8,
+			"description": "PLACEHOLDER",
+			"tags": ["dreadnought", "ancient"],
+		},
  // Terminator armours
     "Early Terminator Armour": {
          "abbreviation": "HPArm", 
@@ -2641,6 +2522,8 @@ global.gear = {
         "master_crafted": -5, // Augmented
         "artifact": 0 // Augmented
       },
+      "melee_hands": 0.05,
+      "ranged_hands": 0.05,
       "description": "The very first variant of power armour. Lacking life support and other later improvements, this armour is mostly suited to ceremonial duty nowadays.",
        "tags":["power_armour"],
     },
@@ -2661,8 +2544,8 @@ global.gear = {
         "master_crafted": 5, // Augmented
         "artifact": 10 // Augmented
       },
-      "melee_hands": 0.05,
-      "ranged_hands": 0.05,
+      "melee_hands": 0.1,
+      "ranged_hands": 0.1,
       "description": "Armour made with Great Crusade in mind. Often believed to be the most efficient power armour design.",
        "tags":["power_armour"],
     },
@@ -2683,8 +2566,8 @@ global.gear = {
         "master_crafted": 0, // Augmented
         "artifact": 5 // Augmented
       },
-      "melee_hands": 0.05,
-      "ranged_hands": 0.05,
+      "melee_hands": 0.1,
+      "ranged_hands": 0.1,
       "description": "An ancient set of Armorum Ferrum. Generally the best in terms of protection, but it is quite heavy.",
        "tags":["power_armour"],
     },
@@ -2705,8 +2588,8 @@ global.gear = {
         "master_crafted": 10, // Augmented
         "artifact": 15 // Augmented
       },
-      "melee_hands": 0.1,
-      "ranged_hands": 0.1,
+      "melee_hands": 0.15,
+      "ranged_hands": 0.15,
       "description": "Armour dating to the end of the Great Crusade. Often considered the ultimate Space Marine armour. The components are no longer reproducible.",
       "tags":["power_armour"],
     },
@@ -2727,8 +2610,8 @@ global.gear = {
         "master_crafted": 0,
         "artifact": 5
       },
-      "melee_hands": 0.05,
-      "ranged_hands": 0.05,
+      "melee_hands": 0.06,
+      "ranged_hands": 0.06,
       "description": "A non-standard variants of Power armour, that were developed during the Horus Heresy, made from various components that could still be produced. With the ad-hoc nature of these suits, it is one of the weaker armours.",
       "tags":["power_armour"],
     },
@@ -2771,8 +2654,8 @@ global.gear = {
         "master_crafted": 5, // Augmented
         "artifact": 10 // Augmented
       },
-      "melee_hands": 0.05,
-      "ranged_hands": 0.05,
+      "melee_hands": 0.1,
+      "ranged_hands": 0.1,
       "description": "The staple power armour, developed during the Horus heresy, that is still manufactured.",
       "tags":["power_armour"],
     },
@@ -2795,7 +2678,7 @@ global.gear = {
       },
       "melee_hands": 0.15,
       "ranged_hands": 0.15,
-    "description": "The newest and, in a way, most advanced of the standardized power armours. It still tends to be rare and expensive.",
+    "description": "The newest and, in some ways, most advanced of the standardized power armours. It still tends to be rare and expensive.",
     "tags":["power_armour"],
     },
     "MK10 Tacticus": {
@@ -3010,8 +2893,8 @@ global.gear = {
     "abbreviation": "Nrthcm",
       "special_properties": ["Medkit"],
       "description": "An advanced medical field kit, these allow Space Marines to heal or recover Gene-Seed from fallen marines.",
-        "melee_hands": 0.15,
-        "ranged_hands": 0.15,       
+        "melee_hands": -0.05,
+        "ranged_hands": -0.05,       
       "armour_value": {
         "standard": 0,
         "master_crafted": 2,
@@ -3035,7 +2918,9 @@ global.gear = {
     },
     "Psychic Hood": {
     "abbreviation": "PsyHd",
-      "special_properties": ["Perils Protection 50"],
+		"specials": {
+			"psychic_focus": 15
+		},
       "description": "An attachment to armour intended to help psykers keep their powers under control. Helps to reduce casualties.",
       "armour_value": {
         "standard": 0,
@@ -3161,44 +3046,10 @@ global.gear = {
         } ,
         // "weight":3,
         "tags":["shield"],
-        // "hp_mod":{
-        //  "standard": 10,
-        //  "master_crafted": 15,
-        //  "artifact": 20
-        //},
       },  
-		"Servo-arm": {
-			"abbreviation": "SrvArm",
-			"special_properties": ["Repairs Vehicles"],
-			"second_profiles": ["Servo-arm(M)"],
-			"description": "A manipulator mechandendrite, also known as a Servo-arm. This artificial limb is a great aid to help trained Techmarines repair damaged vehicles on the battlefield, yet may be used in melee combat, thanks to its considerable crushing power and weight.",
-			"damage_resistance_mod": {
-				"standard": 0, // Adjusted
-				"master_crafted": 5, // Adjusted
-				"artifact": 10 // Adjusted
-			},
-			"melee_hands": -0.25,
-			"ranged_hands": -0.25,
-		},
-		"Servo-harness": {
-			"abbreviation": "SrvHrns",
-			"special_properties": ["Repairs Vehicles"],
-			"second_profiles": ["Servo-arm(M)", "Servo-arm(M)", "Flamer", "Plasma Cutter"],
-			"description": "A Servo-Harness is a special type of augmetic aid, often used by Chapter's Master of the Forge or his senior Techmarines. It consists of many blessed tools, two Servo-arms and a couple of deadly weapons. With it, one can make battlefield repairs on any vehicle, shore up defences, or even assist his battle-brothers in combat.",
-			"damage_resistance_mod": {
-				"standard": 5, // Adjusted
-				"master_crafted": 10, // Adjusted
-				"artifact": 15 // Adjusted
-			},
-			"melee_hands": -0.5,
-			"ranged_hands": -0.5,
-		},
-		"Conversion Beamer Pack": {
-			"abbreviation": "CnvBmr",
-			"second_profiles": ["Conversion Beam Projector"],
-			"description": "The Conversion Beam Projector is a heavy energy weapon that harnesses advanced technology to project a concentrated beam of destructive energy. Armor detonates as the matter that comproises it is transformed into pure energy.",
-			"melee_hands": -0.5,
-			"ranged_hands": -0.5,
+		"Gene Pod Incubator" : {
+			"abbreviation": "GenePod",
+			"description": "Required to house gene slaves in order to generate new gene seed for the chapter.",
 		},
   },
   "mobility":{
@@ -3206,11 +3057,6 @@ global.gear = {
     "abbreviation": "Bike",
       "special_properties": ["Integrated Twin Linked-Bolters"],
       "description": "A robust bike that can propel a marine at very high speeds. Boasts highly responsive controls and Twin Linked Bolters.",
-     // "hp_mod": {
-       // "standard": 25,
-       // "master_crafted": 25,
-       // "artifact": 35
-     // },
       "damage_resistance_mod": {
         "standard": 10,
         "master_crafted": 15,
@@ -3222,12 +3068,8 @@ global.gear = {
 
     "Jump Pack": {
     "abbreviation": "JmpPck",
+	"special_properties": ["Hammer of Wrath"],
       "description": "A back-mounted device containing turbines or jets powerful enough to lift even a user in Power Armour.",
-     // "hp_mod": {
-       // "standard": 5,
-       // "master_crafted": 5,
-       // "artifact": 5
-     // },
       "damage_resistance_mod": {
         "standard": 20,
         "master_crafted": 25,
@@ -3235,6 +3077,17 @@ global.gear = {
       },
       "tags":["jump"],
     },
+		"Serpha Jump Pack": {
+			"abbreviation": "SphJmpPck",
+			"special_properties": ["Hammer of Wrath"],
+			"description": "Once the mainstay of the Legiones Astartes, now the Serpha Pattern Jump Pack is nothing but a sad reminder of these better times and of the terrible atrocities that followed. Mainly used by the Traitors in the modern Imperium, it is nonetheless seen in the Loyalist armouries in which it is prized for its superior energy cells and power cabling, but doesn't provide as reliable of a thruster as, for instance, the most common in the 41st millennium Mark VII Mars Pattern.",
+			"damage_resistance_mod": {
+				"standard": 30,
+				"master_crafted": 35,
+				"artifact": 40
+			},
+			"tags": ["jump", "ancient"],
+		},
     "Heavy Weapons Pack": {
     "abbreviation": "HvyWpPck",
       "description": "A heavy ammunition backpack commonly used by marines in conjunction with a heavy ranged weapon.",
@@ -3250,7 +3103,40 @@ global.gear = {
       },
     "melee_hands": -1,
     "ranged_hands": 1,      
-    }
+    },
+		"Servo-arm": {
+			"abbreviation": "SrvArm",
+			"special_properties": ["Repairs Vehicles"],
+			"second_profiles": ["Servo-arm(M)"],
+			"description": "A manipulator mechandendrite, also known as a Servo-arm. This artificial limb is a great aid to help trained Techmarines repair damaged vehicles on the battlefield, yet may be used in melee combat, thanks to its considerable crushing power and weight.",
+			"damage_resistance_mod": {
+				"standard": 0, // Adjusted
+				"master_crafted": 5, // Adjusted
+				"artifact": 10 // Adjusted
+			},
+			"melee_hands": -0.05,
+			"ranged_hands": -0.05,
+		},
+		"Servo-harness": {
+			"abbreviation": "SrvHrns",
+			"special_properties": ["Repairs Vehicles"],
+			"second_profiles": ["Servo-arm(M)", "Servo-arm(M)", "Flamer", "Plasma Cutter"],
+			"description": "A Servo-Harness is a special type of augmetic aid, often used by Chapter's Master of the Forge or his senior Techmarines. It consists of many blessed tools, two Servo-arms and a couple of deadly weapons. With it, one can make battlefield repairs on any vehicle, shore up defences, or even assist his battle-brothers in combat.",
+			"damage_resistance_mod": {
+				"standard": 5, // Adjusted
+				"master_crafted": 10, // Adjusted
+				"artifact": 15 // Adjusted
+			},
+			"melee_hands": -0.1,
+			"ranged_hands": -0.1,
+		},
+		"Conversion Beamer Pack": {
+			"abbreviation": "CnvBmr",
+			"second_profiles": ["Conversion Beam Projector"],
+			"description": "The Conversion Beam Projector is a heavy energy weapon that harnesses advanced technology to project a concentrated beam of destructive energy. Armor detonates as the matter that comproises it is transformed into pure energy.",
+			"melee_hands": -0.5,
+			"ranged_hands": -0.5,
+		},
     // Add more mobility items as needed...
   }
 }

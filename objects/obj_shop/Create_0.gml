@@ -96,6 +96,11 @@ if (shop = "equipment") {
     item_cost[i] = 5;
     forge_cost[i] = 25;
     i += 1;
+    item[i] = "Chainaxe";
+    item_stocked[i] = scr_item_count(item[i]);
+    item_cost[i] = 6;
+    forge_cost[i] = 30;
+    i += 1;
     x_mod[i] = 9;
     item[i] = "Eviscerator";
     if (research.chain[0]>0){
@@ -105,14 +110,8 @@ if (shop = "equipment") {
     }   
     item_stocked[i] = scr_item_count(item[i]);
     nobuy[i] = 1;
+
     i += 1;
-    item[i] = "Chainaxe";
-    item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 6;
-    forge_cost[i] = 30;
-    i += 1;
-	
- 
     item[i] = "Power Axe";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 30;
@@ -340,9 +339,9 @@ if (shop = "equipment") {
     x_mod[i] = 9;
     item[i] = "Combiflamer";
     item_stocked[i] = scr_item_count(item[i]);
+    item_cost[i] = 12;
     forge_cost[i] = 95;
     if (research.bolt[0]<1 || research.flame[0]<1) then forge_cost[i] = 0;
-    item_cost[i] = 12;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -351,20 +350,9 @@ if (shop = "equipment") {
     x_mod[i] = 9;
     item[i] = "Combiplasma";
     item_stocked[i] = scr_item_count(item[i]);
+    item_cost[i] = 110;
     forge_cost[i] = 450;
     if (research.bolt[0]<1 || research.plasma[0]<1) then forge_cost[i] = 0;
-    item_cost[i] = 110;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
-    i += 1;
-    x_mod[i] = 9;
-    item[i] = "Combimelta";
-    item_stocked[i] = scr_item_count(item[i]);
-    forge_cost[i] = 350;
-    if (research.bolt[0]<1 || research.melta[0]<1) then forge_cost[i] = 0;
-    item_cost[i] = 40;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -373,9 +361,20 @@ if (shop = "equipment") {
     x_mod[i] = 9;
     item[i] = "Combigrav";
     item_stocked[i] = scr_item_count(item[i]);
+    item_cost[i] = 110;
     forge_cost[i] = 450;
     if (research.bolt[0]<1 || research.grav[0]<1) then forge_cost[i] = 0;
-    item_cost[i] = 110;
+    if (rene = 1) {
+        nobuy[i] = 1;
+        item_cost[i] = 0;
+    }
+    i += 1;
+    x_mod[i] = 9;
+    item[i] = "Combimelta";
+    item_stocked[i] = scr_item_count(item[i]);
+    item_cost[i] = 40;
+    forge_cost[i] = 350;
+    if (research.bolt[0]<1 || research.melta[0]<1) then forge_cost[i] = 0;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -406,10 +405,10 @@ if (shop = "equipment") {
     item_cost[i] = 12;
     i += 1;
     item[i] = "Hand Flamer";
-    forge_cost[i] = 75;
+    forge_cost[i] = 35;
     if (research.flame[0]<1) then forge_cost[i] = 0;
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 12;
+    item_cost[i] = 7;
     i += 1;
     item[i] = "Flamer";
     item_cost[i] = 7;
@@ -825,6 +824,19 @@ if (shop = "equipment2") {
         nobuy[i] = 1;
         item_cost[i] = 0;
     }
+	if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1) {
+    forge_cost[i] = 1500;
+	} else {
+    tooltip_overide[i] = "requires : \n";
+    if (research.armour[1].stealth[0] < 1) {
+        tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}\n";
+        for (var r = research.armour[1].armour[0]; r < 2; r++) {
+            tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}\n"; 
+        }
+    }
+	mk_4_tool_tip = tooltip_overide[i];
+ 
+}  
 
     i += 1;
     item[i] = "Early Terminator Armour";
@@ -837,29 +849,42 @@ if (shop = "equipment2") {
     nobuy[i] = 1;
 	if (obj_controller.stc_wargear >= 6) {
         nobuy[i] = 0;
-        item_cost[i] = 400;
+        item_cost[i] = 750;
     }
 	i += 1;
     item[i] = "Tartaros";
     item_stocked[i] = scr_item_count("Tartaros");
     nobuy[i] = 1;
-	if (obj_controller.stc_wargear >= 5) {
-        nobuy[i] = 0;
-        item_cost[i] = 350;
+if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj_controller.stc_wargear >= 6) {
+    forge_cost[i] = 5000;
+} else {
+    tooltip_overide[i] = "requires : \n";
+    if (research.armour[1].stealth[0] < 1) {
+        tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}\n";
+        for (var r = research.armour[1].armour[0]; r < 2; r++) {
+            tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}\n"; 
+        }
     }
+    mk_4_tool_tip = tooltip_overide[i];
+    tooltip_overide[i] += $"STC wargear component 6"; 
+}
     i += 1;
     item[i] = "Terminator Armour";
     item_stocked[i] = scr_item_count("Terminator Armour");
-    nobuy[i] = 1;
-    if (obj_controller.stc_wargear >= 4) {
-        if (research.armour[1].stealth[0] >0 && research.armour[1].armour[0] >1){
-            item_cost[i] = 300;
-            forge_cost[i] = 4000;
-        } else {
-            tooltip_overide[i] = mk_4_tool_tip;
-            tooltip_overide[i]+= "#STC wargear component 6";
+    item_cost[i] = 475;
+if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj_controller.stc_wargear >= 6) {
+    forge_cost[i] = 4000;
+} else {
+    tooltip_overide[i] = "requires : \n"; 
+    if (research.armour[1].stealth[0] < 1) {
+        tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}\n"; 
+        for (var r = research.armour[1].armour[0]; r < 2; r++) {
+            tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}\n"; 
         }
     }
+    mk_4_tool_tip = tooltip_overide[i];
+    tooltip_overide[i] += $"STC wargear component 6"; 
+}
 
     i += 1;
     x_mod[i] = 9;
@@ -1020,33 +1045,26 @@ if (shop = "vehicles") {
     item[i] = "Dreadnought";
     item_stocked[i] = scr_item_count(item[i]);
     nobuy[i] = 1;
-    item_cost[i] = 0;
-    if (obj_controller.in_forge){
-        if (obj_controller.stc_wargear >= 6) {
-            if (research.armour[1].stealth[0] >0 && research.armour[1].armour[0] >1){
-                nobuy[i] = 0;
-                forge_cost[i] = 5000;
-                item_cost[i] = 500;
-            } else {
-                tooltip_overide[i] = require_tool_tip;
-                if (research.armour[1].stealth[0] < 1){
-                    tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}#";
-                    for (var r = research.armour[1].armour[0]; r < 2;r++){
-                        tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}#";
-                    }
-                }
-            }
-        } else {
-            tooltip_overide[i] = require_tool_tip;
-            tooltip_overide[i] += "#STC wargear component : 6";
+if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj_controller.stc_wargear >= 6) {
+    forge_cost[i] = 3000;
+} else {
+    tooltip_overide[i] = "requires : \n"; 
+    if (research.armour[1].stealth[0] < 1) {
+        tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}\n"; 
+        for (var r = research.armour[1].armour[0]; r < 2; r++) {
+            tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}\n"; 
         }
     }
+    mk_4_tool_tip = tooltip_overide[i];
+    tooltip_overide[i] += $"STC wargear component 6"; 
+}
 
     i += 1;
     x_mod[i] = 9;
     item[i] = "Close Combat Weapon";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 50;
+	forge_cost[i] = 200*player_hanger; // TODO: Lock behind research
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1055,12 +1073,12 @@ if (shop = "vehicles") {
     item[i] = "Bike";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 35;
-    forge_cost[i] = 300;
+    forge_cost[i] = 150*player_hanger;
     i += 1;
     item[i] = "Rhino";
     item_stocked[i] = scr_vehicle_count(item[i], "");
     item_cost[i] = 120;
-    forge_cost[i] = 4000*player_hanger;
+    forge_cost[i] = 2000*player_hanger;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1069,7 +1087,7 @@ if (shop = "vehicles") {
     item[i] = "Predator";
     item_stocked[i] = scr_vehicle_count(item[i], "");
     item_cost[i] = 240;
-    forge_cost[i] = 4000*player_hanger;
+    forge_cost[i] = 3000*player_hanger;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1133,7 +1151,7 @@ if (shop = "vehicles") {
     if (obj_controller.stc_vehicles >= 6) {
         nobuy[i] = 0;
         item_cost[i] = 500;
-        forge_cost[i] = 4500*player_hanger;
+        forge_cost[i] = 5500*player_hanger;
     }
     if (rene=1) {
         nobuy[i]=1;
@@ -1204,7 +1222,7 @@ if (shop = "vehicles") {
     item[i] = "Whirlwind";
     item_stocked[i] = scr_vehicle_count(item[i], "");
     item_cost[i] = 180;
-	forge_cost[i] = 2000*player_hanger;
+	forge_cost[i] = 2500*player_hanger;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1490,7 +1508,7 @@ if (shop = "vehicles") {
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 10;
 	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 200;
+        item_cost[i] = 10;
 		forge_cost[i] = 250*player_hanger;
     }
     if (rene = 1) {
@@ -1503,7 +1521,7 @@ if (shop = "vehicles") {
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 10;
 	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 200;
+        item_cost[i] = 10;
 		forge_cost[i] = 200*player_hanger;
     }
     if (rene = 1) {
@@ -1516,7 +1534,7 @@ if (shop = "vehicles") {
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 15;
 	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 200;
+        item_cost[i] = 10;
 		forge_cost[i] = 250*player_hanger;
     }
     if (rene = 1) {

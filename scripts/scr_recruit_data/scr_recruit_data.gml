@@ -213,7 +213,7 @@ function planet_training_sequence(local_apothecary_points) {
                     if (random(1) < recruit_type.seed_waste) {
                         obj_controller.gene_seed--;
                         //TODO make more informative
-                        scr_alert("red", "owner", "Blood Duels are efficient in time, but costly in risk with gene material. Gene-seed has been lost.", 0, 0);
+                        scr_alert("red", "owner", "Blood Duel trial casualties are reported. Gene-seed have been lost.", 0, 0);
                     }
                 }
             }
@@ -263,9 +263,10 @@ function planet_training_sequence(local_apothecary_points) {
                 var new_recruit = 0;
 
                 // gets the next empty recruit space on the array
-                if (new_recruit_exp >= 40) {
-                    new_recruit_exp = 38;
-                } // we don't want immediate battle bros
+                //if (new_recruit_exp >= 40) {
+                //    new_recruit_exp = 38;
+                //}
+				//we don't want immediate battle bros
 
                 for (var i = 0; i < array_length(obj_controller.recruit_training); i++) {
                     if (obj_controller.recruit_training[i] < 1 || months_to_neo < obj_controller.recruit_training[i]) {
@@ -298,20 +299,20 @@ function scr_trial_data(wanted=-1){
 			},
 			seed_waste : 0.1,
 			corruption_bonus: [10, 2],
-			long_description :$"THE BLOOD DUEL?  HA DO I EVEN NEED TO EXPLAIN, CHAPTER MASTER?  ASPIRANTS ENTER.  NEOPHYTES LEAVE.  Those worthy of serving the Emperor are rewarded justly and those merely pretending at glory are lost in the BLOOD AND THUNDER of the dome.  Do not be alarmed at the carnage.  The Apothecarium has become quite adept at rebuilding those fit to serve.  The others are given to the {role_data[eROLE.Techmarine]}s.  The mind is a terrible thing to waste and the Emperor does hate waste.  Not every man is useful as an Astartes but every man is useful.",
+			long_description :$"The fastest and most straightforward way of training new marines. Apothecaries implant the gene-seed into all promosing candidates, then send them to fight to near death in the thunder dome. This kind of training favors the physicaly fit and aggressive recruits, but tends to diminish other skills. Major drawback is the tendency to for new recruits to die there, which may result in gene-seed loss.",
 		},
 		{
 			name : "Hunting the Hunter",
 			train_time : {
-				base : [72, 84],
+				base : [60, 84],
 			},
 			exp_bonus : {
-				base:[0,0],
+				base:[5, 10],
 				planets : {
-					Ice : [7,10],
-					Desert : [7,10],
-					Death : [7,10],
-					Feudal : [5,10]
+					Ice : [10, 15],
+					Desert : [10, 15],
+					Death : [15, 25],
+					Feudal : [5, 15]
 				}
 			},
 			recruit_count_modifier : {
@@ -323,12 +324,12 @@ function scr_trial_data(wanted=-1){
 					Feudal : 1.5
 				}				
 			},
-			long_description :$"To be an Astartes is to be a hunter of xenos, of traitors, of heretics, and of all those that dare defy the Emperor.  What better way to test the worthiness of Aspirants than to have to them hunt the most dangerous predator to be found on their planet?  Such a task requires a combination of wits and cunning, in addition to raw martial skill.  When they have received the blessed geneseed and become full battle brothers, they will hunt across the stars with bolter and chainsword. For now, let them hunt with nothing more than a spear and their wits.",				
+			long_description :$"This trial focuses on aspirants' capability to hunt dangerous creatures. Aspirants are provided basic equipment and instructed to retrieve a proof of slain creature, or several. Since successful hunt requires preparation, patience and other skills, we may see marines keeping them as they complete their trials.",
 		},
 		{
 			name : "Survival of the Fittest",
 			train_time : {
-				base : [72, 84],
+				base : [48, 60],
 			},
 			recruit_count_modifier : {
 				base : 1.0,
@@ -344,82 +345,89 @@ function scr_trial_data(wanted=-1){
 				base:[0,0],
 			},
 			corruption_bonus: [5, 1],
-			long_description :$"To become one of the Imperium’s finest warriors, the Space Marines, is the greatest glory that any human can aspire to. And is glory not worth fighting, bleeding or even dying for? It must be, for whole worlds of ice, ash and sand have buried generations of sons in pursuit of this glory and never once called the price too dear.  To ensure the necessary bloodshed, lies, paranoia and psychosis-inducing drugs have been introduced to .  This trial will seperate the weak from the strong and the chaff from the wheat.",				
+			long_description :$"This trial focuses on aspirants' capability to survive in harsh and sometimes dystopic conditions. Aspirants are given various difficult tasks, which puts their trust in others to the test - as psychosis-inducing drugs are introduced. Note, that resulting marines from this trial tend to be more self-centered.",	
 		},
 		{
 			name : "Exposure",
 			train_time : {
-				base : [72, 84],
+				base : [48, 72],
 				planets : {
-					Desert :[36, 60],
-					Ice :[36, 60],
-					Forge :[36, 60],
-					Hive :[36, 60],
-					Lava :[36, 60],
-					Death :[36, 60],
+					Forge :[24, 72],
+					Hive :[24, 72],
+					Shrine :[24, 72],
+					Temperate :[24, 72],
+					Agri :[24, 72],
+					Lava :[36, 72],
+					Feudal : [36, 72], // Horse or a donkey can be found
 				}
 			},
 			exp_bonus : {
-				base:[0,0],
+				base:[1, 3],
 				planets : {
-					Ice : [2,4],
-					Desert : [2,4],
-					Death : [2,4],
-					Lava :[2,5],
+					Forge : [1, 5],
+					Hive : [1, 5],
+					Feudal : [2, 5],
+					Death : [4, 10],
+					Desert : [3, 10],
+					Ice : [3, 10],
+					Lava : [5, 10],
 				}
 			},
 			recruit_count_modifier : {
 				base : 1.0,
 			},
-			long_description :$"Few worlds of the Imperium are free from the adversity of pollution or toxic waste.  Still others are bequeathed with flows of lava and choking atmosphere.  The glory of rising to astartes is only granted to those that can tackle and overcome these dangerous environments.  Aspirants are placed upon the most hellish of planet in the sector, and then expected to traverse the continent with only himself to rely upon.  Those who face the impossible without faltering and survive past the point they should have perished are recovered by {role_data[eROLE.Apothecary]}s, judged worthy of becoming a Neophyte.",						
+			long_description :$"This trial focuses on aspirants' capability to survive in and traverse dangerous environments. Given simple equipment, aspirants are to traverse hazardous areas on the worlds. On more civilized worlds, trial can be completed faster, as they may able to find means of transport. Although, they would have less experience.",	
 		},
 		{
 			name : "Knowledge of self",
 			train_time : {
 				base : [96, 108],
 				planets : {
+					Agri :[84, 108],
+					Feudal :[84, 108],
+					Lava :[84, 108],
+					Hive :[72, 108],
 					Shrine :[72, 108],
-					Feudal :[72, 108],
 					Forge :[72, 108],
+					Temperate :[72, 108],
 				}
 			},
 			exp_bonus : {
-				base: [15,25],
+				base: [15, 25],
 				planets : {
-					Shrine :[20,35],
-					Feudal : [20,35],
-					Forge :[20,35],
+					Shrine :[20, 35],
+					Feudal : [20, 35],
+					Forge :[20, 35],
 				}
 			},
 			recruit_count_modifier : {
 				base : 1.0,
 			},
 			corruption_bonus: [-5, 1],
-			long_description :$"An Aspirant’s spiritual and mental capability is every bit as important as his physical characteristics.  It is wise to impose Trials not upon their body, but on the mind.  Either through psychic powers, chemical agents, or endurance trials, the Aspirant’s willpower is tested.  Those unworthy do not survive the stress and trauma placed upon their hearts- only those whose minds are proven to be unbreakable are welcomed into our ranks.",							
+			long_description :$"Focus on aspirants' mental skills. Various mental exercises and tests are often part of aspirants' daily routine. Unlike most other trials, this one tends to give new marines with skills not typically found in a brute soldier. Trials do take a comparativelly long time however, but they are faster in civilized worlds where we can make use of medical records, to speed up evaluations.",	
 		},
 		{
 			name : "Combat Challenge",
 			train_time : {
-				base : [66, 84],
+				base : [48, 60],
 				planets : {
-					Shrine :[72, 108],
-					Feudal :[60, 84],
+					Feudal :[36, 60],
 				}
 			},
 			exp_bonus : {
 				base: [10,20,0.2],
 			},
-			corruption_bonus: [5, 1],
-			long_description :$"What better gauge of an Aspirant than in a duel with our astartes?  Our brother, unarmed and unarmoured, will face against the armed challenger until one cannot continue.  It is impossible for the Aspirant to actually succeed these trials, but demonstrates how far they can possibly go, and allow us to judge him accordingly.  As with most trials the Aspirant’s life is in their own hands.  He who has failed the duel- yet proven himself worthy- is rescued from the jaws of death by {role_data[eROLE.Apothecary]} and allowed to progress to the rank of Neophyte.",				
+			long_description :$"Fairly straightforward trial - see how well can aspirants fare against an unarmed and unarmored space marine. Such trial shows how far an aspirant can go.",				
 		},
 		{
 			name : "Apprenticeship",
 			train_time : {
 				base : [120, 144],
 				planets : {
-					Shrine :[96, 120],
-					Feudal :[96, 120],
-					Forge :[96, 120],
+					Shrine :[108, 144],
+					Feudal :[108, 144],
+					Forge :[108, 144],
+					Temperate :[108, 144],
 				}
 			},
 			exp_bonus : {
@@ -433,7 +441,7 @@ function scr_trial_data(wanted=-1){
 				},			
 			},
 			corruption_bonus: [-10, 1],
-			long_description :$"What better way to cultivate astartes than to raise them from youth?  The capable children of our recruitment targets are apprenticed to our battle brothers.  Beneath their steady guidance the Aspirants spend several years learning the art of the smith.  The most able are judged by our Chapter’s {role_data[eROLE.Apothecary]}s and {role_data[eROLE.Chaplain]} to deem if they are compatible with gene-seed implantation.  If so, the Aspirant’s trial culminates in hunting and slaying a massive beast.  Only the brightest and bravest are added to our ranks.",									
+			long_description :$"Have your own serfs and at times marines oversee various aspects of aspirant growth, from very young age. If we seek marines with perfect traits, this would be the way to go. However, this kind of training takes the most time and resources.",	
 		},						
 	]
 	if (wanted>-1){
