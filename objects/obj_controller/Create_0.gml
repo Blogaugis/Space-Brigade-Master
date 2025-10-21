@@ -536,15 +536,18 @@ production_research = {
     grav : [0,{}],
     chasis : [0,{}],
     chain :[0,{}],
-    power_fields:[1,{}],
+    power_fields:[0,{}],
     las : [0,{}],
-    armour : [
-        0,
-        {
-            stealth : [0,{}],
-            armour : [0,{}],
-		},
-    ],
+	armourmk1 : [0,{}],
+	armourmk2 : [0,{}],
+	armourmk3 : [0,{}],
+	armourmk4 : [0,{}],
+	armourmk5 : [0,{}],
+	armourmk6 : [0,{}],
+	armourmk7 : [0,{}],
+	armourmk8 : [0,{}],
+	hvyarmcon : [0,{}],
+	dread : [0,{}],
 }
 		if (scr_has_disadv("Tech Regression: Late Conventional")) {
 			with(production_research) {
@@ -582,7 +585,7 @@ production_research_pathways ={
 	// 
 	// Tribal Tech - Animal Husbandry, Rune Analysis
 	animal : [["Animal Husbandry"],{}],
-    psi : [["Rune Analysis", "Psionic Resonance Valves"],{}],
+    psi : [["Rune Analysis", "Warp-Affecting Materials"],{}],
 	// Early Conventional Tech - Early Metallurgy, Early Mechanisms, Early Chemistry
 	metallurgy : [["Early Metallurgy", "Advanced Metallurgy"],{}],
 	mechanisms : [["Early Mechanisms"],{}],
@@ -592,23 +595,25 @@ production_research_pathways ={
 	plastics : [["Plastics"],{}],
 	mechnchem : [["Advanced Mechanisms and Chemistry"],{}],
 	// Techs of 40k
-    flame : [["Promethium Tank Brazing"],{}],
-    bolt : [["Hardened Barrel Boring", "Projectile Propellant Purification"],{}],
-    plasma : [[ "Plasma Coil Magnetization"],{}],
-    melta : [["Atomic Chamber Construction"],{}],
-    grav : [["Gravitic Reaction Principle"],{}],
+    flame : [["Flamer Technology"],{}],
+    bolt : [["Bolter Technology", "Bolter Miniaturization", "Combi Weaponry"],{}],
+    plasma : [[ "Plasma Technology"],{}],
+    melta : [["Melta Technology"],{}],
+    grav : [["Grav Technology"],{}],
     chasis : [[],{}],
-    chain :[["Adamantine Links"],{}],
-    power_fields:[["Power Field Cooling", "Mono-molecular Edge Sheathing"],{}],
-    las : [["Light Condensement Chamber"],{}],
-    armour : 
-        [
-            ["Ceramite Casting Chambers", "Enhanced Nerve Interfacing"],
-            {
-                stealth : [["Advanced Servo Motors"],{}],
-                armour : [["Advanced Ceramite Bonding", "Lightened Ceramite Compound","Ceremite Void Hardening"],{}],
-            }
-        ]
+    chain :[["Chain Weaponry"],{}],
+    power_fields:[["Power Field Technology"],{}],
+    las : [["Advanced Las Weaponry"],{}],
+	armourmk1 : [["Mark I Armour"],{}],
+	armourmk2 : [["Mark II Armour"],{}],
+	armourmk3 : [["Mark III Armour"],{}],
+	armourmk4 : [["Mark IV Armour"],{}],
+	armourmk5 : [["Mark V Armour"],{}],
+	armourmk6 : [["Mark VI Armour"],{}],
+	armourmk7 : [["Mark VII Armour"],{}],
+	armourmk8 : [["Mark VIII Armour"],{}],
+	hvyarmcon : [["Heavy Powered Armour Concept"],{}],
+	dread : [["Dreadnought Technology"],{}],
 }
 // ** STC values **, 
 stc_wargear=0;

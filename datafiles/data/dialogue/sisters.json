@@ -3,8 +3,8 @@
         "multi_part" : true,
         "parts":[
             [
-                "[[Old and experienced, this Prioress of the Sisters of Battle is not a woman to be trifled with.  Clad in an elaborate set of full power armour and with her face sporting several scars, {faction_leader} exudes battlefield experience.]]",
-                "[[The Ecclesiarchy have assigned one of their militant arm to their dealings with you- Prioress {faction_leader}   The woman wears a set of well-used powered armour that has seen many battles, if its charred exterior is to be believed.  Incense burners hang from chains on her belt and waft smoke around her body.]]"
+                "[[Old and experienced, this Prioress of the Sisters of Battle seems a capable leader.  Clad in an elaborate set of full power armour and with her face sporting several scars, {faction_leader} exudes battlefield experience.]]",
+                "[[The Ecclesiarchy have assigned one of their militant arm to their dealings with you- Prioress {faction_leader}   The woman wears a set of well-used powered armour that has seen many battles, if its charred exterior is to be believed.]]"
             ],
             "\n\n"
             ,

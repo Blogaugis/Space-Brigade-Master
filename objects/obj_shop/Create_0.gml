@@ -133,17 +133,29 @@ if (shop = "equipment") {
     item[i] = "Combat Knife";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 1;
+	if (research.metallurgy[0]>1){
     forge_cost[i] = 10;
+	} else {
+		tooltip_overide[i] = $"{require_tool_tip} {research_pathways.metallurgy[0][1]}"
+	}
     i += 1;
     item[i] = "Chainsword";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 5;
+	if (research.chain[0]>0){
     forge_cost[i] = 25;
+	} else {
+        tooltip_overide[i] = $"{require_tool_tip} {research_pathways.chain[0][0]}"
+    }
     i += 1;
     item[i] = "Chainaxe";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 6;
+	if (research.chain[0]>0){
     forge_cost[i] = 30;
+	} else {
+        tooltip_overide[i] = $"{require_tool_tip} {research_pathways.chain[0][0]}"
+    }
     i += 1;
     x_mod[i] = 9;
     item[i] = "Eviscerator";
@@ -151,7 +163,7 @@ if (shop = "equipment") {
         forge_cost[i] = 150;
     } else {
         tooltip_overide[i] = $"{require_tool_tip} {research_pathways.chain[0][0]}"
-    }   
+    }
     item_stocked[i] = scr_item_count(item[i]);
     nobuy[i] = 1;
 
@@ -159,7 +171,7 @@ if (shop = "equipment") {
     item[i] = "Power Axe";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 30;
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 150;
     }
     if (rene = 1) {
@@ -170,7 +182,7 @@ if (shop = "equipment") {
     item[i] = "Power Sword";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 25;
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 125;
     }
     if (rene = 1) {
@@ -181,7 +193,7 @@ if (shop = "equipment") {
     item[i] = "Power Spear";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 30;
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 150;
     }
     if (rene = 1) {
@@ -192,7 +204,7 @@ if (shop = "equipment") {
     item[i] = "Crozius Arcanum";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 75;
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 150;
     }
     if (rene = 1) {
@@ -203,7 +215,7 @@ if (shop = "equipment") {
     item[i] = "Power Fist";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 30;
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 150;
     }
     if (rene = 1) {
@@ -214,7 +226,7 @@ if (shop = "equipment") {
     item[i] = "Boltstorm Gauntlet";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 90;
-    if (research.power_fields[0]>1&& research.bolt[0]>=2){
+    if (research.power_fields[0]>0&& research.bolt[0]>=2){
         forge_cost[i] = 300;
     }
     if (rene = 1) {
@@ -225,7 +237,7 @@ if (shop = "equipment") {
 	item[i] = "Executioner Power Axe";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 100;
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 300;
     }
     if (rene = 1) {
@@ -237,7 +249,7 @@ if (shop = "equipment") {
     item[i] = "Power Mace";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 50;
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 140;
     }
     if (rene = 1) {
@@ -249,7 +261,7 @@ if (shop = "equipment") {
         item[i] = "Mace of Absolution";
         item_stocked[i] = scr_item_count(item[i]);
         item_cost[i] = 70;
-        if (research.power_fields[0]>1){
+        if (research.power_fields[0]>0){
             forge_cost[i] = 160;
         }
     }
@@ -257,7 +269,7 @@ if (shop = "equipment") {
     item[i] = "Lightning Claw";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 35;
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 150;
     }
     if (rene = 1) {
@@ -268,7 +280,7 @@ if (shop = "equipment") {
     item[i] = "Chainfist";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 35;
-    if (research.power_fields[0]>1 && research.chain[0]>0){
+    if (research.power_fields[0]>0 && research.chain[0]>0){
         forge_cost[i] = 150;
     }
     if (rene = 1) {
@@ -312,7 +324,7 @@ if (shop = "equipment") {
     i += 1;
     item[i] = "Thunder Hammer";
     item_cost[i] = 50;
-    if (research.power_fields[0]>2){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 500;
     }
     item_stocked[i] = scr_item_count(item[i]);
@@ -322,7 +334,7 @@ if (shop = "equipment") {
     }
     i += 1;
     item[i] = "Heavy Thunder Hammer";
-    if (research.power_fields[0]>1){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 750;
     }    
     item_stocked[i] = scr_item_count(item[i]);
@@ -335,20 +347,24 @@ if (shop = "equipment") {
     x_mod[i] = 9;
     item[i] = "Lascutter";
     item_cost[i] = 5;
+	if (research.plastics[0]>0){
     forge_cost[i] = 50;
+	}
     item_stocked[i] = scr_item_count(item[i]);
     i += 1;
     x_mod[i] = 9;
     item[i] = "Boarding Shield";
     item_cost[i] = 2;
+	if (research.metallurgy[0]>1){
     forge_cost[i] = 20;
+	}
     item_stocked[i] = scr_item_count(item[i]);
     i += 1;
     x_mod[i] = 9;
     item[i] = "Storm Shield";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 15;
-    if (research.power_fields[0]>2){
+    if (research.power_fields[0]>0){
         forge_cost[i] = 150;
     }
     if (rene = 1) {
@@ -398,17 +414,21 @@ if (shop = "equipment") {
     item[i] = "Bolt Pistol";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 5;
-    forge_cost[i] = 25;
+	if (research.bolt[0]>1){
+        forge_cost[i] = 50;
+    }
     i += 1;
     item[i] = "Bolter";
     item_cost[i] = 7;
-    forge_cost[i] = 35;
+	if (research.bolt[0]>1){
+        forge_cost[i] = 75;
+    }
     item_stocked[i] = scr_item_count(item[i]);
     i += 1;
     item[i] = "Stalker Pattern Bolter";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 10;
-    if (research.bolt[0]>0){
+    item_cost[i] = 8;
+    if (research.bolt[0]>1){
         forge_cost[i] = 90;
     }
     i += 1;
@@ -416,8 +436,8 @@ if (shop = "equipment") {
     item[i] = "Combiflamer";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 12;
-    forge_cost[i] = 95;
-    if (research.bolt[0]<1 || research.flame[0]<1) then forge_cost[i] = 0;
+    forge_cost[i] = 110;
+    if (research.bolt[0]<3 || research.flame[0]<1) then forge_cost[i] = 0;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -428,7 +448,7 @@ if (shop = "equipment") {
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 110;
     forge_cost[i] = 450;
-    if (research.bolt[0]<1 || research.plasma[0]<1) then forge_cost[i] = 0;
+    if (research.bolt[0]<3 || research.plasma[0]<1) then forge_cost[i] = 0;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -437,20 +457,16 @@ if (shop = "equipment") {
     x_mod[i] = 9;
     item[i] = "Combigrav";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 110;
+    nobuy[i] = 1; // item_cost[i] = 110;
     forge_cost[i] = 450;
-    if (research.bolt[0]<1 || research.grav[0]<1) then forge_cost[i] = 0;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
+    if (research.bolt[0]<3 || research.grav[0]<1) then forge_cost[i] = 0;
     i += 1;
     x_mod[i] = 9;
     item[i] = "Combimelta";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 40;
     forge_cost[i] = 350;
-    if (research.bolt[0]<1 || research.melta[0]<1) then forge_cost[i] = 0;
+    if (research.bolt[0]<3 || research.melta[0]<1) then forge_cost[i] = 0;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -459,7 +475,7 @@ if (shop = "equipment") {
     item[i] = "Heavy Bolter";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 20;
-    if (research.bolt[0]>=2) then forge_cost[i] = 200;
+    if (research.bolt[0]>=1) then forge_cost[i] = 200;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -551,10 +567,10 @@ if (shop = "equipment") {
     }
     i += 1;
     item[i] = "Plasma Cannon";
-    if (research.plasma[0]<1) then forge_cost[i] = 0;
-    item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 100;
     forge_cost[i] = 950;
+    if (research.plasma[0]<1) then forge_cost[i] = 0;
+    item_stocked[i] = scr_item_count(item[i]);
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -564,31 +580,19 @@ if (shop = "equipment") {
     forge_cost[i] = 250;
      if (research.grav[0]<1) then forge_cost[i] = 0;
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 60;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
+    nobuy[i] = 1; // item_cost[i] = 60
     i += 1;
     item[i] = "Grav-Gun";
     forge_cost[i] = 350;
     if (research.grav[0]<1) then forge_cost[i] = 0;
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 100;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
+    nobuy[i] = 1; // item_cost[i] = 100;
     i += 1;
     item[i] = "Grav-Cannon";
     forge_cost[i] = 600;
     if (research.grav[0]<1) then forge_cost[i] = 0;
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 300;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
+    nobuy[i] = 1; // item_cost[i] = 300;
     i += 1;
     x_mod[i] = 9;
     item[i] = "Archeotech Laspistol";
@@ -607,12 +611,16 @@ if (shop = "equipment") {
     i += 1;
     item[i] = "Sniper Rifle";
     item_cost[i] = 8;
+	if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
     forge_cost[i] = 75;
+	}
     item_stocked[i] = scr_item_count(item[i]);
     i += 1;
     item[i] = "Missile Launcher";
     item_cost[i] = 25;
+	if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
     forge_cost[i] = 250;
+	}
     item_stocked[i] = scr_item_count(item[i]);
     i += 1;
     item[i] = "Lascannon";
@@ -801,40 +809,31 @@ if (shop = "equipment2") {
     item[i] = "Scout Armour";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 10;
+	if (research.plastics[0] > 0){
     forge_cost[i] = 150;
+	}
 	i += 1;
     item[i] = "MK1 Thunder Armour";
     item_stocked[i] = scr_item_count("MK1 Thunder Armour");
     nobuy[i] = 1;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
+	if (research.armourmk1[0] > 0){
+	forge_cost[i] = 300;
+	}
 	i += 1;
     item[i] = "MK2 Crusade Armour";
     item_stocked[i] = scr_item_count("MK2 Crusade Armour");
     nobuy[i] = 1;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
+	if (research.armourmk2[0] > 0){
+	forge_cost[i] = 350;
+	}
     i += 1;
     item[i] = "MK3 Iron Armour";
     item_stocked[i] = scr_item_count("MK3 Iron Armour");
     nobuy[i] = 1;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
      if (obj_controller.in_forge){
-        if (research.armour[1].armour[0]>2){
-            forge_cost[i] = 1250;
-        } else {
-            tooltip_overide[i] = "requires : #";
-            for (var r = research.armour[1].armour[0]; r < 3;r++){
-                tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}#";
-            }
-        }            
+        if (research.armourmk3[0] > 0){
+            forge_cost[i] = 750;
+        }
     }
 
     i += 1;
@@ -843,30 +842,23 @@ if (shop = "equipment2") {
     item[i] = "MK4 Maximus";
     item_stocked[i] = scr_item_count("MK4 Maximus");
     if (obj_controller.in_forge){
-        if (research.armour[1].stealth[0] >0 && research.armour[1].armour[0] >1){
-            forge_cost[i] = 1250;
+        if (research.armourmk4[0] > 0){
+            forge_cost[i] = 750;
             mk_4_able=true;
-        } else {
-            tooltip_overide[i] = "requires : #";
-            if (research.armour[1].stealth[0] < 1){
-                tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}#";
-                for (var r = research.armour[1].armour[0]; r < 2;r++){
-                    tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}#";
-                }
-            }
-            mk_4_tool_tip = tooltip_overide[i];
         }
     }
     nobuy[i] = 1;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
     i += 1;
     item[i] = "MK5 Heresy";
     item_stocked[i] = scr_item_count("MK5 Heresy");
     item_cost[i] = 25;
+	if (rene = 1) {
+        nobuy[i] = 1;
+        item_cost[i] = 0;
+    }
+	if (research.armourmk5[0] > 0){
     forge_cost[i] = 300;
+	}
     i += 1;
     item[i] = "MK6 Corvus";
     item_stocked[i] = scr_item_count("MK6 Corvus");
@@ -876,13 +868,8 @@ if (shop = "equipment2") {
         item_cost[i] = 0;
     }
     if (obj_controller.in_forge){
-        if (research.armour[1].stealth[0] > 0){
-            forge_cost[i] = 500;
-        } else {
-            tooltip_overide[i] = "requires : #";
-            if (research.armour[1].stealth[0] < 1){
-                tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}#";
-            }
+        if (research.armourmk6[0] > 0){
+            forge_cost[i] = 400;
         }
     }
     i += 1;
@@ -894,13 +881,8 @@ if (shop = "equipment2") {
         item_cost[i] = 0;
     }
     if (obj_controller.in_forge){
-        if (research.armour[0] > 0){
-            forge_cost[i] = 350;
-        } else {
-            tooltip_overide[i] = "requires : #";
-            if (research.armour[0] < 1){
-                tooltip_overide[i] += $"     {research_pathways.armour[0][0]}#";
-            }
+        if (research.armourmk7[0] > 0){
+            forge_cost[i] = 325;
         }
     }
     i += 1;
@@ -912,91 +894,53 @@ if (shop = "equipment2") {
         item_cost[i] = 0;
     }
     if (obj_controller.in_forge){
-        if (research.armour[0] > 1){
-            forge_cost[i] = 1000;
-        } else {
-            tooltip_overide[i] = "requires : #";
-            if (research.armour[0] < 2 && mk_4_able){
-                tooltip_overide[i] += $"     {research_pathways.armour[0][1]}#";
-            } else {
-				tooltip_overide[i] = mk_4_tool_tip;
-            }
+        if (research.armourmk8[0] > 0){
+            forge_cost[i] = 400;
         }
-    }    
+    }
 	i += 1;
     item[i] = "Power Armour";
     item_stocked[i] = scr_item_count("Power Armour");
-    item_cost[i] = 125;
-    forge_cost[i] = 1250;
+    item_cost[i] = 25;
+	if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+    forge_cost[i] = 375;
+	}
     i += 1;
-    item[i] = "Artificer Armour"; // TODO: Will have to review and fix some stuff here later
+    item[i] = "Artificer Armour";
     item_stocked[i] = scr_item_count("Artificer Armour");
     nobuy[i] = 1;
-    if (rene = 1) {
-        nobuy[i] = 1;
-        item_cost[i] = 0;
-    }
-	if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1) {
-    forge_cost[i] = 1500;
-	} else {
-    tooltip_overide[i] = "requires : \n";
-    if (research.armour[1].stealth[0] < 1) {
-        tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}\n";
-        for (var r = research.armour[1].armour[0]; r < 2; r++) {
-            tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}\n"; 
-        }
-    }
-	mk_4_tool_tip = tooltip_overide[i];
- 
-}  
+	if (research.armourmk4[0] > 0){
+    forge_cost[i] = 1000;
+	}
 
     i += 1;
     item[i] = "Early Terminator Armour";
     item_stocked[i] = scr_item_count("Early Terminator Armour");
-    item_cost[i] = 275;
-    forge_cost[i] = 2750;
+    item_cost[i] = 75;
+	if (research.hvyarmcon[0] > 0){
+    forge_cost[i] = 750;
+	}
 	i += 1;
     item[i] = "Cataphractii Pattern Terminator";
     item_stocked[i] = scr_item_count("Cataphractii Pattern Terminator");
-    nobuy[i] = 1;
-	if (obj_controller.stc_wargear >= 6) {
-        nobuy[i] = 0;
-        item_cost[i] = 750;
+    nobuy[i] = 1; // item_cost[i] = 750;
+	if (research.hvyarmcon[0] > 0 && research.armourmk4[0] > 0) {
+        forge_cost[i] = 3500;
     }
 	i += 1;
     item[i] = "Tartaros";
     item_stocked[i] = scr_item_count("Tartaros");
-    nobuy[i] = 1;
-if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj_controller.stc_wargear >= 6) {
-    forge_cost[i] = 5000;
-} else {
-    tooltip_overide[i] = "requires : \n";
-    if (research.armour[1].stealth[0] < 1) {
-        tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}\n";
-        for (var r = research.armour[1].armour[0]; r < 2; r++) {
-            tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}\n"; 
-        }
-    }
-    mk_4_tool_tip = tooltip_overide[i];
-    tooltip_overide[i] += $"STC wargear component 6"; 
-}
+    nobuy[i] = 1; // && obj_controller.stc_wargear >= 6
+	if (research.hvyarmcon[0] > 0 && research.armourmk3[0] > 0) {
+    forge_cost[i] = 2500;
+	}
     i += 1;
     item[i] = "Terminator Armour";
     item_stocked[i] = scr_item_count("Terminator Armour");
-    item_cost[i] = 475;
-if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj_controller.stc_wargear >= 6) {
-    forge_cost[i] = 4000;
-} else {
-    tooltip_overide[i] = "requires : \n"; 
-    if (research.armour[1].stealth[0] < 1) {
-        tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}\n"; 
-        for (var r = research.armour[1].armour[0]; r < 2; r++) {
-            tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}\n"; 
-        }
-    }
-    mk_4_tool_tip = tooltip_overide[i];
-    tooltip_overide[i] += $"STC wargear component 6"; 
-}
+    item_cost[i] = 275;
+	if (research.hvyarmcon[0] > 0 && research.armourmk8[0] > 0) {
+    forge_cost[i] = 2000;
+	}
 
 	i += 1;
     item[i] = "Animal Mount";
@@ -1012,8 +956,10 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Jump Pack";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 20;
+    item_cost[i] = 25;
+	if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
     forge_cost[i] = 250;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1031,8 +977,10 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Heavy Weapons Pack";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 15;    
-    forge_cost[i] = 150;
+    item_cost[i] = 10;
+	if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+    forge_cost[i] = 100;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1042,11 +990,13 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Servo-harness";
     item_stocked[i] = scr_item_count(item[i]);
+	if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
     forge_cost[i] = 1500;
-    item_cost[i] = 150;
-	 if (obj_controller.stc_wargear >= 6) {
+	}
+	if (obj_controller.stc_wargear >= 6) {
 		forge_cost[i] = 400;
     }
+    item_cost[i] = 150;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1057,7 +1007,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Conversion Beamer Pack";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 180;
-	if (research.grav[0]>=1 && research.flame[0]>=1 && research.las[0]>=1 && research.plasma[0]>=1 ) then forge_cost[i] = 450;
+	if (research.grav[0]>=1 && research.flame[0]>=1 && research.las[0]>=1 && research.plasma[0]>=1 ) then forge_cost[i] = 950;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1069,7 +1019,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Primitive Tools";
     item_stocked[i] = scr_item_count(item[i]);
     forge_cost[i] = 50;
-    item_cost[i] = 3;
+    item_cost[i] = 2;
 // Conventional tools
 	i += 1;
     x_mod[i] = 9;
@@ -1170,14 +1120,16 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     i += 1;
     x_mod[i] = 9;
     item[i] = "Wooden Shield";
-    forge_cost[i] = 15;
+    forge_cost[i] = 10;
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 2;
+    item_cost[i] = 1;
 // 40k tools
     i += 1;
     x_mod[i] = 9;
     item[i] = "Combat Shield";
+	if (research.metallurgy[0]>1){
     forge_cost[i] = 75;
+	}
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 15;
     i += 1;
@@ -1185,7 +1137,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Rosarius";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 100;
-    forge_cost[i] = 1000; // TODO: Lock behind research
+	if (research.power_fields[0] > 0) {
+    forge_cost[i] = 1000; 
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1195,7 +1149,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Iron Halo";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 300;
-    forge_cost[i] = 2000; // TODO: Also add research
+	if (research.power_fields[0] > 0) {
+    forge_cost[i] = 2000; // TODO: Lock beyond further research, add more power field tech tiers
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1204,22 +1160,27 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Plasma Bomb";
     item_cost[i] = 175;
-    forge_cost[i] = 1750; // Also consider locking behind research?
+	if (research.mechnchem[0] > 0) {
+    forge_cost[i] = 1750;
+	}
     item_stocked[i] = scr_item_count(item[i]);
 
     i += 1;
     x_mod[i] = 9;
     item[i] = "Exterminatus";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 2500; // Add a way to forge it
+    item_cost[i] = 2500;
+	if (research.mechnchem[0] > 0) { // TODO: lock beyond more advanced research
+	forge_cost[i] = 10000;
+	}
 
     i += 1;
     x_mod[i] = 9;
     item[i] = "Gene Pod Incubator";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 20;   
+    item_cost[i] = 25;   
     if (research.mechnchem[0] > 0) {
-        forge_cost[i] = 150 * player_hanger;
+        forge_cost[i] = 100;
     } else {
         forge_cost[i] = 0;
         tooltip_overide[i] = $"{require_tool_tip} {research_pathways.mechnchem[0][0]}";
@@ -1245,27 +1206,19 @@ if (shop = "vehicles") {
     i += 1;
     item[i] = "Dreadnought";
     item_stocked[i] = scr_item_count(item[i]);
-    nobuy[i] = 1;
-if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj_controller.stc_wargear >= 6) {
+    nobuy[i] = 1; // && obj_controller.stc_wargear >= 6
+	if (research.dread[0] > 0) {
     forge_cost[i] = 3000;
-} else {
-    tooltip_overide[i] = "requires : \n"; 
-    if (research.armour[1].stealth[0] < 1) {
-        tooltip_overide[i] += $"     {research_pathways.armour[1].stealth[0][0]}\n"; 
-        for (var r = research.armour[1].armour[0]; r < 2; r++) {
-            tooltip_overide[i] += $"     {research_pathways.armour[1].armour[0][r]}\n"; 
-        }
-    }
-    mk_4_tool_tip = tooltip_overide[i];
-    tooltip_overide[i] += $"STC wargear component 6"; 
-}
+	}
 
     i += 1;
     x_mod[i] = 9;
     item[i] = "Close Combat Weapon";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 50;
-	forge_cost[i] = 200*player_hanger; // TODO: Lock behind research
+	if (research.dread[0] > 0) {
+	forge_cost[i] = 500;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1275,7 +1228,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 35;
     if (research.combustion[0] > 0) {
-        forge_cost[i] = 150 * player_hanger;
+        forge_cost[i] = 250;
     } else {
         forge_cost[i] = 0;
         tooltip_overide[i] = $"{require_tool_tip} {research_pathways.combustion[0][0]}";
@@ -1284,7 +1237,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Rhino";
     item_stocked[i] = scr_vehicle_count(item[i], "");
     item_cost[i] = 120;
-    forge_cost[i] = 2000*player_hanger;
+	if (obj_controller.stc_vehicles >= 2) {
+    forge_cost[i] = 2000;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1293,7 +1248,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Predator";
     item_stocked[i] = scr_vehicle_count(item[i], "");
     item_cost[i] = 240;
-    forge_cost[i] = 3000*player_hanger;
+	if (obj_controller.stc_vehicles >= 3) {
+    forge_cost[i] = 3000;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1303,7 +1260,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Autocannon Turret";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 30;
-	if (research.bolt[0]> 2) then forge_cost[i] = 150*player_hanger;
+	if (research.bolt[0]> 1) then forge_cost[i] = 250;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1313,7 +1270,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Twin Linked Lascannon Turret";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 60;
-	if (research.las[0]>1) then 	forge_cost[i] = 400*player_hanger;
+	if (research.las[0]>1) then 	forge_cost[i] = 400;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1323,8 +1280,8 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Heavy Bolter Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 38;
-	forge_cost[i] = 100*player_hanger;
-	if (research.bolt[0]> 2) then forge_cost[i] = 100*player_hanger;
+	forge_cost[i] = 380;
+	if (research.bolt[0]> 0) then forge_cost[i] = 100;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1333,9 +1290,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Heavy Flamer Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 50;
-	forge_cost[i] = 150*player_hanger;
-    if (research.flame[0]<1) then forge_cost[i] = 0;
+    item_cost[i] = 25;
+	forge_cost[i] = 250;
+    if (research.flame[0] < 1) then forge_cost[i] = 0;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1345,7 +1302,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Lascannon Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 60;
-	if (research.las[0]>1) then forge_cost[i] = 300;
+	if (research.las[0] > 0) then forge_cost[i] = 300;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1357,7 +1314,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     if (obj_controller.stc_vehicles >= 6) {
         nobuy[i] = 0;
         item_cost[i] = 500;
-        forge_cost[i] = 5500*player_hanger;
+        forge_cost[i] = 5500;
     }
     if (rene=1) {
         nobuy[i]=1;
@@ -1368,7 +1325,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Twin Linked Heavy Bolter Mount";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 28;
-	if (research.bolt[0]> 2) then forge_cost[i] = 250*player_hanger;
+	if (research.bolt[0]> 1) then forge_cost[i] = 250;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1378,7 +1335,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Quad Linked Heavy Bolter Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 60;
-	if (research.bolt[0]> 3) then 	forge_cost[i] = 350*player_hanger;
+	if (research.bolt[0]> 1) then 	forge_cost[i] = 350;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1388,7 +1345,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Twin Linked Assault Cannon Mount";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 60;
-	if (research.bolt[0]> 3) then 	forge_cost[i] = 400*player_hanger;
+	if (research.bolt[0]> 1) then 	forge_cost[i] = 400;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1398,8 +1355,8 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Flamestorm Cannon Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 100;
-	forge_cost[i] = 300*player_hanger;
-    if (research.flame[0]<1) then forge_cost[i] = 0;
+	forge_cost[i] = 300;
+    if (research.flame[0] < 1) then forge_cost[i] = 0;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1409,7 +1366,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Hurricane Bolter Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 70;
-	if (research.bolt[0]> 3) then 	forge_cost[i] = 300*player_hanger;
+	if (research.bolt[0] > 1) then 	forge_cost[i] = 300;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1419,7 +1376,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Twin Linked Lascannon Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 120;
-	if (research.las[0]>1) then forge_cost[i] = 250*player_hanger;
+	if (research.las[0]>1) then forge_cost[i] = 250;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1428,7 +1385,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Whirlwind";
     item_stocked[i] = scr_vehicle_count(item[i], "");
     item_cost[i] = 180;
-	forge_cost[i] = 2500*player_hanger;
+	if (obj_controller.stc_vehicles >= 3) {
+	forge_cost[i] = 2500;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1438,7 +1397,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "HK Missile";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 10;
-	forge_cost[i] = 250*player_hanger;
+	if (obj_controller.stc_vehicles >= 4) {
+	forge_cost[i] = 250;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1450,7 +1411,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
 	if (obj_controller.stc_vehicles >= 6) {
     nobuy[i] = 0;
     item_cost[i] = 120;
-	forge_cost[i] = 700*player_hanger;
+	forge_cost[i] = 700;
     }
 
     i += 1;
@@ -1458,13 +1419,13 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Twin Linked Bolters";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 8;
-	if (research.bolt[0]>= 2) then forge_cost[i] = 150*player_hanger;
+	if (research.bolt[0]>= 2) then forge_cost[i] = 150;
     i += 1;
     x_mod[i] = 9;
     item[i] = "Twin Linked Heavy Bolter";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 110;
-	if (research.bolt[0]> 2) then 	forge_cost[i] = 150*player_hanger;
+	if (research.bolt[0]> 1) then 	forge_cost[i] = 400;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1474,7 +1435,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Twin Linked Lascannon";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 110;
-	if (research.las[0]>1) then forge_cost[i] = 150*player_hanger;
+	if (research.las[0]>0) then forge_cost[i] = 500;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1484,7 +1445,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Autocannon";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 80;
-	if (research.bolt[0]> 2) then 	forge_cost[i] = 150;
+	if (research.bolt[0]> 1) then 	forge_cost[i] = 350;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1493,8 +1454,10 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Inferno Cannon";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 115;
-	forge_cost[i] = 250*player_hanger;
+    item_cost[i] = 65;
+	if (research.flame[0]>0){
+	forge_cost[i] = 350;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1504,7 +1467,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Dreadnought Lightning Claw";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 185;
-    forge_cost[i] = 250*player_hanger;
+	if (research.dread[0] > 0) {
+    forge_cost[i] = 650;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1514,7 +1479,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Assault Cannon";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 75;
-	if (research.bolt[0]> 2) then 	forge_cost[i] = 350;
+	if (research.bolt[0]> 1) {
+	forge_cost[i] = 350;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1524,7 +1491,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Dreadnought Power Claw";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 150;
-	forge_cost[i] = 200*player_hanger;
+	if (research.dread[0] > 0) {
+	forge_cost[i] = 600;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1534,7 +1503,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item[i] = "Whirlwind Missiles";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 90;
-	forge_cost[i] = 250*player_hanger;
+	if (obj_controller.stc_vehicles >= 6) {
+	forge_cost[i] = 350;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1543,7 +1514,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Heavy Conversion Beam Projector";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 350*player_hanger;
+	if (obj_controller.stc_vehicles >= 6) {
+	forge_cost[i] = 500;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1552,7 +1525,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Plasma Destroyer Turret";
     item_stocked[i] = scr_item_count(item[i]);
-    forge_cost[i] = 400*player_hanger;
+	if (research.plasma[0]>0){
+    forge_cost[i] = 450;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1561,7 +1536,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Flamestorm Cannon Turret";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 400*player_hanger;
+	if (research.flame[0]>0){
+	forge_cost[i] = 450;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1570,7 +1547,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Magna-Melta Turret";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 400*player_hanger;
+	if (research.melta[0]>0){
+	forge_cost[i] = 450;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1579,7 +1558,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Neutron Blaster Turret";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 450*player_hanger;
+	if (obj_controller.stc_vehicles >= 6) {
+	forge_cost[i] = 450;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1588,7 +1569,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Volkite Saker Turret";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 400*player_hanger;
+	if (obj_controller.stc_vehicles >= 6) {
+	forge_cost[i] = 400;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1597,7 +1580,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Volkite Culverin Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 350*player_hanger;
+	if (obj_controller.stc_vehicles >= 6) {
+	forge_cost[i] = 400;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1606,7 +1591,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Twin Linked Volkite Culverin Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 400*player_hanger;
+	if (obj_controller.stc_vehicles >= 6) {
+	forge_cost[i] = 800;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1615,8 +1602,10 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Twin Linked Multi-Melta Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
-	item_cost[i] = 200;
-	forge_cost[i] = 200*player_hanger;
+	item_cost[i] = 120;
+	if (research.melta[0]>0){
+	forge_cost[i] = 900;
+	}
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1625,7 +1614,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Twin Linked Heavy Flamer Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 200*player_hanger;
+	if (research.flame[0]>0){
+	forge_cost[i] = 600;
+	}
 	item_cost[i] = 150;
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1635,7 +1626,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Reaper Autocannon Mount";
     item_stocked[i] = scr_item_count(item[i]);
-	forge_cost[i] = 250*player_hanger;
+	if (obj_controller.stc_vehicles >= 6){
+	forge_cost[i] = 650;
+	}
 	nobuy[i] = 1;
     if (rene = 1) {
         item_cost[i] = 0;
@@ -1648,7 +1641,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     if (obj_controller.stc_vehicles >= 6) {
         nobuy[i] = 0;
         item_cost[i] = 500;
-		forge_cost[i] = 2000*player_hanger;
+		forge_cost[i] = 2500;
     }
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1662,7 +1655,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     if (obj_controller.stc_vehicles >= 6) {
         nobuy[i] = 0;
         item_cost[i] = 90;
-		forge_cost[i] = 1250*player_hanger;
+		forge_cost[i] = 1250;
     }
    if (rene = 1) {
         nobuy[i] = 1;
@@ -1676,7 +1669,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     if (obj_controller.stc_vehicles >= 3) {
         nobuy[i] = 0;
         item_cost[i] = 200;
-		forge_cost[i] = 1000*player_hanger;
+		forge_cost[i] = 2500;
     }
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1686,10 +1679,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Armoured Ceramite";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 120;
+    item_cost[i] = 100;
 	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 200;
-		forge_cost[i] = 500*player_hanger;
+		forge_cost[i] = 600;
     }
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1701,8 +1693,7 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 50;
 	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 200;
-		forge_cost[i] = 250*player_hanger;
+		forge_cost[i] = 250;
     }
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1712,10 +1703,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Smoke Launchers";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 10;
-	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 10;
-		forge_cost[i] = 250*player_hanger;
+    item_cost[i] = 5;
+	 if (obj_controller.stc_vehicles >= 1) {
+		forge_cost[i] = 50;
     }
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1725,10 +1715,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Dozer Blades";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 10;
-	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 10;
-		forge_cost[i] = 200*player_hanger;
+    item_cost[i] = 5;
+	 if (obj_controller.stc_vehicles >= 1) {
+		forge_cost[i] = 50;
     }
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1738,10 +1727,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Searchlight";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 15;
-	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 10;
-		forge_cost[i] = 250*player_hanger;
+    item_cost[i] = 5;
+	 if (obj_controller.stc_vehicles >= 1) {
+		forge_cost[i] = 50;
     }
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1751,10 +1739,9 @@ if (research.armour[1].stealth[0] > 0 && research.armour[1].armour[0] > 1 && obj
     x_mod[i] = 9;
     item[i] = "Frag Assault Launchers";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 30;
-	 if (obj_controller.stc_vehicles >= 3) {
-        item_cost[i] = 200;
-		forge_cost[i] = 250*player_hanger;
+    item_cost[i] = 10;
+	 if (obj_controller.stc_vehicles >= 2) {
+		forge_cost[i] = 100;
     }
     if (rene = 1) {
         nobuy[i] = 1;
@@ -1916,136 +1903,212 @@ if (shop == "production"){
         forge_cost[i] = 1000;
 		} else { forge_cost[i] = 0;
 		}
-		tooltip_overide[i] = "We can expand our chemical facilities to accomodate plastic making. \nRequired for: Hellguns, Flak Armour."; // Lasgun and its variants, Composite armour and other items
+		tooltip_overide[i] = "We can expand our chemical facilities to accomodate plastic making. \nRequired for: Hellgun, Lascutter, Flak Armour."; // Lasgun and its variants, Composite armour and other items
 	}
 	if (research.mechnchem[0] == 0){
         i++;
         item[i] = ["research", research_pathways.mechnchem[0][research.mechnchem[0]], ["mechnchem"]];
         item_stocked[i] = 0;
+		if (research.chemistry[0] > 0 && research.mechanisms[0] > 0){
         forge_cost[i] = 1000;
+		}
 		tooltip_overide[i] = "To forge proper medical tools and bionics, some improvements to mechanism making and chemical facilities are required. \nRequired for: Bionics, Narthecium, Servo-arm.";
 	}
     //Research of 40k
-    if (research.flame[0] == 0){
+	// Bolters
+    if (research.bolt[0] == 0){
         i++;
-        item[i] = ["research", research_pathways.flame[0][research.flame[0]], ["flame"]];
-        item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research grants the ability to fabricate and harness Promethium Tanks, allowing for the construction of flame-based weaponry. This technology taps into the potent destructive potential of Promethium, turning it into a terrifying tool of war, capable of reducing enemies to ash.\nUnlocks: Flamers, Heavy Flamers, Incinerator.\nRequired for: Heavy Flamer Sponsons, Flamestorm Cannon Sponsons, Inferno Cannon, Servo-harness, Combi-flamer.";
-
-    }
-    if (research.psi[0] == 1){
-        i++;
-        item[i] = ["research", research_pathways.psi[0][research.psi[0]], ["psi"]];
-        item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unlocks the arcane art of crafting Force Weapons, allowing our trained psykers to channel the raw, untamed power of the Warp into tangible forms. It transforms ordinary melee implements into conduits of psychic fury, each blow imbued with devastating energy This grants our psykers the ability to strike down the mightiest foes, turning the tide of battle with the very power of the immaterium.\n\nUnlocks: Force Staff, Force Sword, Force Axe.";
-    }
-    if (research.las[0] == 0){
-        i++;
-        item[i] = ["research", research_pathways.las[0][research.las[0]], ["las"]];
-        item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unveils the secrets of advanced Las Weaponry, a testament to the Imperium's mastery of directed energy. It allows the construction of more potent and reliable las weapons, each pulse of light capable of searing through armor and flesh alike. This empowers our forces with vastly enhanced range, penetration, and damage, ensuring the Emperor's light shines brighter against the encroaching darkness.\n\nUnlocks: Lascannon.\nRequired for: Twin Linked Lascannon Turret, Twin Linked Lascannon Sponsons, Twin Linked Lascannon.";
-    }    
-     if (research.chain[0] == 0){
-        i++;
-        item[i] = ["research", research_pathways.chain[0][research.chain[0]], ["chain"]];
-        item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unleashes the technology for Advanced Chain Weaponry, allowing us to produce tools of brutal, unrelenting destruction. It allows for the creation of weapons that tear and rend, leaving nothing but bloody ruin in their wake. Our warriors wield these instruments of carnage to devastating effect, carving through the ranks of our enemies with unstoppable fury. \n\nUnlocks: Eviscerator, Chainfist.";
-    }         
-    if (research.plasma[0] == 0){
-        i++;
-        item[i] = ["research", research_pathways.plasma[0][research.plasma[0]], ["plasma"]];
-        item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research delves into the dangerous art of Plasma Weaponry, granting us the means to unleash the raw power of superheated plasma upon the enemy. This volatile technology produces weapons that can inflict devastating wounds, but its very nature demands a careful hand, lest its power consume the wielder. These weapons provide a high damage potential, capable of obliterating even heavily armored foes.\n\nUnlocks: Plasma Pistol, Plasma Gun, Plasma Cannon.\nRequired for: Combiplasma.";
+        item[i] = ["research",research_pathways.bolt[0][research.bolt[0]], ["bolt"]];
+		item_stocked[i] = 0;
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 1000;
+		} else { tooltip_overide[i] = $"{require_tool_tip} {research_pathways.mechnchem[0][0]}"
+		}
+        tooltip_overide[i] = "Before we can start forging bolters - the standard weapon of the Space Marines - we need to construct facilities dedicated to their construction and maintenance. \n\nUnlocks: Heavy Bolter, Heavy bolter Sponsons.\nRequired for: Combiflamer, Combiplasma, Combimelta, Combigrav, Assault Cannon, Autocannon Turret, Hurricane Bolter, Quad Linked Heavy Bolter Sponsons, Twin Linked Bolters, Twin Linked Heavy Bolter mount, Twin Linked assault cannon.";
     }
     if (research.bolt[0] == 1){
         i++;
         item[i] = ["research",research_pathways.bolt[0][research.bolt[0]], ["bolt"]];
 		item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research reveals the secrets of Advanced Bolt Weapons, an expansion of the Emperor's favored projectile weapons into more specialized and lethal forms. It is the pinnacle of projectile technology, combining explosive force with devastating impact. This provides our forces with a significant increase in firepower, ensuring that each shot finds its mark and shatters the foe. \n\nUnlocks: Stalker Pattern Bolter, Heavy Bolter, Heavy bolter Sponsons.\nRequired for: Combiflamer, Combiplasma, Combimelta, Combigrav, Assault Cannon, Autocannon Turret, Hurricane Bolter, Quad Linked Heavy Bolter Sponsons, Twin Linked Bolters, Twin Linked Heavy Bolter mount, Twin Linked assault cannon.";
+        forge_cost[i] = 1500;
+        tooltip_overide[i] = "To allow bolters to be constructed in a compact form, we need to increase precision in our bolter forging. \n\nUnlocks: Stalker Pattern Bolter, Bolter, Bolt Pistol, Storm Bolter, Autocannon, Assault Cannon, Twin Linked bolters.\nRequired for: Combiflamer, Combiplasma, Combimelta, Combigrav, Assault Cannon, Autocannon Turret, Hurricane Bolter, Quad Linked Heavy Bolter Sponsons, Twin Linked Bolters, Twin Linked Heavy Bolter mount, Twin Linked assault cannon.";
     }
 	if (research.bolt[0] == 2){
         i++;
-        item[i] = ["research","Advanced Weapon Integration and Targeting", ["bolt"]];
+        item[i] = ["research",research_pathways.bolt[0][research.bolt[0]], ["bolt"]];
 		item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unlocks the divine secrets of Advanced Weapon Integration and Targeting, allowing for the creation of systems that connect the chapter’s weaponry with the Astartes in perfect harmony, enhancing their coordination and tactical prowess upon the Emperor's battlefields. It also allows for the construction of the devastating Assault Cannon and the mighty Autocannon for Predator tanks, making them instruments of divine vengeance, ensuring that the enemies of Mankind tremble before their might. This knowledge shall improve the efficiency of standard bolter weaponry, while also unleashing newer and more devastating tools of annihilation. \nUnlocks: Assault Cannon, Autocannon Turret, Twin Linked Heavy Bolter mount, Twin Linked bolter.\nRequired for: Hurricane Bolter, Quad Linked Heavy Bolter Sponsons, Twin linked assault cannon.";
+        forge_cost[i] = 2000;
+        tooltip_overide[i] = "The final iteration is the combination weaponry - bolter, mixed in with a weapon from a different class. \nUnlocks: Combi-weapons.";
     }
-		if (research.bolt[0] == 3){
+	// Las
+    if (research.las[0] == 0){
         i++;
-        item[i] = ["research","Integrated Weapon Stabilization and Rate of Fire Enhancements", ["bolt"]];
-		item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unlocks the sacred technology of Integrated Weapon Stabilization and Rate of Fire Enhancements, allowing our warriors to unleash bolter fire with unprecedented might, creating a maelstrom of righteous destruction upon the heretic and the alien. This divine advancement focuses on the inner workings of the weaponry, turning them into the Emperor's own instruments of divine wrath, rivaled only by the most sacred creations of the Machine God. Their might shall tear down the very fortresses of our foes, and their righteous fury shall cleanse the battlefield from all that would oppose the Imperium. \nUnlocks: Hurricane Bolter, Quad Linked Heavy Bolter Sponsons, Twin linked assault cannon.";
-    }
-    if (research.power_fields[0] < 2){
-        i++;
-        item[i] = ["research",research_pathways.power_fields[0][research.power_fields[0]], ["power_fields"]];
+        item[i] = ["research", research_pathways.las[0][research.las[0]], ["las"]];
         item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unlocks the ancient science of Advanced Power Weapons, enhancing melee armaments with potent energy fields that disrupt the very bonds of matter. It is a testament to the power of technology, transforming ordinary weapons into instruments of righteous fury. This allows our warriors to devastate the most armored foes, cleaving through enemy ranks with the raw energy of the machine god.\n\nUnlocks: Power Axe, Power Sword, Power Spear, Crozius Arcanum, Power Fist, Power Mace, Lightning Claw, Chainfist, Thunder Hammer, Heavy Thunder Hammer, Storm Shield.";
+        if (research.plastics[0] > 0){
+        forge_cost[i] = 1000;
+		}
+        tooltip_overide[i] = "To forge las weaponry of greater power, we need some improvements to our facilities.\n\nUnlocks: Lascannon.\nRequired for: Twin Linked Lascannon Turret, Twin Linked Lascannon Sponsons, Twin Linked Lascannon.";
+    }
+	// Flamers
+    if (research.flame[0] == 0){
+        i++;
+        item[i] = ["research", research_pathways.flame[0][research.flame[0]], ["flame"]];
+        item_stocked[i] = 0;
+        if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 2000;
+		}
+        tooltip_overide[i] = "To forge flamer weaponry, we need to build facilities that allow creation of materials that can hold the fuel and withstand their destructive properties.\nUnlocks: Flamers, Heavy Flamers, Incinerator.\nRequired for: Heavy Flamer Sponsons, Flamestorm Cannon Sponsons, Inferno Cannon, Servo-harness, Combi-flamer.";
     }
     if (research.melta[0] == 0){
         i++;
         item[i] = ["research",research_pathways.melta[0][research.melta[0]], ["melta"]];
         item_stocked[i] = 0;
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
         forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unlocks the terrifying potential of Basic Melta Weaponry, granting us the ability to unleash the searing heat of miniature suns upon the enemy. These weapons melt through armor and fortifications with unparalleled ease. This enhances our anti-tank capabilities, allowing our forces to shatter enemy vehicles and fortifications, leaving only molten slag in their wake.\n\nUnlocks: Meltagun, Multi-Melta.\nRequired for: Combimelta";
+		}
+        tooltip_overide[i] = "To deal with armored targets at close distance, melta weaponry is an option.\n\nUnlocks: Meltagun, Multi-Melta.\nRequired for: Combimelta";
+    }
+	// Plasma
+    if (research.plasma[0] == 0){
+        i++;
+        item[i] = ["research", research_pathways.plasma[0][research.plasma[0]], ["plasma"]];
+        item_stocked[i] = 0;
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 5000;
+		}
+        tooltip_overide[i] = "Getting the capability to forge our own plasma weaponry is an expensive undertaking. But with sufficient resources, we'd gain a serious advantage over any adversary.\n\nUnlocks: Plasma Pistol, Plasma Gun, Plasma Cannon.\nRequired for: Combiplasma.";
     }
     if (research.grav[0] == 0){
         i++;
         item[i] = ["research", research_pathways.grav[0][research.grav[0]], ["grav"]];
         item_stocked[i] = 0;
-        forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unravels the enigmatic science of Grav Weapons, allowing us to manipulate the very fabric of gravity for destructive purposes. These weapons crush and pulverize their targets with the force of collapsing worlds. They become the bane of armored units, allowing our forces to annihilate heavy infantry and vehicles with the very force of celestial bodies. \n\nUnlocks: Grav-Pistol, Grav-Gun, Grav-Cannon.\nRequired for: Combigrav";
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 10000;
+		}
+        tooltip_overide[i] = "Grav weapons, being extremely rare, will be difficult to properly reproduce. Nonetheless, with enough resources and time, we could attempt to forge them for our purposes.\n\nUnlocks: Grav-Pistol, Grav-Gun, Grav-Cannon.\nRequired for: Combigrav";
     }
-    if (research.armour[0]>0){
-        if (research.armour[1].stealth[0] == 0){
-            i++;
-            item[i] = ["research","Advanced Servo Motors", ["armour", "stealth"]];
-            item_stocked[i] = 0;
-            forge_cost[i] = 3000;
-            tooltip_overide[i] = "This research unlocks the secrets of Advanced Servo Motors, allowing the fabrication of enhanced movement systems, greatly boosting the speed and agility of our warriors. The speed and maneuverability increase will provide our troops with a significant advantage. It also unlocks the construction of specialized armors and advanced items.\n\nUnlocks: Mk6 Corvus.\nRequired for: Artificer Armour, Terminator Armour, Tartaros.";
-        }
-        if (research.armour[1].armour[0] == 0){
-            i++;
-            item[i] = ["research","Advanced Ceramite Bonding", ["armour", "armour"]];
-            item_stocked[i] = 0;
-            forge_cost[i] = 3000;
-            tooltip_overide[i] = "This research uncovers the lost techniques of Advanced Ceramite Bonding, allowing us to create superior armors. It fortifies our war plate, offering unparalleled protection against enemy fire. This dramatically enhances the survivability of our units as well as unlocking new armor capabilities.\n\nUnlocks: MK3 Iron Armour.\nRequired for: MK8 Errant, Artificer Armour, Terminator Armour, Tartaros.";
-        } else if (research.armour[1].armour[0] == 2){
-            i++;
-            item[i] = ["research","Ceremite Void Hardening", ["armour", "armour"]];
-            item_stocked[i] = 0;
-            forge_cost[i] = 3000;
-            tooltip_overide[i] = "This research grants the secrets of Ceramite Void Hardening techniques, reinforcing our armors to withstand the harshest conditions of the void. It is essential for warriors who brave the vacuum of space, ensuring they can perform their duties where others would falter. It increases the unit's resilience in harsh environments as well as providing a superior armor plating. \n\nUnlocks: MK3 Iron Armour.\nRequired for: MK8 Errant, Artificer Armour.";
-        }
-        if  (research.armour[0]==1){
-            i++;
-            item[i] = ["research",research_pathways.armour[0][1], ["armour"]];
-            item_stocked[i] = 0;
-            forge_cost[i] = 3000;
-            tooltip_overide[i] = "This research unlocks the knowledge to fabricate the Mk VIII 'Errant' pattern Power Armour, a refinement of the ubiquitous Aquila armour, often favored by veteran Astartes and officers due to its unparalleled protection. It features improved plating around the torso and neck, enhancing its resilience against both ranged and melee attacks. This technology marks the pinnacle of power armour technology and a significant step in the path to becoming a battle-hardened Astartes.\n\nUnlocks: MK8 Errant.\nRequired for: Artificer Armour.";               
-        }        
-        if (research.armour[1].stealth[0] == 1 && research.armour[1].armour[0] == 1){
-            i++;
-            item[i] =  ["research","Enhanced Nerve Interfacing", ["armour", "armour"]];
-            item_stocked[i] = 0;
-            forge_cost[i] = 3000;
-            tooltip_overide[i] = "This research allows the creation of Enhanced Nerve Interfacing systems, binding unit and armor in perfect harmony. It augments the link between warrior and war plate, unlocking new levels of effectiveness. This provides the user with better accuracy, damage output, and mobility, unlocking new levels of tactical potential. \n\nUnlocks: MK4 Maximus.";
-        }
-    } else if (research.armour[0]==0){
+	// Psi of 40k
+    if (research.psi[0] == 1){
         i++;
-        item[i] = ["research",research_pathways.armour[0][0], ["armour"]];
+        item[i] = ["research", research_pathways.psi[0][research.psi[0]], ["psi"]];
         item_stocked[i] = 0;
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 5000;
+		}
+        tooltip_overide[i] = "In addition to inscribing runes, some materials may have properties that make channeling warp power easier, or harder. Developing facilities to exploit this is necessary for more advanced force weaponry.\n\nUnlocks: Force Staff, Force Sword, Force Axe.";
+    }
+	// Chain
+     if (research.chain[0] == 0){
+        i++;
+        item[i] = ["research", research_pathways.chain[0][research.chain[0]], ["chain"]];
+        item_stocked[i] = 0;
+		if (research.combustion[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 1000;
+		}
+        tooltip_overide[i] = "One of the options for forging affordable and reasonably powerful melee weaponry, would be chain weaponry. \n\nUnlocks: Chainsword, Chainaxe, Eviscerator, Chainfist.";
+    }
+	// Power fields
+    if (research.power_fields[0] == 0){
+        i++;
+        item[i] = ["research",research_pathways.power_fields[0][research.power_fields[0]], ["power_fields"]];
+        item_stocked[i] = 0;
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
         forge_cost[i] = 3000;
-        tooltip_overide[i] = "This research unlocks the knowledge to fabricate Mk VII 'Aquila' pattern Power Armour, the standard armour pattern for the Adeptus Astartes. It is a reliable and ubiquitous armour used by many Chapters that is also easy to construct and maintain, making it a stable base for the might of the Imperium's warriors.\n\nUnlocks: MK7 Aquila.\nRequired for: MK8 Errant, Artificer Armour, Terminator Armour, Tartaros.";        
-    } 
+		}
+        tooltip_overide[i] = "To make the most out of our melee arsenal, integrating power fields in them is the standard approach.\n\nUnlocks: Power Axe, Power Sword, Power Spear, Crozius Arcanum, Power Fist, Power Mace, Lightning Claw, Chainfist, Thunder Hammer, Heavy Thunder Hammer, Storm Shield.";
+    }
+	// Armour Techs
+	if (research.armourmk1[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.armourmk1[0][0], ["armourmk1"]];
+        item_stocked[i] = 0;
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 500;
+		}
+        tooltip_overide[i] = "The first powered armour - Mark I Thunder Armour - was used only on Terra by Thunder warriors. In the original schematics, it would be of little use, with no life suport and Thunder warrior physical differences, however, we can improve and adapt the design, to make it useable.\n\nUnlocks: MK1 Thunder Armour.\nRequired for: MK2 Crusade Armour.";
+    }
+	if (research.armourmk2[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.armourmk2[0][0], ["armourmk2"]];
+        item_stocked[i] = 0;
+		if (research.armourmk1[0] > 0 || research.armourmk5[0] > 0 || research.armourmk7[0] > 0){
+        forge_cost[i] = 1000;
+		}
+        tooltip_overide[i] = "Mark II Crusade Armour was used, as the name implies, during the Great Crusade. Considering specifications, it would be superior in some aspects to the armours used nowadays.\n\nUnlocks: MK2 Crusade Armour.\nRequired for: MK3 Iron Armour.";
+    }
+	if (research.armourmk3[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.armourmk3[0][0], ["armourmk3"]];
+        item_stocked[i] = 0;
+		if (research.armourmk2[0] > 0){
+        forge_cost[i] = 2500;
+		}
+        tooltip_overide[i] = "Mark III Iron Armour was an attempt to improve survivability of the MK2. If estimations are correct, this armour offers the best in terms of protection of powered armour, besides artificer and terminator variants.\n\nUnlocks: MK3 Iron Armour.\nRequired for: MK4 Maximus, Tartaros.";
+    }
+	if (research.armourmk4[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.armourmk4[0][0], ["armourmk4"]];
+        item_stocked[i] = 0;
+		if (research.armourmk3[0] > 0 && research.armourmk6[0] > 0){
+        forge_cost[i] = 5000;
+		}
+        tooltip_overide[i] = "Mark IV Imperium Maximus Armour was created at the end of the Great Crusade, as a symbol of power of the Imperium. The suits of this mark are extremely rare, and considering the types of resources used, it is very difficult to properly reproduce. It would be an expensive undertaking to establish forging facilities of this armour.\n\nUnlocks: MK4 Maximus.\nRequired for: Artificer Armour, Cataphractii Pattern Terminator.";
+    }
+	if (research.armourmk5[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.armourmk5[0][0], ["armourmk5"]];
+        item_stocked[i] = 0;
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 600;
+		}
+        tooltip_overide[i] = "Mark V Heresy Armour was created at the beginning of Horus Heresy. It is less a standardized variant, but rather a group of variants competing for a name. It would not be too hard to establish facilities for a sub-variant that we can forge and maintain.\n\nUnlocks: MK5 Heresy.\nRequired for: MK6 Corvus, MK2 Crusade Armour.";
+    }
+	if (research.armourmk6[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.armourmk6[0][0], ["armourmk6"]];
+        item_stocked[i] = 0;
+		if (research.armourmk2[0] > 0 || research.armourmk5[0] > 0 || research.armourmk7[0] > 0){
+        forge_cost[i] = 3000;
+		}
+        tooltip_overide[i] = "Mark VI Corvus Armour was a variant with improved sensor suite. While it tends to improve accuracy and thus combat performance, the survivability is not as good.\n\nUnlocks: MK6 Corvus.\nRequired for: MK4 Maximus.";
+    }
+	if (research.armourmk7[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.armourmk7[0][0], ["armourmk7"]];
+        item_stocked[i] = 0;
+		if (research.mechnchem[0] > 0 && research.metallurgy[0] > 1){
+        forge_cost[i] = 750;
+		}
+        tooltip_overide[i] = "Mark VII Aquila Armour is the standard armour currently used by most chapters in the imperium. It would not be too difficult to set up capabilities to forge it locally.\n\nUnlocks: MK7 Aquila.\nRequired for: MK2 Crusade Armour, MK6 Corvus, MK8 Errant, Artificer Armour, Terminator Armour, Tartaros.";
+    }
+	if (research.armourmk8[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.armourmk8[0][0], ["armourmk8"]];
+        item_stocked[i] = 0;
+		if (research.armourmk7[0] > 0){
+        forge_cost[i] = 1000;
+		}
+        tooltip_overide[i] = "Mark 8 Errant Armour is a further development of MK7, most notable improvement is increased survivability.\n\nUnlocks: MK8 Errant.\nRequired for: Terminator Armour.";
+    }
+	if (research.hvyarmcon[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.hvyarmcon[0][0], ["hvyarmcon"]];
+        item_stocked[i] = 0;
+		if (research.armourmk1[0] > 0 || research.armourmk5[0] > 0 || research.armourmk7[0] > 0){
+        forge_cost[i] = 2500;
+		}
+        tooltip_overide[i] = "Now that we possess the means to forge a regular power armour, there is a possibility to go beyond it. The Indomitus pattern may require more research, but we should be able to forge a militarized variant of a heavy-duty industrial armour.\n\nUnlocks: Early Terminator Armour.\nRequired for: Terminator Armour, Tartaros, Artificer Armour.";
+    }
+	if (research.dread[0] == 0){
+		i++;
+        item[i] = ["research",research_pathways.dread[0][0], ["dread"]];
+        item_stocked[i] = 0;
+		if (research.hvyarmcon[0] > 0 && research.combustion[0] > 0){
+        forge_cost[i] = 25000;
+		}
+        tooltip_overide[i] = "With rudimentary heavy power armour forging capabilities, as well as ways to give locomotion, we can consider building facilities necessary for dreadnought construction. It would be a very costly development however.\n\nUnlocks: Dreadnought, Close Combat Weapon, Dreadnought Lightning Claw, Dreadnought Power Claw."; // \nRequired for: other types of dreads, perhaps
+    }
 
 }
 legitimate_items = i;

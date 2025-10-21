@@ -476,7 +476,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 		diplo_option=["","","","",""];
 		switch (diplo_keyphrase){
 			case "intro":
-				diplo_text = "[[The Emmissary to Chaos is writhing snake like creature, a vile creature even by the standards of it's foul bretheren it has no specific master instead preffering to work undividely. It's savage toungue flicks from between it's teeth with glazed aged ayes staring into your soul]]";
+				diplo_text = "[[The Emmissary to Chaos appears as a mish-mash of various creatures.  It does not appear to have a specific master, instead preffering to work undividely.]]";
 				diplo_text += "\n#";
 				diplo_text += "Greetings Chapter Master, The gods have been watching you oh so very closely, they see you struggles, they hear your pain, they breathe your despair. The warp is the key too all things all you need do is ask and they will provide......For a cost of course even in the warp nothing comes without cost";
 				add_diplomacy_option({option_text:"I seek a favour from the Gods"}) ; 
@@ -560,8 +560,8 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	    }
     
 	    if (diplo_keyphrase=="intro") or (diplo_keyphrase=="intro2"){
-	        if (faction_gender[10]==1) then tempd="[[An ancient and veteran Chaos Lord, "+string(faction_leader[eFACTION.Chaos])+" has been a massive threat to "+string(obj_ini.sector_name)+" and the surround region since time remembered.  He has fought against loyal Astartes and the forces of man for many millennia, if not since the Horus Heresy, and is personally responsible for several rebellions.  Were "+string(faction_leader[eFACTION.Chaos])+" to be silenced, his poisonous lies and false promises would no longer taint the sector.]]";
-	        if (faction_gender[10]==2) then tempd="[An ancient World Eaters Chaos Lord, "+string(faction_leader[eFACTION.Chaos])+" is a powerful warrior, blessed by Khorne.  He has personally vanquished dozens of Astartes Champions and countless more Imperial Servants.  It is by his warband's hands that a massive, bloody path of destruction has been carved through the stars.  His forces are just now arriving within "+string(obj_ini.sector_name)+"- a direct confrontation is ill-advised.]]";
+	        if (faction_gender[10]==1) then tempd="[[An ancient and veteran Chaos Lord, "+string(faction_leader[eFACTION.Chaos])+" is considered a serious threat to "+string(obj_ini.sector_name)+" and the surrounding region since time remembered.  ]]";
+	        if (faction_gender[10]==2) then tempd="[[An ancient World Eaters Chaos Lord, "+string(faction_leader[eFACTION.Chaos])+" is a powerful warrior, said to be blessed by Khorne.  His warband has been carving a path of destruction through the stars.  His forces are just now arriving within "+string(obj_ini.sector_name)+".  Based on his behavior, it does not seem that this Chaos Lord can be reasoned with.]]";
 	        tempd+="\n#";
         
 	        // Need to have situational awareness for here- alternate introductions
@@ -569,8 +569,12 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	        if (faction_gender[10]==1) and (diplo_keyphrase=="intro"){
 	            rando=choose(1,1,2);
 				force_goodbye=1;
-	            if (rando==1) then tempd+="It is a fine day, is it not?  Yet again the Imperium displays its tyrannical, bureaucratic nature by declaring your chapter traitor.  To unmake your forces, alone, is beyond my reach.  It is fortunate I may simply sit back and watch as it is ground to dust by your former allies.  When we meet again, "+string(obj_ini.master_name)+"- if we meet again- I will enjoy killing you.";
-	            if (rando==2) then tempd+="We have not met before, "+string(obj_ini.master_name)+", but until now this would have been troublesome.  I am "+string(faction_leader[eFACTION.Chaos])+"- no doubt you know of me, or have at least seen my hand at play.  I am here, now, to laugh at you.  Though it's been long since I could feel joy, or amusement, my hearts are warmed at seeing the Imperium destroying their own.  If we meet again I would very much like to kill you.";
+	            if (rando==1) then tempd+="Somehow, imperium declaring its former subjects traitor never gets old.  You're not the first and won't be the last to witness this.  Tell you what "+string(obj_ini.master_name)+", I'm feeling generous,  not to mention that it would be a shame to waste useful assets - I'm ordering my ships to let you be if you ever end up in the systems of our liberated worlds.  Help us take down this rotten monstrosity known as Imperium, and maybe I'll even consider You an ally.  Until we meet again, cousin.";
+	            if (rando==2) then tempd+="We have not met before, "+string(obj_ini.master_name)+".  I am "+string(faction_leader[eFACTION.Chaos])+"- no doubt you know of me, or have at least seen my hand at play.  Considering the circumstances, I think I'll let my ships give you breathing room.  Until we meet again, "+string(obj_ini.master_name)+".";
+				disposition[10]+=35;
+				faction_status[eFACTION.Chaos]="Antagonism";
+				disposition[11]+=35;
+				faction_status[eFACTION.Heretics]="Antagonism";
 	        }
 	        if (faction_gender[10]==1) and (diplo_keyphrase="intro2"){
 	            rando=choose(1,1,2,3,3,4,4);
@@ -850,8 +854,8 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	if (diplomacy==2){
 	    if (diplo_keyphrase=="intro"){
 	        rando=choose(1,2);
-	        if (rando==1) then tempd=$"[[To see Sector Commander {faction_leader[eFACTION.Imperium]} is to see what happens to heroes when their glory days have passed and the rot of ages sets in. Now a huge mass of fat and flab, he was once a mighty and respected general and the commander of a score of successful campaigns. As his reward for a glorious career, he was given commander of the sector and, as has happened to so many others, the bureaucracy crushed his warrior spirit and turned him into the man he is.]]";
-	        if (rando==2) then tempd=$"[[Loyal to allies and venomous to enemies, few figures command such opposing reputations as {faction_leader[eFACTION.Imperium]}. Enemies of the Imperium speak in hushed tones of his incredible cruelty and harsh actions against them, whereas the citizens and organizations that lay claim to the protection of the Emperor loudly toast his generosity and stalwart courage. A friend to keep and an enemy to lose.]]";
+	        if (rando==1) then tempd=$"[[The Sector Commander {faction_leader[eFACTION.Imperium]} can be considered an example of a hero who's glory days have passed.  If one had to guess, consuming food and avoiding exercise are his preferences - considering his physique.  He had a glorious career - given command of the sector and, with time, grew a bit complacent.]]";
+	        if (rando==2) then tempd=$"[[Based on information you could gather, the {faction_leader[eFACTION.Imperium]} seems a competent individual.  Although, considering the size of the average sector, even competent individuals may have problems.]]";
 	        tempd+="\n#";
 	        rando=choose(1,2);
 	        if (rando==1) then tempd+="Space Marines in my sector are expected to conduct themselves as befits one of the Adeptus Astartes. Do not disappoint me."; 
@@ -1079,8 +1083,8 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	if (diplomacy=3){ 
 	    if (diplo_keyphrase=="intro"){
 	        rando=choose(1,2);
-	        if (rando==1) then diplo_text="[["+string(faction_leader[eFACTION.Mechanicus])+" is a name often spoken of on the factory floor of "+string(obj_ini.sector_name)+"'s forgeworlds, though it cursed as often as it's praised. Sometimes referred to as “The Iron Whip”, "+string(faction_leader[eFACTION.Mechanicus])+" is famed for the high level of efficiency he extracts from those working under him, if not particularly for the quality of their works.]]";
-	        if (rando==2) then diplo_text="[[The flesh is weak. "+string(faction_leader[eFACTION.Mechanicus])+" believes in this part of the iron creed above all others, forcing all those under him to mirror his dedication. All meaty parts of his body have been removed, leaving only the most vital parts of his brain. His retinue display their rank by showing how little of their body remains.]]";
+	        if (rando==1) then diplo_text="[[Based on information you could gather, the "+string(faction_leader[eFACTION.Mechanicus])+" of "+string(obj_ini.sector_name)+"'s forgeworlds is sometimes referred to as “The Iron Whip”,  for the high level of efficiency he extracts from those working under him, if not particularly for the quality of their works.]]";
+	        if (rando==2) then diplo_text="[[From initial impression, you can see that "+string(faction_leader[eFACTION.Mechanicus])+" believes in the iron creed above all others.  Most, if not all flesh is removed, replaced by metal and electro-mechanical contraptions.]]";
 	        diplo_text+="\n#";
 	        if (disposition[3]>30) and (disposition[3]<60) then tempd="Greetings. I wish to see you bring the light of civilization to this sector, Chapter Master.";
 	        if (disposition[3]<=30) or (scr_has_disadv("Tech-Heresy")) then tempd="You are impure, illogical and irritating. Keep your army of techno barbarians away from my territory.";
@@ -1278,8 +1282,8 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	if (diplomacy==4){
 	    if (diplo_keyphrase=="intro"){
 	        rando=choose(1,1,2);
-	        if (rando==1) then tempd="[[An ancient and well respected Inquistor Lord, "+string(faction_leader[eFACTION.Inquisition])+" has purged heresy and exterminated mutants for well over four centuries. His steely gaze and iron will have broken as many heretics as have the tools of persuasion wielded by his retinue. Were he to die, the Ordo "+choose("Malleus","Xenos","Hereticus")+" would dearly miss his services.]]";
-	        if (rando==2) then tempd="[[A thousand heretics have cursed the name of "+string(faction_leader[eFACTION.Inquisition])+" with their last breath but he is still not satisfied. Remorse is as alien to him as pity and he will stop at nothing to destroy the enemies of purity.]]";
+	        if (rando==1) then tempd="[[An ancient for a mortal, Inquistor Lord, "+string(faction_leader[eFACTION.Inquisition])+" has been purging heresy and mutants for well over four centuries.  He managed to maintain a good reputation, to the point of seeing speculations that the Ordo "+choose("Malleus","Xenos","Hereticus")+" would dearly miss his services, should he pass away.]]";
+	        if (rando==2) then tempd="[[The "+string(faction_leader[eFACTION.Inquisition])+" would be the example of obsessed puritan Inquisitor Lord.  It is said that remorse and pity are alien concepts to him and that he will stop at nothing to destroy the enemies of, his perceived, purity.]]";
 	        tempd+="\n#";
 	        if (rela=="friendly") then tempd+="Ave Imperator, Chapter Master. You show great promise and I look forward to seeing you bring the light of the Emperor to "+string(obj_ini.sector_name)+".";
 	        if (rela=="neutral") then tempd+="Greetings, space marine. Serve the Emperor in body and soul and you shall have nothing to fear from the Inquisition.";
@@ -1788,10 +1792,10 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	// ** Eldar **
 	if (diplomacy=6){
 	    if (string_count("intro",diplo_keyphrase)>0){
-	        if (faction_gender[6]==1) then diplo_text="[["+string(faction_leader[diplomacy])+" is a farseer, or witch, of the eldar.  He is dressed in a typical fashion of his position, clad in flowing black cloth and bone-like armour.  Almost seeming to relish in conflict, this xeno is known in local records for "+choose("sudden raid on trade vessels","assassinating a pair of planetary govererners")+".  It is unlikely "+string(faction_leader[diplomacy])+" will be receptive to diplomacy- further audiences are ill-advised.]]";
+	        if (faction_gender[6]==1) then diplo_text="[["+string(faction_leader[diplomacy])+" is a farseer, or witch, of the eldar.  There are rumors that he enjoys conflict, suspect in local records for "+choose("sudden raid on trade vessels","assassinating a pair of planetary governors")+".  It is unlikely "+string(faction_leader[diplomacy])+" will be receptive to diplomacy.]]";
 	        if (faction_gender[6]==2){
 	            rando=choose(1,2,3);
-	            diplo_text="[["+string(faction_leader[diplomacy])+" is a witch; an old farseer of eldar kind.  While obviously a female, the grating voice and inhuman proportions are an unholy mockery of the human form.  She seems to avoid contact with the Imperium, as is befitting a xeno.  Little is known about "+string(faction_leader[diplomacy])+", other than ";
+	            diplo_text="[["+string(faction_leader[diplomacy])+" is a witch; an old farseer of eldar kind.  She seems to avoid contact with the Imperium.  Little is known about "+string(faction_leader[diplomacy])+", other than ";
 	            if (rando==1) then diplo_text+="random1.";
 	            if (rando==2) then diplo_text+="random2.";
 	            if (rando==3){
@@ -1799,7 +1803,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 					diplo_text+=global.name_generator.generate_star_name();
 					diplo_text+=" "+choose("I.","II.","III.","IV.");
 				}
-	            diplo_text+="  Do not expect futher contact.]]";
+	            diplo_text+="  Futher contact is unlikely.]]";
 	        }
 	        diplo_text+="\n#";
 			// * Normal craftworld reveal *
@@ -2299,8 +2303,8 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 		// * Request audience *
 	    if (diplo_keyphrase=="intro"){
 	        rando=choose(1,2);
-	        if (rando==1) then diplo_text="[["+string(faction_leader[diplomacy])+" is the scourge of the sector, a colossal green brute infamous for the destruction of a dozen worlds. He rules his vicious horde of xenos savages the only way greenskins know how; with brute force. Trophies from the champions of a score of races bedeck his armour, including many from "+string(choose("other Astartes","the Tyranids","the Tau Empire"))+".]]";
-	        if (rando==2) then diplo_text="[["+string(faction_leader[diplomacy])+" is a veteran of countless engagements, leading his tribe into battle with an almost manic giddiness. His name is synonymous with extended campaigns of looting and senseless violence, even more so than the other members of his barbaric race. He and the rest of his tribe hail from the "+string(choose("Goffs","Blood Axes","Bad Moons","Death Skulls","Death Skulls"))+" clan.]]";
+	        if (rando==1) then diplo_text="[["+string(faction_leader[diplomacy])+" is considered the scourge of the sector.  It may be of no surprise that intel reports his ruling preference being brute force.  Trophies from various species bedeck his armour, including many from "+string(choose("other Astartes","the Tyranids","the Tau Empire"))+".]]";
+	        if (rando==2) then diplo_text="[["+string(faction_leader[diplomacy])+" is considered a veteran of countless engagements.  His name is known in extended campaigns of looting and violence.  He and the rest of his tribe hail from the "+string(choose("Goffs","Blood Axes","Bad Moons","Death Skulls","Death Skulls"))+" clan.]]";
 	        diplo_text+="\n#";
 			if (scr_has_adv("Enemy: Orks")){
 				diplo_text+="Oi Beaky! I ain't heard your name round here before! If ya eva get bored of havin' your ‘ead attached to your shouldas, good old "+string(faction_leader[diplomacy])+" can sort dat out for ya!";
@@ -2526,8 +2530,8 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	if (diplomacy==8){
 	    if (diplo_keyphrase=="intro"){
 	        rando=choose(1,2);     
-	        if (rando==1) then tempd="[[Tall and slender, its skin is blue and clammy-looking.  Disgusting.  Its face contains two large, expressionless eyes, a slit-like mouth, and a bizarre I-shaped gash between its eyes that must function as a nose.  So this is "+string(faction_title[8])+" "+string(faction_leader[eFACTION.Tau])+".  This particular xenos is said to "+choose("have quite the silver tongue","have negotiated the surrender of many Imperial worlds","have a great deal of military backing.")+".]]";        
-	        if (rando==2) then tempd="[[Tall and slender, its skin is a light blue and looks almost reptilian.  A Y-shaped slit nestles between its eyes, and a mouth like a slit sits below that.  This must be "+string(faction_title[8])+" "+string(faction_leader[eFACTION.Tau])+".  The Ordo Xenos tells us that this particular xeno "+choose("can sense weakness in a rock","knows more than it will let on","uses its words like a scalpel")+".]]";
+	        if (rando==1) then tempd="[[Tall and slender, this is "+string(faction_title[8])+" "+string(faction_leader[eFACTION.Tau])+".  This particular xenos is said to "+choose("have quite the silver tongue","have negotiated the surrender of many Imperial worlds","have a great deal of military backing.")+".]]";
+	        if (rando==2) then tempd="[[Tall and slender, its skin is a light blue and looks almost reptilian.  This must be "+string(faction_title[8])+" "+string(faction_leader[eFACTION.Tau])+".  If Ordo Xenos reports are to be believed, this particular individual "+choose("can sense weakness in a rock","knows more than it will let on","uses its words like a scalpel")+".]]";
 	        tempd+="\n#";
 	        rando=choose(1,2);
 	        if (rando==1) then tempd+="Greetings, Chapter Master.  As you know, we have claimed for ourselves planets along the borders of your Imperium.  I wish to clarify that we of the Tau do not seek a war.  Rather, we hope to cooperate with you so that we may both work towards a Greater Good."; 

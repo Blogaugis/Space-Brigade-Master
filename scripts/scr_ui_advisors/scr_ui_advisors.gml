@@ -70,8 +70,8 @@ function scr_ui_advisors() {
         draw_set_font(fnt_40k_14);
         draw_set_alpha(1);
         draw_set_color(c_gray);
-        if (temp[36] != "0") then blurp = $"Sir!  You requested a report?  Currently, we have deployed {temp[36]} {obj_ini.role[100, 14]}s to watch over the health of our Battle-Brothers in the field.  We have an additional " + string(temp[37]) + " " + string(obj_ini.role[100, 14]) + "s who await only your order to carry the word to the troops.";
-        if (temp[36] = "0") then blurp = "Sir!  You requested a report?  Currently, we have {temp[37]} {obj_ini.role[100, 14]}s who await only your order to carry the word to the troops.";
+        if (temp[36] != "0") then blurp = $"Greetings Chapter Master.  Reclusiam is operational, with {temp[36]} {obj_ini.role[100, 14]}s watching over our battle brothers in the field.  Additional " + string(temp[37]) + " " + string(obj_ini.role[100, 14]) + "s can be assigned to field duties, if necessary.";
+        if (temp[36] = "0") then blurp = "Greetings Chapter Master.  Reclusiam is operational, with {temp[37]} {obj_ini.role[100, 14]}s who can be assigned to watch over our brothers in the field.";
         // 
         if (global.chapter_name != "Space Wolves") and(global.chapter_name != "Iron Hands") {
             blurp += "##Currently, we are training additional " + string(obj_ini.role[100, 14]) + " at a ";
@@ -84,8 +84,8 @@ function scr_ui_advisors() {
             // 
             blurp += " rate";
             if (training_chaplain > 0) then blurp += " and expect to see a new one in " + string(eta) + " month's time.";
-            if (training_chaplain < 5) then blurp += "We can increase this rate, but it will require us to requisition additional facilities, as well as upkeep, Sir.";
-            if (penitorium = 0) then blurp += "##Our men have been behaving as they should.  Not a single one is scheduled for corrective action of any type.";
+            if (training_chaplain < 5) then blurp += "To increase this rate, additional requisition will be required.";
+            if (penitorium = 0) then blurp += "## Penitorium is fully operational and can hold prisoners.  Executing our brothers who fall out of line here will ensure that their equipment and gene-seed is not wasted.  Currently, no one is scheduled for corrective action of any type.";
 
             draw_set_font(fnt_40k_30b);
             draw_set_halign(fa_center);
