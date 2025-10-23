@@ -41,9 +41,9 @@ global.weapons = {
 			"master_crafted": 40,
 			"artifact": 50
 		},
-		"description": "A stone knife, with inscribed runes. Usually seen used by shamans and cult leaders in various rituals and sacrifices.",
+		"description": "A stone knife, with inscribed runes. Usually seen used by shamans and cult leaders in various rituals and sacrifices. \nTo forge - Rune Analysis.",
 		"melee_hands": 0.25,
-		"ranged_hands": 0,
+		"ranged_hands": 0.1,
 		"ammo": 0,
 		"range": 1,
 		"spli": 5,
@@ -51,20 +51,20 @@ global.weapons = {
 		"special_description": "Spell damage +10%",
 		"tags": ["force", "knife", "primitive"],
 		"specials": {
-			"psychic_amplification": 5
+			"psychic_amplification": 10
 		},
 		"maintenance" : 0.01,
 	},
 	"Stone Hammer": {
 		"abbreviation": "StnHmmr",
 		"attack": {
-			"standard": 25,
-			"master_crafted": 37,
-			"artifact": 45
+			"standard": 30,
+			"master_crafted": 40,
+			"artifact": 50
 		},
-		"description": "A flattened rock attacked to a piece of wood. With a few other tools, it could be a caveman's way of repairing things...",
-		"melee_hands": 0.6,
-		"ranged_hands": 0.6,
+		"description": "A flattened rock attached to a piece of wood. A very primitive tool.",
+		"melee_hands": 0,
+		"ranged_hands": 0,
 		"ammo": 0,
 		"range": 1,
 		"spli": 3, // I'm thinking it might be a good idea to have 'alternative attacks' - like power attack, with low spli, but higher attack, or swing strike with high spli but less damage.
@@ -108,7 +108,7 @@ global.weapons = {
 			"master_crafted": 60,
 			"artifact": 75
 		},
-		"description": "A simple ranged weapon, typically made from wood.",
+		"description": "A simple ranged weapon, typically made from wood. \nTo forge - Early Mechanisms.",
 		"melee_hands": 1,
 		"ranged_hands": 1.25, 
 		"ammo": 10,
@@ -117,8 +117,8 @@ global.weapons = {
 		"arp": 0, // Also Strength, if we want to go into depth with this?
 		"maintenance" : 0.01,
 	},
-	"Early Metal Sword": {
-		"abbreviation": "MtlSrd",
+	"Iron Sword": {
+		"abbreviation": "IrnSrd",
 		"attack": {
 			"standard": 75,
 			"master_crafted": 90,
@@ -129,7 +129,7 @@ global.weapons = {
 			"master_crafted": 10,
 			"artifact": 15
 		},
-		"description": "A sword made out of simple to forge metals, such as bronze or iron.",
+		"description": "A sword made out of simple to forge metals, in this case iron. \nTo forge - Early Metallurgy.",
 		"melee_hands": 1,
 		"ranged_hands": 0.25,
 		"ammo": 0,
@@ -139,16 +139,42 @@ global.weapons = {
 		"tags": ["sword", "primitive"],
 		"maintenance" : 0.01,
 	},
-	"Early Metal Hammer": {
-		"abbreviation": "MtlHmr",
+	"Ritual Iron Sword": {
+		"abbreviation": "RtlIrnSrd",
 		"attack": {
-			"standard": 45,
-			"master_crafted": 60,
-			"artifact": 75
+			"standard": 75,
+			"master_crafted": 90,
+			"artifact": 105
 		},
-		"description": "A hammer made out of simple to forge metals, such as bronze or iron.",
+		"melee_mod": {
+			"standard": 5,
+			"master_crafted": 10,
+			"artifact": 15
+		},
+		"description": "A sword made out of simple to forge metals, in this case iron. This one has inscribed runes. \nTo forge - Early Metallurgy, Rune Analysis.",
 		"melee_hands": 1,
-		"ranged_hands": 0.5,
+		"ranged_hands": 0.25,
+		"ammo": 0,
+		"range": 1,
+		"spli": 6,
+		"arp": 0,
+		"special_description": "Spell damage +10%",
+		"tags": ["force" ,"sword", "primitive"],
+		"specials": {
+			"psychic_amplification": 10
+		},
+		"maintenance" : 0.02,
+	},
+	"Iron Hammer": {
+		"abbreviation": "IrnHmr",
+		"attack": {
+			"standard": 75,
+			"master_crafted": 90,
+			"artifact": 105
+		},
+		"description": "A hammer made out of simple to forge metals, in this case iron.",
+		"melee_hands": 0,
+		"ranged_hands": 0,
 		"ammo": 0,
 		"range": 1,
 		"spli": 3,
@@ -168,7 +194,7 @@ global.weapons = {
 			"master_crafted": 10,
 			"artifact": 15
 		},
-		"description": "A sword made out of steel. Lacking power field, it's damage and parry capabilities are limited.",
+		"description": "A sword made out of steel. Lacking power field, it's damage and parry capabilities are limited. \nTo forge - Advanced Metallurgy.",
 		"melee_hands": 1,
 		"ranged_hands": 0.25,
 		"ammo": 0,
@@ -178,8 +204,8 @@ global.weapons = {
 		"tags": ["sword"],
 		"maintenance" : 0.01,
 	},
-	"Steel Force Sword": {
-		"abbreviation": "StlFrcSwrd",
+	"Ritual Steel Sword": {
+		"abbreviation": "RtlStlSwrd",
 		"attack": {
 			"standard": 105,
 			"master_crafted": 130,
@@ -190,14 +216,14 @@ global.weapons = {
 			"master_crafted": 10,
 			"artifact": 15
 		},
-		"description": "A steel sword that does not have a power field. However, psychically attuned materials used in it's construction may be able to provide it's equivalent.",
+		"description": "A sword made out of steel. Lacking power field, it's damage and parry capabilities are limited. This one has inscribed runes. \nTo forge - Advanced Metallurgy, Rune Analysis.",
 		"melee_hands": 1,
 		"ranged_hands": 0.25,
 		"ammo": 0,
 		"range": 1,
 		"spli": 6,
 		"arp": 1,
-		"special_properties": ["Parry"],
+		"special_description": "Spell damage +10%",
 		"tags": ["force", "sword"],
 		"specials": {
 			"psychic_amplification": 10
@@ -509,7 +535,7 @@ global.weapons = {
 	//40k weapons
 	 // Melee
   "Boarding Shield": {
-    "description":"Protects twice as well when boarding. Used in siege or boarding operations, this shield offers additional protection.  It may be used with a 2-handed ranged weapon.",    
+    "description":"Protects twice as well when boarding. Used in siege or boarding operations, this shield offers additional protection.  It may be used with a 2-handed ranged weapon. \nTo forge - Advanced Metallurgy.",
     "abbreviation": "BrdShld",
     "attack": {
       "standard": 45,
@@ -527,6 +553,7 @@ global.weapons = {
       "artifact": 5 // Adjusted
     },
     "melee_hands": 0.1,
+	"ranged_hands": 0.1,
      "tags":["shield","boarding"],
      "units_whitelist": ["astartes", "terminator"],
 	 "maintenance" : 0.01,
@@ -562,8 +589,8 @@ global.weapons = {
             "master_crafted": 150,
             "artifact": 200
         },
-        "description": "More a sword than a knife for average mortals, this blade, otherwise known as Legion Combat Knife, is a deadly weapon in the hand of a Space Marine.",
-        "melee_hands": 0.4,
+        "description": "More a sword than a knife for average mortals, this blade, otherwise known as Legion Combat Knife, is a deadly weapon in the hand of a Space Marine. \nTo forge - Advanced Metallurgy.",
+        "melee_hands": 0.25,
         "ranged_hands": 0.1,
         "ammo": 0,
         "range": 1,
@@ -579,7 +606,7 @@ global.weapons = {
             "master_crafted": 400,
             "artifact": 500
         },
-        "description": "A standard Chainsword. It is popular among Assault Marines due to their raw power while maintaining speed.",
+        "description": "A standard Chainsword. It is popular among Assault Marines due to their raw power while maintaining speed. \nTo forge - Chain Weaponry.",
         "melee_hands": 1,
         "ranged_hands": 0.25,
         "ammo": 0,
@@ -601,7 +628,7 @@ global.weapons = {
             "master_crafted": 10,
             "artifact": 15
         },
-        "description": "A weapon most frequently seen in the hands of Traitor Astartes, the Chainaxe uses motorized chainsaw teeth to maim and tear. Astartes often duel-wield them to increase frequency of attacks.",
+        "description": "A weapon most frequently seen in the hands of Traitor Astartes, the Chainaxe uses motorized chainsaw teeth to maim and tear. Astartes often duel-wield them to increase frequency of attacks. \nTo forge - Chain Weaponry.",
         "melee_hands": 1,
         "ranged_hands": 0.5,
         "ammo": 0,
@@ -670,7 +697,7 @@ global.weapons = {
             "master_crafted": 5,
             "artifact": 10
         },
-        "description": "An obscenely large Chainsword, this two-handed weapon can carve through flesh and plasteel with equal ease.",
+        "description": "An obscenely large Chainsword, this two-handed weapon can carve through flesh and plasteel with equal ease. \nTo forge - Chain Weaponry.",
         "melee_hands": 2,
         "ranged_hands": 1,
         "ammo": 0,
@@ -714,7 +741,7 @@ global.weapons = {
             "master_crafted": 5,
             "artifact": 10
         },
-        "description": "This weapon's power systems can be activated with the press of a button to sheathe the axe-head in a lethal haze of disruptive energy. Those fortunate enough to get their hands on two tend to duel-wield them.",
+        "description": "This weapon's power systems can be activated with the press of a button to sheathe the axe-head in a lethal haze of disruptive energy. Those fortunate enough to get their hands on two tend to duel-wield them. \nTo forge - Power Field Technology.",
         "melee_hands": 1,
         "ranged_hands": 0.5,
         "ammo": 0,
@@ -736,7 +763,7 @@ global.weapons = {
             "master_crafted": 5,
             "artifact": 10
         },
-        "description": "The most common kind of Power Weapon. When active, the blade becomes sheathed in a lethal haze of disruptive energy that seamlessly cuts through ceramite and flesh. Tends to intrude ranged weapons the least.",
+        "description": "The most common kind of Power Weapon. When active, the blade becomes sheathed in a lethal haze of disruptive energy that seamlessly cuts through almost any known material. Tends to intrude ranged weapons the least. \nTo forge - Power Field Technology.",
         "melee_hands": 1,
         "ranged_hands": 0.25,
         "ammo": 0,
@@ -759,7 +786,7 @@ global.weapons = {
             "master_crafted": 5,
             "artifact": 10
         },
-        "description": "A rare kind of Power Weapon requires great skill to wield. When active, the spearhead becomes sheathed in a lethal haze of disruptive energy.",
+        "description": "A rare kind of Power Weapon requires great skill to wield. When active, the spearhead becomes sheathed in a lethal haze of disruptive energy. \nTo forge - Power Field Technology.",
         "melee_hands": 2,
         "ranged_hands": 1,
         "ammo": 0,
@@ -782,7 +809,7 @@ global.weapons = {
             "master_crafted": 5,
             "artifact": 10
         },
-        "description": "Power weapon variant.",
+        "description": "Power weapon variant. \nTo forge - Power Field Technology.",
         "melee_hands": 1,
         "ranged_hands": 0.5,
         "ammo": 0,
@@ -805,7 +832,7 @@ global.weapons = {
             "master_crafted": 5,
             "artifact": 10
         },
-        "description": "An alternative kind of power weapon that does not fit other, more conventional weapon types.",
+        "description": "An alternative kind of power weapon that does not fit other, more conventional weapon types. \nTo forge - Power Field Technology.",
         "melee_hands": 1,
         "ranged_hands": 0.5,
         "ammo": 0,
@@ -824,7 +851,7 @@ global.weapons = {
             "master_crafted": 350,
             "artifact": 500
         },
-        "description": "Originally industrial tools used for breaking through bulkheads, this laser weapon is devastating in close combat.",
+        "description": "Originally industrial tools used for breaking through bulkheads, this laser weapon is devastating in close combat. \nTo forge - Plastics.",
         "melee_hands": 1,
         "range": 1,
 		"spli": 3,
@@ -3551,8 +3578,8 @@ global.gear = {
 		"Combi-Tool": {
 			"abbreviation": "CmbTl",
 			"special_properties": ["Repairs Vehicles"],
-			"second_profiles": ["Early Metal Hammer"],
-			"description": "The standard utility and maintenance tool in the imperium.",
+			"second_profiles": ["Iron Hammer"],
+			"description": "The standard utility and maintenance tool in the imperium. \nTo forge - Early Metallurgy.",
 			"damage_resistance_mod": {
 				"standard": 0, // Adjusted
 				"master_crafted": 2, // Adjusted
@@ -3566,7 +3593,7 @@ global.gear = {
 			"abbreviation": "SrvArm",
 			"special_properties": ["Repairs Vehicles"],
 			"second_profiles": ["Servo-arm(M)"],
-			"description": "A manipulator mechandendrite, also known as a Servo-arm. This artificial limb is a great aid to help trained Techmarines repair damaged vehicles on the battlefield, yet may be used in melee combat, thanks to its considerable crushing power and weight.",
+			"description": "A manipulator mechandendrite, also known as a Servo-arm. This artificial limb is the best techmarine tool available, besides the Servo-harness variant. \nTo forge - Advanced Mechanisms and Chemistry",
 			"damage_resistance_mod": {
 				"standard": 0, // Adjusted
 				"master_crafted": 5, // Adjusted
@@ -3578,7 +3605,7 @@ global.gear = {
 		"Servo-harness": {
 			"abbreviation": "SrvHrns",
 			"special_properties": ["Repairs Vehicles"],
-			"second_profiles": ["Servo-arm(M)", "Servo-arm(M)", "Flamer", "Plasma Cutter"],
+			"second_profiles": ["Servo-arm(M)", "Servo-arm(M)", "Flamer", "Lascutter"],
 			"description": "A Servo-Harness is a special type of augmetic aid, often used by Chapter's Master of the Forge or his senior Techmarines. It consists of many blessed tools, two Servo-arms and a couple of deadly weapons. With it, one can make battlefield repairs on any vehicle, shore up defences, or even assist his battle-brothers in combat.",
 			"damage_resistance_mod": {
 				"standard": 5, // Adjusted

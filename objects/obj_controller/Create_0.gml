@@ -843,7 +843,7 @@ inqis_flag_gene=0;
 
 faction_justmet=0;
 // ** Sets up starting requisition **
-requisition=5000;
+requisition=10000;
 if (instance_exists(obj_ini)){
     if (
         (obj_ini.progenitor == ePROGENITOR.NONE) &&
@@ -1046,7 +1046,7 @@ known = array_create(14, 0);
 known[0]=2;
 known[eFACTION.Player]=999;
 known[eFACTION.Imperium]=1; // TODO: tweak these with certain traits in mind
-known[eFACTION.Mechanicus]=0;
+known[eFACTION.Mechanicus]=1;
 known[eFACTION.Inquisition]=0;
 known[eFACTION.Ecclesiarchy]=0;
 known[eFACTION.Eldar]=0;
@@ -1357,6 +1357,7 @@ if (obj_ini.fleet_type==ePlayerBase.fleet_based) then fleet_type="Fleet";
 if (obj_ini.fleet_type==ePlayerBase.penitent) then fleet_type="Crusade";
 star_names="";
 // ** Sets up the number of enemy factions to appear **
+// if (scr_has_adv("Peaceful Sector")){} - I want to test something in the future
 tau=1; 
 tyranids=1;
 ork=1;

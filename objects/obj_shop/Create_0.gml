@@ -90,12 +90,12 @@ if (shop = "equipment") {
     item[i] = "Wooden Club";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 1;
-    forge_cost[i] = 10;
+    forge_cost[i] = 1;
     i += 1;
     item[i] = "Wooden Spear";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 1;
-    forge_cost[i] = 10;
+    forge_cost[i] = 1;
     i += 1;
     item[i] = "Ritual Stone Knife";
     item_stocked[i] = scr_item_count(item[i]);
@@ -103,20 +103,13 @@ if (shop = "equipment") {
     if (research.psi[0]>0){
     forge_cost[i] = 100;
     }
-    i += 1;
-    item[i] = "Stone Hammer";
-    item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 1;
-    forge_cost[i] = 10;
 	// Early Conventional Weapons
 	i += 1;
-    item[i] = "Early Metal Sword";
+    item[i] = "Iron Sword";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 1;
 	if (research.metallurgy[0]>0){
-		forge_cost[i] = 10;
-	} else {
-		tooltip_overide[i] = $"{require_tool_tip} {research_pathways.metallurgy[0][0]}"
+		forge_cost[i] = 6;
 	}
 	// Late Conventional Melee Weapons
 	i += 1;
@@ -124,9 +117,7 @@ if (shop = "equipment") {
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 1;
 	if (research.metallurgy[0]>1){
-		forge_cost[i] = 10;
-	} else {
-		tooltip_overide[i] = $"{require_tool_tip} {research_pathways.metallurgy[0][1]}"
+		forge_cost[i] = 12;
 	}
 	// Weapons of 40k
     i += 1;
@@ -135,8 +126,6 @@ if (shop = "equipment") {
     item_cost[i] = 1;
 	if (research.metallurgy[0]>1){
     forge_cost[i] = 10;
-	} else {
-		tooltip_overide[i] = $"{require_tool_tip} {research_pathways.metallurgy[0][1]}"
 	}
     i += 1;
     item[i] = "Chainsword";
@@ -144,25 +133,19 @@ if (shop = "equipment") {
     item_cost[i] = 5;
 	if (research.chain[0]>0){
     forge_cost[i] = 25;
-	} else {
-        tooltip_overide[i] = $"{require_tool_tip} {research_pathways.chain[0][0]}"
-    }
+	}
     i += 1;
     item[i] = "Chainaxe";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 6;
 	if (research.chain[0]>0){
     forge_cost[i] = 30;
-	} else {
-        tooltip_overide[i] = $"{require_tool_tip} {research_pathways.chain[0][0]}"
-    }
+	}
     i += 1;
     x_mod[i] = 9;
     item[i] = "Eviscerator";
     if (research.chain[0]>0){
         forge_cost[i] = 150;
-    } else {
-        tooltip_overide[i] = $"{require_tool_tip} {research_pathways.chain[0][0]}"
     }
     item_stocked[i] = scr_item_count(item[i]);
     nobuy[i] = 1;
@@ -291,7 +274,7 @@ if (shop = "equipment") {
     item[i] = "Force Staff";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 80;
-    if (research.psi[0]>0){
+    if (research.psi[0]>1){
         forge_cost[i] = 500;
         item_cost[i] = 50;
     }
@@ -302,7 +285,7 @@ if (shop = "equipment") {
 	i += 1;
     item[i] = "Force Sword";
     item_stocked[i] = scr_item_count(item[i]);
-    if (research.psi[0]>0){
+    if (research.psi[0]>1){
         forge_cost[i] = 400;
     }
     item_cost[i] = 55;
@@ -313,7 +296,7 @@ if (shop = "equipment") {
 	i += 1;
     item[i] = "Force Axe";
     item_stocked[i] = scr_item_count(item[i]);
-    if (research.psi[0]>0){
+    if (research.psi[0]>1){
         forge_cost[i] = 450;
     }
     item_cost[i] = 60;
@@ -406,8 +389,6 @@ if (shop = "equipment") {
     item_cost[i] = 1;
 	if (research.plastics[0]>0){
 		forge_cost[i] = 10;
-	} else {
-		tooltip_overide[i] = $"{require_tool_tip} {research_pathways.plastics[0][0]}"
 	}
 	// Weapons of 40k
     i += 1;
@@ -1020,6 +1001,13 @@ if (shop = "equipment2") {
     item_stocked[i] = scr_item_count(item[i]);
     forge_cost[i] = 50;
     item_cost[i] = 2;
+    i += 1;
+	x_mod[i] = 9;
+    item[i] = "Stone Hammer";
+    item_stocked[i] = scr_item_count(item[i]);
+    item_cost[i] = 0;
+	nobuy[i] = 1;
+    forge_cost[i] = 0;
 // Conventional tools
 	i += 1;
     x_mod[i] = 9;
@@ -1027,10 +1015,15 @@ if (shop = "equipment2") {
     item_stocked[i] = scr_item_count(item[i]);
 	if (research.metallurgy[0]>0){
 		forge_cost[i] = 75;
-	} else {
-		tooltip_overide[i] = $"{require_tool_tip} {research_pathways.metallurgy[0][0]}"
 	}
     item_cost[i] = 5;
+	i += 1;
+	x_mod[i] = 9;
+    item[i] = "Iron Hammer";
+    item_stocked[i] = scr_item_count(item[i]);
+    item_cost[i] = 0;
+	nobuy[i] = 1;
+    forge_cost[i] = 0;
 // 40k items
     i += 1;
     x_mod[i] = 9;
@@ -1039,9 +1032,6 @@ if (shop = "equipment2") {
     // Requires mechnchem progression
     if (research.mechnchem[0] > 0) {
         forge_cost[i] = 250;
-    } else {
-        forge_cost[i] = 0;
-        tooltip_overide[i] = $"{require_tool_tip} {research_pathways.mechnchem[0][0]}";
     }
     item_cost[i] = 25;
     if (rene = 1) {
@@ -1280,8 +1270,7 @@ if (shop = "vehicles") {
     item[i] = "Heavy Bolter Sponsons";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 38;
-	forge_cost[i] = 380;
-	if (research.bolt[0]> 0) then forge_cost[i] = 100;
+	if (research.bolt[0]> 0) then forge_cost[i] = 380;
     if (rene = 1) {
         nobuy[i] = 1;
         item_cost[i] = 0;
@@ -1861,7 +1850,7 @@ if (shop == "production"){
         item[i] = ["research", research_pathways.metallurgy[0][research.metallurgy[0]], ["metallurgy"]];
         item_stocked[i] = 0;
         forge_cost[i] = 500;
-		tooltip_overide[i] = "Our options to forge weaponry are going to be very limited with access to just carpentry and stoneworking. Building basic metalworking tools and facilities will expand these options. \nRequired for: Early Metal Sword, Chainmail Armour, Combi-Tool."; // Iron Armour and numerous other items
+		tooltip_overide[i] = "Our options to forge weaponry are going to be very limited with access to just carpentry and stoneworking. Building basic metalworking tools and facilities will expand these options. \nRequired for: Iron Sword, Chainmail Armour, Combi-Tool."; // Iron Armour and numerous other items
 	}
 	if (research.mechanisms[0] == 0){
         i++;
