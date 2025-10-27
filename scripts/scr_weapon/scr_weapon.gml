@@ -880,6 +880,7 @@ global.weapons = {
         "spli": 1,
         "tags":["banner"],
 		"maintenance" : 0.01,
+		"recovery_chance" : 99,
     },
 	"Xenophase Blade": {
 		"abbreviation": "XenoPhs",
