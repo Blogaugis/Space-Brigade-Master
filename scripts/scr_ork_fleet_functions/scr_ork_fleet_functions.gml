@@ -64,7 +64,7 @@ function ork_fleet_arrive_target(){
     if (_ork_fleet=="none") then return;
     var aler=0;
 
-    var _imperial_ship = scr_orbiting_fleet([eFACTION.Imperium, eFACTION.Mechanicus]);
+    var _imperial_ship = scr_orbiting_fleet([eFACTION.Imperium, eFACTION.Mechanicus]); // TODO Add eFACTION.Sisters and eFACTION.Inquisition later
     if (_imperial_ship == "none" && planets>0 && !has_orbiting_player_fleet()){
         var _allow_landing = true,ork_attack_planet=0,l=0;
         var _planets = shuffled_planet_array();
@@ -85,14 +85,14 @@ function ork_fleet_arrive_target(){
                 if (planet_feature_bool(p_feature[ork_attack_planet], P_features.Gene_Stealer_Cult)){
                     _pdata.delete_feature(P_features.Gene_Stealer_Cult);
                     adjust_influence(eFACTION.Tyranids, -25, ork_attack_planet);
-                    var nearest_imperial = nearest_star_with_ownership(x,y,eFACTION.Imperium, self.id);
+    /*                var nearest_imperial = nearest_star_with_ownership(x,y,eFACTION.Imperium, self.id);
                     if (nearest_imperial != "none"){
                         var targ_planet = scr_get_planet_with_owner(nearest_imperial,eFACTION.Imperium);
                         if (targ_planet==-1){
                             targ_planet = irandom_range(1, nearest_imperial.planets);
                         }
                         _pdata.send_colony_ship(nearest_imperial.id, targ_planet, "refugee");
-                    }
+                    } */ // TODO The refugee system needs improvements - refugees should spawn whenever a hostile entity to imperium invades imperial world, not only when Tyranids are present and the world is attacked by orks.
                 }
             }
         }
@@ -132,7 +132,7 @@ function ork_fleet_arrive_target(){
             if (!_fleet_persists){
                 scr_alert("green","owner",$"Ork ships have crashed across the {name} system.",x,y);
             } else {
-                scr_alert("green","owner",$"Ork ships Spill their ravenouss hordes accross {name} system and the green skin captains turn their guns towards the surface.",x,y);
+                scr_alert("green","owner",$"Ork ships unload their sizable ork contingent accross {name} system, yet sizable fleet remains in orbit.",x,y);
             }
         } else {
             var new_wagh_star = distance_removed_star(x,y, choose(2,3,4,5));
@@ -169,17 +169,17 @@ function merge_ork_fleets(){
 }
 
 function init_ork_waagh(overide = false){
-    var waaagh=roll_dice(1,100);
+    var waaagh=roll_dice(1,5);
 
     var _ork_stars = scr_get_stars(false,[eFACTION.Ork]);
 
     var _ork_star_count = array_length(_ork_stars);
-    if (_ork_star_count>=5 && (waaagh<=_ork_star_count || overide) && obj_controller.known[eFACTION.Ork]==0)/* or (obj_controller.is_test_map=true)*/{
+    if (_ork_star_count<=5 && (waaagh<=_ork_star_count || overide) && obj_controller.known[eFACTION.Ork]==0)/* or (obj_controller.is_test_map=true)*/{
         obj_controller.known[eFACTION.Ork]=0.5;
         //set an alarm for all ork controlled planets
 
 
-        scr_popup("WAAAAGH!","The greenskins have swelled in activity, their numbers increasing seemingly without relent.  A massive Warboss has risen to take control, leading most of the sector's Orks on a massive WAAAGH!","waaagh","");
+        scr_popup("Ork Rampage!","Various sources report that orks exhibit increased activity.  It seems that an ork Warboss has risen and unified orks, leading most of them on their so called /WAAAGH!/.","waaagh","");
         scr_event_log("red","Ork WAAAAGH! begins.");
         
         var ork_waagh_activity = [];
@@ -222,7 +222,7 @@ function init_ork_waagh(overide = false){
             }
 
             if (_pdata.planet_forces[eFACTION.Ork] < 4) {
-                _pdata.add_forces(eFACTION.Ork, 2);
+                _pdata.add_forces(eFACTION.Ork, 1);
             }
         } else {
             out_of_system_warboss(true);
@@ -246,7 +246,7 @@ function out_of_system_warboss(overide = false){
             faction_leader[eFACTION.Ork] = _warboss.name;
             faction_title[7]="Warboss";
             faction_status[eFACTION.Ork]="War";
-            scr_audience(eFACTION.Ork, "new_warboss", -40,"War", 0, 2);     
+            scr_audience(eFACTION.Ork, "new_warboss", -40,"War", 0, 2);      // TODO: tweak starting disposition in accordance with "Tolerant" trait.
         } else {
             known[eFACTION.Ork] = 0.5;
         }
@@ -326,8 +326,8 @@ function out_of_system_warboss(overide = false){
         var _ork_leader = obj_controller.faction_leader[eFACTION.Ork];
         var tix=$"Warboss {_ork_leader} leads a WAAAGH! into Sector {obj_ini.sector_name}.";
         scr_alert("red","lol",string(tix),starf.x,starf.y);
+        scr_popup("Ork Invasion!",$"A so called /WAAAGH!/ led by the Warboss {_ork_leader} has arrived in {obj_ini.sector_name}.  The forefront of the ork group is headed for the {starf.name} system.","waaagh","");
         scr_event_log("red",tix);
-        scr_popup("WAAAAGH!",$"A WAAAGH! led by the Warboss {_ork_leader} has arrived in {obj_ini.sector_name}.  With him is a massive Ork fleet.  Numbering in the dozens of battleships, they carry with them countless greenskins.  The forefront of the WAAAGH! is destined for the {starf.name} system.","waaagh","");
     }
     }
 }
