@@ -152,7 +152,7 @@ function ork_fleet_arrive_target(){
 }
 
 
-//TOSO provide logic for fleets to attack each other
+//TODO provide logic for fleets to attack each other
 function merge_ork_fleets(){
 
     var _stars_with_ork_fleets = stars_with_faction_fleets(eFACTION.Ork);
