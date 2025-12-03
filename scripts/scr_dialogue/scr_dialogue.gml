@@ -2307,7 +2307,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	        if (rando==2) then diplo_text="[["+string(faction_leader[diplomacy])+" is considered a veteran of countless engagements.  His name is known in extended campaigns of looting and violence.  He and the rest of his tribe hail from the "+string(choose("Goffs","Blood Axes","Bad Moons","Death Skulls","Death Skulls"))+" clan.]]";
 	        diplo_text+="\n#";
 			if (scr_has_adv("Enemy: Orks")){
-				diplo_text+="Oi Beaky! I ain't heard your name round here before! If ya eva get bored of havin' your ‘ead attached to your shouldas, good old "+string(faction_leader[diplomacy])+" can sort dat out for ya!";
+				diplo_text+="Oi Beaky! I ain't heard your name round here before! If ya eva get bored of havin' your ‘ead attached to your shouldas, good old "+string(faction_leader[diplomacy])+" can sort dat out for ya! [[You start to feel a desire to bash this greenskin's face in, if not more...]]";
 			} else {
 				if (scr_has_disadv("Tolerant")){
 					diplo_text+="You seem good for a scrap, ya beaky faced ponce! Bring your lads down my way some time and we'll have one!";
@@ -2530,8 +2530,8 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	if (diplomacy==8){
 	    if (diplo_keyphrase=="intro"){
 	        rando=choose(1,2);     
-	        if (rando==1) then tempd="[[Tall and slender, this is "+string(faction_title[8])+" "+string(faction_leader[eFACTION.Tau])+".  This particular xenos is said to "+choose("have quite the silver tongue","have negotiated the surrender of many Imperial worlds","have a great deal of military backing.")+".]]";
-	        if (rando==2) then tempd="[[Tall and slender, its skin is a light blue and looks almost reptilian.  This must be "+string(faction_title[8])+" "+string(faction_leader[eFACTION.Tau])+".  If Ordo Xenos reports are to be believed, this particular individual "+choose("can sense weakness in a rock","knows more than it will let on","uses its words like a scalpel")+".]]";
+	        if (rando==1) then tempd="[[This is "+string(faction_title[8])+" "+string(faction_leader[eFACTION.Tau])+".  This particular xenos is said to "+choose("have quite the silver tongue","have negotiated the surrender of many Imperial worlds","have a great deal of military backing.")+".]]";
+	        if (rando==2) then tempd="[[This must be "+string(faction_title[8])+" "+string(faction_leader[eFACTION.Tau])+".  If Ordo Xenos reports are to be believed, this particular individual "+choose("can sense weakness in a rock","knows more than it will let on","uses its words like a scalpel")+".]]";
 	        tempd+="\n#";
 	        rando=choose(1,2);
 	        if (rando==1) then tempd+="Greetings, Chapter Master.  As you know, we have claimed for ourselves planets along the borders of your Imperium.  I wish to clarify that we of the Tau do not seek a war.  Rather, we hope to cooperate with you so that we may both work towards a Greater Good."; 

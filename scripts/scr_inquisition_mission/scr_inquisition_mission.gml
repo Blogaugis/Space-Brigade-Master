@@ -732,7 +732,7 @@ function mission_investigate_planet(){
 	    text += $" You have {string(eta)} months to complete this task.";
 	    scr_popup("Inquisition Recon",text,"inquisition",$"recon|{string(_star.name)}|{string(planet)}|{string(eta)}|");
 
-}
+} // TODO - copy, paste, and tweak this mission as a placeholder sisters of battle faction mission
 
 
 /// @mixin obj_star

@@ -91,9 +91,9 @@ function scr_apothecarium(){
         draw_set_font(fnt_40k_14);
     }
 
-    blurp = "Milord, I come with a report.  Our Chapter currently boasts " + string(temp[36]) + " " + string(obj_ini.role[100, 15]) + " working on a variety of things, from field-duty to research to administrative duties.  ";
+    blurp = "Greetings Chapter Master.  Apothecarium is operational, with " + string(temp[36]) + " " + string(obj_ini.role[100, 15]) + " working on associated duties.  ";
 
-    if (training_apothecary = 0) then blurp += "Our Brothers are currently not assigned to train further " + string(obj_ini.role[100, 15]) + "; no more can be trained until Apothcarium funds are increased.";
+    if (training_apothecary = 0) then blurp += "We are currently not assigned to train further " + string(obj_ini.role[100, 15]) + "; additional requisition funding is required to begin training.";
     //
     if (training_apothecary > 0) then blurp += "Our Brothers assigned to the training of future " + string(obj_ini.role[100, 15]) + "s have taken up a ";
     if (training_apothecary >= 1 && training_apothecary <= 6){
@@ -110,10 +110,11 @@ function scr_apothecarium(){
 
     // 
 
-    if (gene_seed <= 0) then blurp += "##My lord, our stocks of gene-seed are empty.  It would be best to have some come mechanicus tithe.##Further training of Neophytes is halted until our stocks replenish.";
-    if (gene_seed > 0) and(gene_seed <= 10) then blurp += "##My Brother " + string(obj_ini.role[100, 15]) + "s assigned to the gene-vault have informed me that our stocks are nearly gone.  They only number " + string(gene_seed) + "; this includes those recently recovered from our fallen comerades-in-arms.";
-    if (gene_seed > 10) then blurp += "##My Brother " + string(obj_ini.role[100, 15]) + "s assigned to the gene-vault have informed me that our stocks of gene-seed currently number " + string(gene_seed) + ".  This includes those recently recovered from our fallen comerades-in-arms.";
-    if (gene_seed > 0) then blurp += "##The stocks are stable and show no sign of mutation.";
+    if (gene_seed <= 0) then blurp += "##Our stocks of gene-seed are empty.  We can extract some gene-seed from our brothers fallen in battle - provided an apothecary is present - or from executing traitor brothers in Penitorium, if we are that desperate...##Further training of Neophytes is halted until our stocks replenish.";
+	if (obj_controller.faction_status[eFACTION.Mechanicus] != "War") {blurp += $"It would be best to have some gene-seed for mechanicus tithe, collected every 2 years."};
+    if (gene_seed > 0) and(gene_seed <= 10) then blurp += "##My Brother " + string(obj_ini.role[100, 15]) + "s assigned to the gene-vault have informed me that our stocks are very low in number,  only " + string(gene_seed) + " to be exact; this includes those recently recovered from our fallen brothers-in-arms.";
+    if (gene_seed > 10) then blurp += "##My Brother " + string(obj_ini.role[100, 15]) + "s assigned to the gene-vault have informed me that our stocks of gene-seed currently number " + string(gene_seed) + ".  This includes those recently recovered from our fallen brothers-in-arms.";
+    /* if (gene_seed > 0) then blurp += "##The stocks are stable and show no sign of mutation."; */ // TODO: This blurp is pointless as-is, it should instead be made into, for example, listing gene-seed mutations or other information useful to player
 
     if (menu_adept = 1) {
         var _recruit_pace = ARR_recruitment_pace;
@@ -130,7 +131,7 @@ function scr_apothecarium(){
     var _slave_length = array_length(obj_ini.gene_slaves);
     if (!obj_ini.zygote) {
         if (obj_controller.marines + obj_controller.gene_seed <= 300) and(_slave_length = 0) {
-            blurp2 = "Our Chapter is disasterously low in number- it is strongly advised that we make use of test-slaves to breed new gene-seed.  Give me the word andwe can begin installing gestation pods.";
+            blurp2 = "Our Chapter is very low in number - I strongly advise that we make use of test-slaves to breed new gene-seed.  Gene Pod Incubators can be bought or forged in the Armamentarium.";
         }
         else if (obj_controller.marines + obj_controller.gene_seed > 300) and(_slave_length = 0) {
             blurp2 = "Our Chapter is capable of using test-slaves to breed new gene-seed.  Should our number of astartes ever plummet this may prove a valuable method of rapidly bringing our chapter back up to size.";
@@ -139,7 +140,7 @@ function scr_apothecarium(){
             blurp2 = "Our Test-Slave Incubators are working optimally.  As soon as a batch fully matures a second progenoid gland they will be harvested and prepared for use.";
         }
     }
-    if (obj_ini.zygote = 1) then blurp2 = "Unfortunantly we cannot make use of Test-Slave Incubators.  Due to our missing Zygote any use of gestation pods is ultimately useless- no new gene-seed may be grown, no matter how long we wait.";
+    if (obj_ini.zygote = 1) then blurp2 = "Due to our missing Zygote any use of gestation pods is ultimately useless- no new gene-seed may be grown, no matter how long we wait.";
 
     draw_set_halign(fa_center);
     draw_set_color(c_gray);
@@ -173,7 +174,7 @@ function scr_apothecarium(){
         }
     } else {
         if (scr_hit(draw_unit_buttons([xx + 411, yy + 793],"Add Test-Slave",[0.75,0.75],c_grey))){
-            tooltip_draw("No available Gene Pod Incubators, Build more Gene Pod Incubators in the forge");
+            tooltip_draw("No available Gene Pod Incubators, Build or purchase more Gene Pod Incubators in the Armamentarium");
         }
     }
 
