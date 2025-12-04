@@ -11,7 +11,7 @@ enum eTrials{
 #macro ARR_recruitment_pace [" is currently halted."," is advancing sluggishly."," is advancing slowly."," is advancing moderately fast."," is advancing fast."," is advancing frenetically."," is advancing as fast as possible."]
 
 #macro ARR_recruitement_rate  ["HALTED","SLUGGISH","SLOW","MODERATE","FAST","FRENETIC","MAXIMUM",]
-#macro ARR_recruitment_rates  ["halted","sluggish","slow","moderate","fast","frenetic","hereticly fast"]
+#macro ARR_recruitment_rates  ["halted","sluggish","slow","moderate","fast","frenetic","as fast as possible"]
 
 #macro ARR_neophyte_rate  ["HALTED","ONGOING"]
 #macro ARR_neophyte_rates  ["halted","ongoing"]
@@ -695,21 +695,21 @@ function scr_draw_recruit_advisor(){
         draw_set_font(fnt_40k_14);
     }
 
-    if (menu_adept = 0) then blurp = $"Hail {obj_ini.name[0, 0]}! You asked for a report?\n\n";
+    if (menu_adept = 0) then blurp = $"Hail {obj_ini.name[0, 0]}!\n\n";
 
 	if (obj_ini.doomed == 0) {
 		if (recruits <= 0) {
 			if (marines >= 1000) {
-				blurp += "Our Chapter currently has no Neophytes - we are at maximum strength and do not require more marines.";
+				blurp += "Chapter currently has no Neophytes, but we are at intended Codex Astartes strength (if not exceeding it) and do not require more marines.";
 			}
 			if ((marines < 1000) && (recruiting == 0)) {
-				blurp += "Our Chapter currently has no Neophytes. Without training more our chapter is doomed to a slow death.";
+				blurp += "Chapter currently has no Neophytes. We are below the Codex Astartes intended strength, so I suggest we proceed with recruitment.";
 			}
 			if ((marines < 1000) && (recruiting > 0)) {
-				blurp += "Our Chapter currently has no Neophytes. We are doing our utmost best to find suitable recruits.";
+				blurp += "Chapter currently has no Neophytes. Recruitment efforts are underway to find suitable recruits.";
 			}
 		} else if (recruits == 1) {
-			blurp += $"Our Chapter currently has one recruit being trained. The Neophyte's name is {recruit_name[0]} and they are scheduled to become a battle brother in {recruit_training[0] + recruit_distance[0]} months' time.";
+			blurp += $"Chapter currently has one recruit being trained. Scheduled to become a battle brother in {recruit_training[0] + recruit_distance[0]} months' time.";
 		} else if (recruits > 1) {
 			blurp += $"Our Chapter currently has {recruits} recruits being trained. {recruit_name[0]} is the next scheduled Neophyte to become a battle brother in {recruit_training[0] + recruit_distance[0]} months' time.";
 		}
@@ -718,21 +718,21 @@ function scr_draw_recruit_advisor(){
 			var _recruit_rates = ARR_neophyte_rates;
 			var _cur_recruit_rate = $"The recruitment is {_recruit_rates[recruiting]}";
 			if ((recruiting == 0) && (marines >= 1000)) {
-				blurp += $"\n{_cur_recruit_rate}. You must only give me the word and I can begin further increasing our numbers... though this would violate the Codex Astartes.";
+				blurp += $"\n{_cur_recruit_rate}. I can begin further increasing our numbers, though our allies may see this as violation of Codex Astartes.";
 			} else if ((recruiting == 0) && (marines < 1000)) {
-				blurp += $"\n{_cur_recruit_rate}. You must only give me the word and I can begin further increasing our numbers.";
+				blurp += $"\n{_cur_recruit_rate}. I can begin further increasing our numbers. The rate depends on Apothecaries present - either on planet or on ships in orbit - and requisition allowance.  Requisition allowance is set on the world's population screen.";
 			} else if (recruiting == 1) {
-				blurp += $"\n{_cur_recruit_rate}.";
+				blurp += $"\n{_cur_recruit_rate}. The rate depends on Apothecaries present - either on planet or on ships in orbit - and requisition allowance.  Requisition allowance is set on the world's population screen.";
 			}
 		}
 	}
 
 	if (obj_ini.doomed == 1) {
-		blurp += "\nMutation of our gene-seed currently makes us unable to recruit new Neophytes. We are doomed to a slow demise unless the Apothecaries can fix it.";
+		blurp += "\nOur gene-seed mutation currently makes us unable to recruit new Neophytes. We are on a slow demise unless the Apothecaries can mend it.";
 	}
 	
 	if (gene_seed == 0) {
-		blurp += "\nThere is no more gene-seed in our vaults and we cannot create more neophytes as a result. Something must be done, Chapter Master.";
+		blurp += "\nWe cannot create more Neophytes without gene-seed. While I usually suggest sorting such issues in Apothecarium, I must admit Penitorium can also give a desperate solution.";
 	}
 	
 	if (recruiting > 0) {
