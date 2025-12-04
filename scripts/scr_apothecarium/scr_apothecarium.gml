@@ -174,7 +174,7 @@ function scr_apothecarium(){
         }
     } else {
         if (scr_hit(draw_unit_buttons([xx + 411, yy + 793],"Add Test-Slave",[0.75,0.75],c_grey))){
-            tooltip_draw("No available Gene Pod Incubators, Build or purchase more Gene Pod Incubators in the Armamentarium");
+            tooltip_draw("No available Gene Pod Incubators. Build or purchase more Gene Pod Incubators in the Armamentarium.");
         }
     }
 
