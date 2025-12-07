@@ -1529,13 +1529,13 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 
 			add_diplomacy_option({
 				option_text:"Skip Inspection",
-				method : inquis_demand_inspection_pass,
+				choice_func : inquis_demand_inspection_pass,
 			});
 
 	        if (inspection_passes>0){
 				add_diplomacy_option({
 					option_text:"Skip Inspection (Use pass)",
-					method : inquis_use_inspection_pass
+					choice_func : inquis_use_inspection_pass
 				});
 			}
 			add_diplomacy_option({
@@ -1561,7 +1561,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	        add_diplomacy_option({
 	        	option_text:"It will not happen again", 
 	        	key : "serf_removal_submit",
-	        	method : function(){
+	        	choice_func : function(){
 	                scr_dialogue("you_better");
 	                force_goodbye=1;
 	                hunt_player_serfs(audience_data.planet, audience_data.system);
@@ -1576,7 +1576,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	        add_diplomacy_option({
 	        	option_text:"Very well", 
 	        	key : "serf_removal_accept",
-	        	method : function(){
+	        	choice_func : function(){
                     force_goodbye=1;
 
                     hunt_player_serfs(audience_data.planet, audience_data.system);
@@ -1594,7 +1594,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	        	add_diplomacy_option({
 	        		option_text:"Perhaps We can come to an arrangement", 
 	        		tooltip : "This action will trigger a Charisma test",
-	        		method : function(){
+	        		choice_func : function(){
 
 	        		}
 	        	});
@@ -1603,7 +1603,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	        	option_text:$"You will not.  {_star_name} is MINE!", 
 	        	key : "serf_removal_defy",
 	        	force_goodbye : 1,
-	        	method : function(){
+	        	choice_func : function(){
 	               	alter_dispositions([
 	            		[eFACTION.Imperium, -30],
 	            		[eFACTION.Inquisition, -60],
@@ -2048,7 +2048,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	        add_diplomacy_option({
 	        	option_text:"Give 500 Requisition",
 	        	goto : "elder_mission1_thanks",
-	        	method : function(){
+	        	choice_func : function(){
                     scr_loyalty("Xeno Trade","+");
                     scr_quest(2,"fund_elder",6,0);
                     requisition-=500;	        		
@@ -2061,7 +2061,7 @@ function scr_dialogue(diplo_keyphrase, data = {}) {
 	        add_diplomacy_option({
 	        	option_text:"Refuse",
 	        	goto : "mission1_refused",
-	        	method : function(){
+	        	choice_func : function(){
 	        		scr_quest(3,"fund_elder",6,0);
 	        		questing=0;
 	        	}
