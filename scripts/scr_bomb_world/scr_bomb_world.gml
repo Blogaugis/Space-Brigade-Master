@@ -6,11 +6,11 @@ function scr_bomb_world(bombard_target_faction, bombard_ment_power, target_stren
 
 	// TODO - update descriptions below, once we get Surface to Orbit weaponry into the game
 
-	var txt1=choose("Your cruiser and larger ship", "The heavens rumble and thunder as your ship"); // TODO - add more variation, for different planets, perhaps different ships, CMs positioning, planetary features and other factors
+	var txt1="Your cruiser and larger ship"; // TODO - add more variation, for different planets, perhaps different ships, CMs positioning, planetary features and other factors
 	if (obj_bomb_select.ships_selected>1) then txt1+="s";
-	txt1+=choose(" position themselves over the target in close orbit, and unleash", " unload");
-	if (obj_bomb_select.ships_selected=1) then txt1+="s";
-	txt1+= $" annihilation upon {name()}. Even from space the explosions can be seen, {choose("tearing ground", "hammering", "battering", "thundering")} across the planet's surface.";
+	txt1+=" position themselves over the target in close orbit, and unleash";
+	// if (obj_bomb_select.ships_selected=1) then txt1+="s";
+	txt1+= $" annihilation upon {name()}. Even from the void, explosions can be seen, {choose("hammering", "battering")} across the planet's surface.";
 
 	kill = population_small_conversion(0.15);
 
@@ -65,17 +65,17 @@ function scr_bomb_world(bombard_target_faction, bombard_ment_power, target_stren
 	    		bombard_protection=4; // Hi-tech faction
 	    		break;
 	    	case 7:
-	    		txt2="##The Ork forces, for brutal savages, are well dug in; "; // TODO spice up descriptions with variable levels of protection
-	    		bombard_protection=2;
+	    		txt2="##The Ork forces are poorly fortified; "; // TODO spice up descriptions with variable levels of protection
+	    		bombard_protection=1;
 	    		if (has_feature(P_features.OrkStronghold)){
 	    			var _stronghold = get_features(P_features.OrkStronghold)[0];
 	    			var _protection = floor(_stronghold.tier);
 	    			bombard_protection += _protection;
 	    			if (_protection){
-	    				if (bombard_protection == 3){
-	    					txt2 = "The Ork Stronghold on this planet is sizeable and provides the Orks with heavy protection"
+	    				if (bombard_protection == 2){
+	    					txt2 = "Ork Stronghold on this planet provides the Orks a competent protection against bombardment"
 	    				} else {
-	    					txt2 = "The Ork Stronghold Provides near absolute protection for the greenskins within the vast shielding is impressivly effective despite it's seemingly primitive designs";
+	    					txt2 = "A large Ork stronghold provides the greenskins with a surprising amount of protection, for such a shoddy constructions";
 	    				}
 	    			}
 	    		}
@@ -263,6 +263,12 @@ function scr_bomb_world(bombard_target_faction, bombard_ment_power, target_stren
             if (system.p_influence[planet][eFACTION.Tau] < 0) {
                 system.p_influence[planet][eFACTION.Tau] = 0;
             }
+			system.p_influence[planet][eFACTION.Tyranids] -= sci1;
+			if (system.p_influence[planet][eFACTION.Tyranids] < 0) {
+                system.p_influence[planet][eFACTION.Tyranids] = 0;
+            }
+			if (planet_feature_bool(system.p_feature[planet], P_features.Gene_Stealer_Cult)) {
+                delete_features(system.p_feature[planet], P_features.Gene_Stealer_Cult); }
         }
 
 	    var pip=instance_create(0,0,obj_popup);
@@ -273,11 +279,11 @@ function scr_bomb_world(bombard_target_faction, bombard_ment_power, target_stren
     
 	    if (pop_after==0 && pop_before>0){
 	        if (current_owner=2) and (obj_controller.faction_status[eFACTION.Imperium]!="War"){
-	            if (planet_type="Temperate" || planet_type="Hive" || planet_type="Desert"){
+	            if (planet_type="Temperate" || planet_type="Hive" || planet_type="Agri"){
 	            	var _disp_neg = 0;
 		            if (planet_type="Temperate"){ 
 		            	_disp_neg-=5;
-		            }else if (planet_type="Desert"){ 
+		            }else if (planet_type="Agri"){ 
 		            	_disp_neg-=3;
 		            }else if (planet_type="Hive"){ 
 		            	_disp_neg-=10;
@@ -288,7 +294,7 @@ function scr_bomb_world(bombard_target_faction, bombard_ment_power, target_stren
 	            var _disp_neg = 0;
 	            if (planet_type="Forge"){
 	            	_disp_neg-=15;
-	        	}else if (planet_type="Ice"){
+	        	}else if (planet_type="Lava"){
 	        		_disp_neg-=7;
 	       		}
 	       		scr_audience(eFACTION.Mechanicus, "bombard_angry", _disp_neg,);
@@ -316,9 +322,9 @@ function scr_bomb_world(bombard_target_faction, bombard_ment_power, target_stren
 
 	if (planet_type="Space Hulk"){
 	    var bombard_protection=1;
-	    txt1="Torpedoes and Bombardment Cannons rain hell upon the space hulk; ";
+	    txt1="With bombardment target being out in the cosmos, more weapons can be used for bombardment; ";
     
-	    reduced_bombard_score=bombard_ment_power/1.25;// fraction of bombardment score, TODO maybe we should make SHs more vulnerable to bombardment? They are out in space, and can be targeted with other weapons
+	    reduced_bombard_score=bombard_ment_power/0.9;// fraction of bombardment score, TODO maybe we should make SHs more vulnerable to bombardment? They are out in space, and can be targeted with other weapons
 	    strength_reduction=0;txt3="";
     
 	    var rel=0;
