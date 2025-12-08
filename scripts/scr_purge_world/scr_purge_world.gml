@@ -246,7 +246,7 @@ function scr_purge_world(star, planet, action_type, action_score) {
                     adjust_influence(eFACTION.Tyranids, -5, planet, star);
                 } else if (nid_influence > 0) {
                     txt1 += "Marines noted the traces of a genestealer infestation, your marines handled the few that they managed to locate, but they note the limited effectiveness.  Some suggest a more drastic purge or permament garrison to keep the genestealer infestation in check.";
-					adjust_influence(eFACTION.Tyranids, -1, planet, star)
+					adjust_influence(eFACTION.Tyranids, -1, planet, star);
                 }
             }
         
