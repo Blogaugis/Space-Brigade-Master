@@ -4,13 +4,13 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	var isquest,thequest,questnum;isquest=0;thequest="";questnum=0;pop_after=0;txt1="";txt2="";overkill=0;
 
 
-
-	if ((action_type==DropType.PurgeFire) or (action_type==DropType.PurgeSelective)) and (star.p_traitors[planet]=0) and (star.p_chaos[planet]=0) and (obj_controller.turn>=obj_controller.chaos_turn){
+	// TODO - A small scale engagement during a selective purge with chaos elements 
+	if /* ( */(action_type==DropType.PurgeFire) /* or (action_type==DropType.PurgeSelective)) */ and (star.p_traitors[planet]=0) and (star.p_chaos[planet]=0) and (obj_controller.turn>=obj_controller.chaos_turn){
 	    if (planet_feature_bool(star.p_feature[planet],P_features.Warlord10) == 1) and (obj_controller.known[10]=0) and (obj_controller.faction_gender[10]=1) then with(obj_drop_select){
 	        var pop=instance_create(0,0,obj_popup);
 	        pop.image="chaos_symbol";
 	        pop.title="Concealed Heresy";
-	        pop.text=$"Your astartes set out and begin to cleanse {planet_numeral_name(planet, star)} of possible heresy.  The general populace appears to be devout in their faith, but a disturbing trend appears- the odd citizen cursing your forces, frothing at the mouth, and screaming out heresy most foul.  One week into the cleansing a large hostile force is detected approaching and encircling your forces.";        
+	        pop.text=$"Your astartes set out and begin the purge of {planet_numeral_name(planet, star)}.  The operation was going as expected, albeit minor oddities in the locals' behavior was noted.  However, it soon was rectified as an attempt to ambush your forces.  Your marines gathered in a combat formation to battle the foe...";        
 	        exit;   
 	    }
 	    if (planet_feature_bool(star.p_feature[planet],P_features.Warlord10) == 1) and (obj_controller.known[10]>=2) and (obj_controller.faction_gender[10]=1) then with(obj_drop_select){
@@ -55,13 +55,13 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	// TODO - while I don't expect Surface to Orbit weapons retaliating against player's purge bombardment, it might still be worthwhile to consider possible situations
 
 	if (action_type=DropType.PurgeBombard){// Bombardment
-	    txt1=choose("Your cruiser and larger ship", "The heavens rumble and thunder as your ship");
+	    txt1="Your cruiser and larger ship";
 	    if (ships_selected>1) then txt1+="s";
-	    txt1+=choose(" position themselves over the target in close orbit, and unleash", " unload");
-	    if (ships_selected=1) then txt1+="s";
-		txt1+= $" annihilation upon {planet_numeral_name(planet, star)}. Even from space the explosions can be seen, {choose("tearing ground", "hammering", "battering", "thundering")} across the planet's surface.";
+	    txt1+=" position themselves over the target in close orbit, and unleash";
+	    // if (ships_selected=1) then txt1+="s";
+		txt1+= $" annihilation upon {planet_numeral_name(planet, star)}. Even from the void, explosions can be seen, {choose("hammering", "battering")} across the planet's surface.";
  
-	    if (star.p_large[planet]=0) then max_kill=action_score*15000000;
+	    if (star.p_large[planet]=0) then max_kill=action_score*500000;
 	    if (star.p_large[planet]=1) then max_kill=action_score*0.015;// Population if large
     
 	    pop_before=star.p_population[planet];
@@ -84,6 +84,20 @@ function scr_purge_world(star, planet, action_type, action_score) {
     
 	    if (star.p_large[planet]=0) then pop_after=round(pop_after);    
 	    if (pop_after<=0) and (pop_before>0) then heres_after=0;
+
+		var nid_influence = star.p_influence[planet][eFACTION.Tyranids];
+            if (planet_feature_bool(star.p_feature[planet], P_features.Gene_Stealer_Cult)) {
+                var cult = return_planet_features(star.p_feature[planet], P_features.Gene_Stealer_Cult)[0];
+                if (cult.hiding) {}
+            } else {
+                if (nid_influence > 25) {
+                    txt1 += "There were signs of genestealer mutant offspring, with limited organization, while their influence is diminished further, we may see some complaints from our imperial allies for such a harsh treatment...";
+                    adjust_influence(eFACTION.Tyranids, -20, planet, star);
+                } else if (nid_influence > 0) {
+                    txt1 += "There were traces of a genestealer infestation, it would have taken considerable time for them to do anything of note, but this should delay them further. Hopefully, we can convince our allies it was worth it...";
+					adjust_influence(eFACTION.Tyranids, -10, planet, star);
+                }
+            }
  
 		var _displayed_population = star.p_large[planet] == 1 ? $"{pop_before} billion" : scr_display_number(floor(pop_before));
 		var _displayed_killed = star.p_large[planet] == 1 ? $"{kill} billion" : scr_display_number(floor(kill));
@@ -91,10 +105,11 @@ function scr_purge_world(star, planet, action_type, action_score) {
     
 	    if (pop_after<=0){
 	        if (star.p_owner[planet]=2) and (obj_controller.faction_status[2]!="War"){
-	            if (star.p_type[planet]="Temperate" || star.p_type[planet]="Hive" || star.p_type[planet]="Desert"){
-	            	var _disp_hit = -10;
-		            if (star.p_type[planet]="Temperate") then _disp_hit = -5;
-		            if (star.p_type[planet]="Desert") then _disp_hit = -3;         	
+	            if (star.p_type[planet]="Temperate" || star.p_type[planet]="Hive" || star.p_type[planet]="Agri"){
+	            	var _disp_hit = -1;
+					if (star.p_type[planet]="Hive") then _disp_hit = -9;
+		            if (star.p_type[planet]="Temperate") then _disp_hit = -4;
+		            if (star.p_type[planet]="Agri") then _disp_hit = -2;         	
 
 	                scr_audience(eFACTION.Imperium, "bombard_angry", _disp_hit, "", 0, 0);
 	            }
@@ -103,7 +118,7 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	    if (star.p_owner[planet]=3) and (obj_controller.faction_status[3]!="War"){
 
 	    	if (star.p_type[planet]="Forge") then _disp_hit =-15;
-	        if (star.p_type[planet]="Ice") then _disp_hit =-7;
+	        if (star.p_type[planet]="Lava") then _disp_hit =-7;
 	    	scr_audience(eFACTION.Inquisition, "bombard_angry", _disp_hit, "", 0, 0);
 
 	    }
@@ -112,7 +127,7 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	}
 
 
-	if (action_type=DropType.PurgeFire){// Burn baby burn
+	if (action_type=DropType.PurgeFire){
 	    var i=0;
 	    if (has_problem_planet(planet, "cleanse", star)){
         	isquest=1;
@@ -165,10 +180,11 @@ function scr_purge_world(star, planet, action_type, action_score) {
                 if (cult.hiding) {}
             } else {
                 if (nid_influence > 25) {
-                    txt1 += " Scores of mutant offspring from a genestealer infestation are burnt, while we have damaged their influence over this world, the mutants appear to lack the organisation of a true cult";
-                    adjust_influence(eFACTION.Tyranids, -10, planet, star);
+                    txt1 += " Scores of mutant offspring from a genestealer infestation were burned down. They appeared to lack the organisation of a cult. Your marines note that there may be some survivors left at large, so they suggest repeating the purge or leaving a garrison.";
+                    adjust_influence(eFACTION.Tyranids, -15, planet, star);
                 } else if (nid_influence > 0) {
-                    txt1 += " There are signs of a genestealer infestation but the cultists are too unorganized to do any real damage to their influence on this world";
+                    txt1 += "There were traces of a genestealer infestation. Considering the difficulty to clear out the infestation, marines note that they may still need to repeat the purge. Hopefully, we can convince our more vocal allies that it was worth the trouble.";
+					adjust_influence(eFACTION.Tyranids, -5, planet, star);
                 }
             }
 	        if (star.p_large[planet]=0) then pop_after=round(pop_after);
@@ -179,7 +195,7 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	}
 
 
-	if (action_type=DropType.PurgeSelective){// Blam!
+	if (action_type=DropType.PurgeSelective){
 	    var i=0;
 	    if (has_problem_planet(planet, "purge", star)){
         	isquest=1;
@@ -219,6 +235,20 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	        sci2=round(action_score/50);
 	        heres_after=heres_before-sci2;
 	        if (pop_before>0) and (pop_after=0) then heres_after=0;
+
+			var nid_influence = star.p_influence[planet][eFACTION.Tyranids];
+            if (planet_feature_bool(star.p_feature[planet], P_features.Gene_Stealer_Cult)) {
+                var cult = return_planet_features(star.p_feature[planet], P_features.Gene_Stealer_Cult)[0];
+                if (cult.hiding) {}
+            } else {
+                if (nid_influence > 25) {
+                    txt1 += "Your forces identified some of the suspected genestealer cultist leaders and associated personnel. They were taken care of, but your marines note the limited effectiveness.  Some suggest more drastic measures - such as purge by fire - to keep genestealer infestation in check.";
+                    adjust_influence(eFACTION.Tyranids, -5, planet, star);
+                } else if (nid_influence > 0) {
+                    txt1 += "Marines noted the traces of a genestealer infestation, your marines handled the few that they managed to locate, but they note the limited effectiveness.  Some suggest a more drastic purge or permament garrison to keep the genestealer infestation in check.";
+					adjust_influence(eFACTION.Tyranids, -1, planet, star);
+                }
+            }
         
 	        if (star.p_large[planet]=0) then pop_after=round(pop_after);    
 	        if (pop_after<=0) and (pop_before>0) then heres_after=0;
@@ -252,29 +282,29 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	    // if (action_score > 200) { siz_penalty = 125; }
     
 	    var spec1=0,spec2=0,txt=""; // TODO consider making it a battle with Planetary governor's guards
-	    txt="Your Astartes descend upon the surface of "+string(star.name)+" "+string(scr_roman(planet))+" and plot the movements and schedule of the governor.  ";    
-	    txt+="Once the time is right their target is ambushed "+choose("in their home","in the streets","while driving","taking a piss")+" and tranquilized.  ";
+	    txt="Your assassins descend upon the surface of "+string(star.name)+" "+string(scr_roman(planet))+" and proceed with investigation of the governor's schedule and other useful details.  ";    
+	    txt+="Once enough info is collected, plot is set in motion - governor is ambushed "+choose("in their home","in the streets","while driving","in the bathroom")+" and tranquilized.  ";
     
 		if(scr_has_disadv("Never Forgive")) then spec1=1;
 	    if (global.chapter_name="Space Wolves" || obj_ini.progenitor == ePROGENITOR.SPACE_WOLVES) { spec1=3; }
 	    if (global.chapter_name="Iron Hands" || obj_ini.progenitor == ePROGENITOR.IRON_HANDS) { spec1=6; }
 	    if (obj_ini.omophagea=1) then spec1=choose(spec1,20);
     
-	    if (spec1=1) then txt+="They are brought to the already-prepared facilities for Fallen, tortured to make "+string(choose("him","him","her"))+" appear a heretic, and then incinerated.  ";
-	    if (spec1=3) then txt+=string(choose("He","He","She"))+" is tossed to the Fenrisian Wolves and viciously mauled, torn apart, and eaten.  The beasts leave nothing but bloody scraps.  ";
-	    if (spec1=6) then txt+=string(choose("He","He","She"))+" is stuck in with the other criminals, and scum, to be turned into a servitor.  Soon nothing remains that could be likened to the former Governor.  ";
+	    if (spec1=1) then txt+="Brought to the already-prepared facilities for Fallen - forced to admit being guilty or even appear a heretic - then disposed.  ";
+	    if (spec1=3) then txt+=string(choose("He","He","She"))+" is tossed to the Fenrisian Wolves - the beasts leave nothing but bloody scraps.  ";
+	    if (spec1=6) then txt+=string(choose("He","He","She"))+" is scheduled to be turned into a servitor.  Whatever memories, recognizable features that "+string(choose("He","He","She"))+" had, are gone.  ";
 	    if (spec1=20){
-	        if (action_score>1) then txt+="Things get out of hand, and the Governor is torn limb from limb and consumed.  "+string(choose("His","His","Her"))+" flesh is torn off and eaten, bone pulverized, and marrow sucked free.  ";
-	        if (action_score=1) then txt+="Your battle brother chops apart the Governor and eats a sizeable portion of "+string(choose("his","his","her"))+" flesh, focusing upon the eyes, teeth, and fingers.  Once full the rest is disposed of.  ";
+	        if (action_score>1) then txt+="Your assassins dispose of the governor in a cannibalistic feast.  ";
+	        if (action_score=1) then txt+="Your assassin uses cannibalism to dispose of the governor.  ";
 	    }
     
 	    if (spec1=0){
 	        spec2=choose(1,2,3,4,5,5,5);
-	        if (spec2=1) then txt+="Their still-living body is disintegrated by acid.  ";
-	        if (spec2=2) then txt+="The Governor is jettisoned into the local star at the first opporunity.  ";
-	        if (spec2=3) then txt+=string(choose("He","He","She"))+" is burned as fuel for one of your vessels.  ";
-	        if (spec2=4) then txt+="A few grenades is all it takes to blow "+string(choose("his","his","her"))+" body to smithereens.  ";
-	        if (spec2=5) then txt+=string(choose("He","He","She"))+" is executed in a mundane fashion and buried.  ";
+	        if (spec2=1) then txt+="Acid was used in governor's disposal.  ";
+	        if (spec2=2) then txt+="Extreme temperature of a star was used in governor's disposal.  ";
+	        if (spec2=3) then txt+="Governor used as fuel for your vessels.  ";
+	        if (spec2=4) then txt+="Several explosives were used in disposal.  ";
+	        if (spec2=5) then txt+=string(choose("He","He","She"))+" is disposed using a firing squad, with burial.  ";
 	    }
     
 	    txt+="What is thy will?";
@@ -308,9 +338,9 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	    } else if (aroll >= chance){// Success
 	        pip.estimate=1;
 	    }
-	    // If there are enemy non-chaos forces then they may be used as a cover
-	    // Does not work with chaos because if the governor dies, with chaos present, the new governor would possibly be investigated
-	    if (star.p_orks[planet]>=4) or (star.p_necrons[planet]>=3) or (star.p_tyranids[planet]>=5){
+	    // If there are enemy forces then they may be used as a cover
+	    // TODO - imperial factions should not work for the most part, but perhaps there can be events or deals with faction leaders
+	    if (star.p_eldar[planet]>=1) or (star.p_orks[planet]>=1) or (star.p_tau[planet]>=1) or (star.p_tyranids[planet]>=1) or (star.p_traitors[planet]>=1) or (star.p_chaos[planet]>=1) or (star.p_necrons[planet]>=1){
 	    	pip.estimate=pip.estimate*0.5;
 	    }
 	}

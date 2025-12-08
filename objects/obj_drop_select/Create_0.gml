@@ -233,19 +233,19 @@ if (purge ==0){
     var _viable_ground_forces = roster.marines_total();
     bombard_purge = new PurgeButton(4, 631,231,DropType.PurgeBombard);
     bombard_purge.active = roster.purge_bombard_score() ? 1:0;
-    bombard_purge.description = "The final sanction for worlds where there is no other economic means for rooting out heresy corruption or the xenos, Your chapters reputation amoung the planets populace may will be damaged, any residing governor (providing they are fit to rule and survive) will be displeased, collaterals will be huge but it's effects will surely be great";
+    bombard_purge.description = "If we want to deal with heresy or tyranid genestealer infestation quickly, bombarding the planet with cruisers and larger ships is the way to do it. Note that our allies may object to such a heavy-handed approach, as this does cause a sizable collateral damage.";
 
     fire_purge = new PurgeButton(5,631,304,DropType.PurgeFire);
     fire_purge.active = _viable_ground_forces;
-    fire_purge.description = "Large swathes of the worst affected areas will be put to the torch the heretics and xenos will be found, the planets populace will not thanks you but most governors will be content to allow the work they were to weak to do to be done";
+    fire_purge.description = "Set a village, town, city or a hive sector to be burned down by your marines. Purges of this scale are more effective at dealing with heresy and genestealer infestation, but note that some factions would disapprove of these methods, especially when they rely on the populace support - such as Ecclesiarchy. In addition, since marines are deployed across a wide area, we may see resistance from the more extreme elements...";
 
     selective_purge = new PurgeButton(6,631,377,DropType.PurgeSelective);
     selective_purge.active = _viable_ground_forces;
-    selective_purge.description = "The nodes of corruption will be saught out and killed, often in such cases the rot resides in the higher reaches of society such methids are perfect for these instances, cut the head off the snake and the rest will wither, the populations of the oppressed planets are generaly pleased even if the nobles and governors chaffe at the censorship or if neccassary execution";
+    selective_purge.description = "Target the nobles, ringleaders and worst offenders. Your marines will go down and eliminate the worst elements of society that they can find. Not very effective, but it is a way to preserve the good will of our allies. While marines will be deployed, they will be moving rapidly, so it is unlikely that we will see any noteworthy resistance.";
 
     assasinate_purge = new PurgeButton(7,631,450,DropType.PurgeAssassinate);
     assasinate_purge.active = _viable_ground_forces;
-    assasinate_purge.description = "Often the simplest solution is a single bolt shell or the swift knife the heart. Kill the Leader.";
+    assasinate_purge.description = "Eliminate the planetary governor. If we are planning to take over the planet for ourselves, it is advisable to use the least amount of forces, otherwise, we may attract unwanted attention, likely from Inquisition. Since our target is just a single person, it is unlikely that we will see much resistance from extreme elements that may be present.";
 
     purge_options = [bombard_purge, fire_purge, selective_purge, assasinate_purge];
 }
