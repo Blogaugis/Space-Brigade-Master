@@ -237,7 +237,7 @@ if (purge ==0){
 
     fire_purge = new PurgeButton(5,631,304,DropType.PurgeFire);
     fire_purge.active = _viable_ground_forces;
-    fire_purge.description = "Set a village, town, city or a hive sector to be burned down by your marines. Purges of this scale are more effective at dealing with heresy and genestealer infestation, but note that some factions would disprove of these methods, especially when they rely on the populace support - such as Ecclesiarchy. In addition, since marines are deployed across a wide area, we may see resistance from the more extreme elements...";
+    fire_purge.description = "Set a village, town, city or a hive sector to be burned down by your marines. Purges of this scale are more effective at dealing with heresy and genestealer infestation, but note that some factions would disapprove of these methods, especially when they rely on the populace support - such as Ecclesiarchy. In addition, since marines are deployed across a wide area, we may see resistance from the more extreme elements...";
 
     selective_purge = new PurgeButton(6,631,377,DropType.PurgeSelective);
     selective_purge.active = _viable_ground_forces;
