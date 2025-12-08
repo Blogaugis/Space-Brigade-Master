@@ -282,7 +282,7 @@ function scr_purge_world(star, planet, action_type, action_score) {
 	    // if (action_score > 200) { siz_penalty = 125; }
     
 	    var spec1=0,spec2=0,txt=""; // TODO consider making it a battle with Planetary governor's guards
-	    txt="Your assassins descend upon the surface of "+string(star.name)+" "+string(scr_roman(planet))+" and proceed with investigation of the governor's shcedule and other useful details.  ";    
+	    txt="Your assassins descend upon the surface of "+string(star.name)+" "+string(scr_roman(planet))+" and proceed with investigation of the governor's schedule and other useful details.  ";    
 	    txt+="Once enough info is collected, plot is set in motion - governor is ambushed "+choose("in their home","in the streets","while driving","in the bathroom")+" and tranquilized.  ";
     
 		if(scr_has_disadv("Never Forgive")) then spec1=1;
