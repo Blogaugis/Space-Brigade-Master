@@ -73,7 +73,7 @@ function scr_bomb_world(bombard_target_faction, bombard_ment_power, target_stren
 	    			bombard_protection += _protection;
 	    			if (_protection){
 	    				if (bombard_protection == 2){
-	    					txt2 = "##Ork Stronghold on this planet provides the Orks a competent protection against bombardment; "
+	    					txt2 = "##Ork Stronghold on this planet provides the Orks a competent protection against bombardment; ";
 	    				} else {
 	    					txt2 = "##A large Ork stronghold provides the greenskins with a surprising amount of protection, for such a shoddy construction; ";
 	    				}
