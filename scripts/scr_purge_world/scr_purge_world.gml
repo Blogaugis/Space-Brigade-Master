@@ -184,7 +184,7 @@ function scr_purge_world(star, planet, action_type, action_score) {
                     adjust_influence(eFACTION.Tyranids, -15, planet, star);
                 } else if (nid_influence > 0) {
                     txt1 += "There were traces of a genestealer infestation. Considering the difficulty to clear out the infestation, marines note that they may still need to repeat the purge. Hopefully, we can convince our more vocal allies that it was worth the trouble.";
-					adjust_influence(eFACTION.Tyranids, -5, planet, star)
+					adjust_influence(eFACTION.Tyranids, -5, planet, star);
                 }
             }
 	        if (star.p_large[planet]=0) then pop_after=round(pop_after);
