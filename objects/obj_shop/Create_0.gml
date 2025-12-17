@@ -87,14 +87,14 @@ if (shop = "equipment") {
     i = 0;
 	// Tribal shop weapons
     i += 1;
-    item[i] = "Wooden Club";
+    item[i] = "Greatclub";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 1;
+    item_cost[i] = 0;
     forge_cost[i] = 1;
     i += 1;
-    item[i] = "Wooden Spear";
+    item[i] = "Simple Spear";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 1;
+    item_cost[i] = 0;
     forge_cost[i] = 1;
     i += 1;
     item[i] = "Ritual Stone Knife";
@@ -365,22 +365,20 @@ if (shop = "equipment") {
     i += 1;
     item[i] = "Bow";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 1;
-    forge_cost[i] = 10;
+    item_cost[i] = 0;
+    forge_cost[i] = 1;
     i += 1;
     item[i] = "Sling";
     item_stocked[i] = scr_item_count(item[i]);
-    item_cost[i] = 1;
-    forge_cost[i] = 10;
+    item_cost[i] = 0;
+    forge_cost[i] = 1;
 	// Early Conventional Ranged Weapons
 	i += 1;
     item[i] = "Crossbow";
     item_stocked[i] = scr_item_count(item[i]);
     item_cost[i] = 1;
 	if (research.mechanisms[0]>0){
-		forge_cost[i] = 10;
-	} else {
-		tooltip_overide[i] = $"{require_tool_tip} {research_pathways.mechanisms[0][0]}"
+		forge_cost[i] = 6;
 	}
 	// Late Conventional Ranged Weapons
 	i += 1;

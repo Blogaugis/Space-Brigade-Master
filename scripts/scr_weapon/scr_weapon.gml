@@ -1,14 +1,14 @@
 global.weapons = {
 	// Might as well try to sort stuff chronologically, I guess?
 	// Tribal tier weapons
-	"Wooden Spear": {
-		"abbreviation": "WdnSpear",
+	"Simple Spear": {
+		"abbreviation": "SplSpear",
 		"attack": {
-			"standard": 30,
-			"master_crafted": 40,
-			"artifact": 50
+			"standard": 45,
+			"master_crafted": 50,
+			"artifact": 55
 		},
-		"description": "A stick with one end sharpened to a point, which may also be fire-hardened. Usually seen used by primitives and ferals.",
+		"description": "A stick with one end sharpened to a point. Sharpening method varies between simple fire-hardening to using materials from hunted animals, depending on available resources. Usually seen used by primitives and ferals.",
 		"melee_hands": 1,
 		"ranged_hands": 0.5,
 		"ammo": 0,
@@ -18,28 +18,28 @@ global.weapons = {
 		// "special_properties": ["Parry"], - "Parry" might be too much for wood at this rate
 		"tags": ["spear", "martial", "primitive"],
 	},
-	"Wooden Club": {
-		"abbreviation": "WdnClb",
+	"Greatclub": {
+		"abbreviation": "GrtClb",
 		"attack": {
-			"standard": 30,
-			"master_crafted": 40,
-			"artifact": 50
+			"standard": 45,
+			"master_crafted": 50,
+			"artifact": 55
 		},
-		"description": "The most primitive weapon known to man since ancient times - a heavy stick. To bash skulls of foes with.",
+		"description": "The most primitive weapon known to man since ancient times - a heavy club, pushed into something fitting a space marine.",
 		"melee_hands": 1,
 		"ranged_hands": 0.5,
 		"ammo": 0,
 		"range": 1,
-		"spli": 3,
+		"spli": 5,
 		"arp": 0,
 		"tags": ["martial", "primitive"],
 	},
 	"Ritual Stone Knife": {
 		"abbreviation": "RtlStnKnf",
 		"attack": {
-			"standard": 30,
-			"master_crafted": 40,
-			"artifact": 50
+			"standard": 45,
+			"master_crafted": 50,
+			"artifact": 55
 		},
 		"description": "A stone knife, with inscribed runes. Usually seen used by shamans and cult leaders in various rituals and sacrifices. \nTo forge - Rune Analysis.",
 		"melee_hands": 0.25,
@@ -58,9 +58,9 @@ global.weapons = {
 	"Stone Hammer": {
 		"abbreviation": "StnHmmr",
 		"attack": {
-			"standard": 30,
-			"master_crafted": 40,
-			"artifact": 50
+			"standard": 45,
+			"master_crafted": 50,
+			"artifact": 55
 		},
 		"description": "A flattened rock attached to a piece of wood. A very primitive tool.",
 		"melee_hands": 0,
@@ -73,9 +73,9 @@ global.weapons = {
 	"Bow": {
 		"abbreviation": "Bow",
 		"attack": { // Logically, we should tie attack power to the strength of the user - and the weapon's capability to stay functional with that strength applied to it.
-			"standard": 30,
-			"master_crafted": 40,
-			"artifact": 50
+			"standard": 45,
+			"master_crafted": 50,
+			"artifact": 55
 		},
 		"description": "A primitive ranged weapon, typically made from wood, relying on the strength of the user.",
 		"melee_hands": 1,
@@ -88,9 +88,9 @@ global.weapons = {
 	"Sling": {
 		"abbreviation": "Slng",
 		"attack": { // Same as bow above
-			"standard": 30,
-			"master_crafted": 40,
-			"artifact": 50
+			"standard": 45,
+			"master_crafted": 50,
+			"artifact": 55
 		},
 		"description": "A primitive ranged weapon, allows throwing pebbles and similar 'ammunition' further.",
 		"melee_hands": 1,
@@ -104,11 +104,11 @@ global.weapons = {
 	"Crossbow": {
 		"abbreviation": "Crsbow",
 		"attack": {
-			"standard": 45,
-			"master_crafted": 60,
+			"standard": 55,
+			"master_crafted": 65,
 			"artifact": 75
 		},
-		"description": "A simple ranged weapon, typically made from wood. \nTo forge - Early Mechanisms.",
+		"description": "A simple ranged weapon, typically using bolts as ammunition. \nTo forge - Early Mechanisms.",
 		"melee_hands": 1,
 		"ranged_hands": 1.25, 
 		"ammo": 10,
@@ -554,12 +554,16 @@ global.weapons = {
     },
     "melee_hands": 0.1,
 	"ranged_hands": 0.1,
+	"ammo": 0,
+	"range": 1,
+	"spli": 3,
+	"arp": 0,
      "tags":["shield","boarding"],
      "units_whitelist": ["astartes", "terminator"],
 	 "maintenance" : 0.01,
   },
   "Storm Shield": {
-    "description":"Protects twice as well when boarding. A powered shield that must be held with a hand.  While powered by the marines armour it shimmers with blue energy.",
+    "description":"Provides protection to the user. A more powerful than the boarding shield, but is more encumbering. \nTo forge - Power Field Technology.",
     "abbreviation": "StrmShld",
     "attack": {
       "standard": 95,
@@ -578,6 +582,10 @@ global.weapons = {
     },
     "melee_hands": 0.9,
     "ranged_hands":0.9,
+	"ammo": 0,
+	"range": 1,
+	"spli": 5,
+	"arp": 1,
     "tags":["shield","boarding"],
     "units_whitelist": ["astartes", "terminator"],
 	"maintenance" : 0.04,
