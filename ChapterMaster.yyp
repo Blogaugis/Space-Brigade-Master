@@ -579,7 +579,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.1400.0.901",
+    "IDEVersion":"2024.1400.0.904",
   },
   "name":"ChapterMaster",
   "resources":[
@@ -835,6 +835,7 @@
     {"id":{"name":"scr_image","path":"scripts/scr_image/scr_image.yy",},},
     {"id":{"name":"scr_imperial_manage_fleet_functions","path":"scripts/scr_imperial_manage_fleet_functions/scr_imperial_manage_fleet_functions.yy",},},
     {"id":{"name":"scr_imperial_navy_functions","path":"scripts/scr_imperial_navy_functions/scr_imperial_navy_functions.yy",},},
+    {"id":{"name":"scr_imperium_mission","path":"scripts/scr_imperium_mission/scr_imperium_mission.yy",},},
     {"id":{"name":"scr_income","path":"scripts/scr_income/scr_income.yy",},},
     {"id":{"name":"scr_ini_ship_cleanup","path":"scripts/scr_ini_ship_cleanup/scr_ini_ship_cleanup.yy",},},
     {"id":{"name":"scr_initialize_custom","path":"scripts/scr_initialize_custom/scr_initialize_custom.yy",},},
@@ -916,6 +917,7 @@
     {"id":{"name":"scr_ship_count","path":"scripts/scr_ship_count/scr_ship_count.yy",},},
     {"id":{"name":"scr_ship_occupants","path":"scripts/scr_ship_occupants/scr_ship_occupants.yy",},},
     {"id":{"name":"scr_shoot","path":"scripts/scr_shoot/scr_shoot.yy",},},
+    {"id":{"name":"scr_sob_mission","path":"scripts/scr_sob_mission/scr_sob_mission.yy",},},
     {"id":{"name":"scr_special_view","path":"scripts/scr_special_view/scr_special_view.yy",},},
     {"id":{"name":"scr_specialist_point_handler","path":"scripts/scr_specialist_point_handler/scr_specialist_point_handler.yy",},},
     {"id":{"name":"scr_specialist_points","path":"scripts/scr_specialist_points/scr_specialist_points.yy",},},
