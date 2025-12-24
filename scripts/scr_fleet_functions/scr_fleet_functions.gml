@@ -19,7 +19,7 @@ function set_fleet_target(targ_x, targ_y, final_target){
 	action_x = targ_x;
 	action_y = targ_y;
 	target = final_target;
-	action_eta=floor(point_distance(x,y,targ_x,targ_y)/128)+1;
+	action_eta=floor(point_distance(x,y,targ_x,targ_y)/384)+1;
 }
 
 function scr_valid_fleet_target(target) {

@@ -514,7 +514,7 @@ function scr_random_event(execute_now) {
 		star.dispo[planet] = -5000; 
 		
 		var text = string(star.name) + scr_roman(planet);
-		scr_popup("War of Succession","The planetary governor of "+string(text)+" has died.  Several subordinates and other parties each claim to be the true heir and successor- war has erupted across the planet as a result.  Heresy thrives in chaos.","succession","");
+		scr_popup("War of Succession","The planetary governor of "+string(text)+" has died.  Several influential figures attempted to seize power - with few willing to step down, it is now effectively a war zone.  Chaos issues aside, this presents an opportunity for us to install a sympathetic governor...","succession","");
 	    var star_alert=instance_create(star.x+16,star.y-24,obj_star_event);
 		star_alert.image_alpha=1;
 		star_alert.image_speed=1;

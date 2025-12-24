@@ -300,7 +300,11 @@ function handle_discovered_governor_assasinations(){
 		}
 	}
 }
-
+// TODO - improve this event. Event needs more player interaction.
+// First, the craft should not come out of thin air. The player should have to choose what resources to give to the builder.
+// The options should be whether to give requisition, assign forge points to project - with other marines too, playing into marine loyalties and traits,
+// Just allow the marine to work on it alone - decrease forge point output,
+// Or straight up send to penitorium
 function strange_build_event(){
 	log_message("RE: Fey Mood");
 	var _search_params = {trait : ["crafter","tinkerer"], trait_any : true}

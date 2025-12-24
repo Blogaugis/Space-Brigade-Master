@@ -32,7 +32,7 @@ if (actual_hi>max_hi) then repeat(10){
 }
 
 if (dragging=false) then draw_text_transformed(x+28,y+(height/2),string_hash_to_newline(string(unit_type)),text_xscale,text_xscale,270);
-if (dragging=true) then draw_text_transformed(x+28,y+(height/2)+1000,string_hash_to_newline(string(unit_type)),text_xscale,text_xscale,270);
+if (dragging=true) then draw_text_transformed(x+28,y+(height/2)+100,string_hash_to_newline(string(unit_type)),text_xscale,text_xscale,270);
 
 
 
