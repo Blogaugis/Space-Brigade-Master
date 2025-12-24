@@ -457,7 +457,7 @@ if (defeat == 0 && _reduce_power){
 
 	
     if (enemy!=2){
-        if (dropping == true || defending == true) {
+        if (dropping == true /* || defending == true */ ) {
             power_reduction = 1;
         } else {
             power_reduction = enemy_power;

@@ -91,6 +91,7 @@ function NewPlanetFeature(feature_type, other_data={}) constructor{
 		swimming=0;
 		stock=0;
 		break;
+		// TODO - Remove Arsenal and Gene Vault as separate structures - merge them into single secret base instead
 	case P_features.Arsenal:
 		inquis_hidden = 1;
 		planet_display = "Arsenal";
@@ -99,7 +100,7 @@ function NewPlanetFeature(feature_type, other_data={}) constructor{
 		break;
 	case P_features.Gene_Vault:
 		inquis_hidden=1;
-		planet_display = "Arsenal";
+		planet_display = "Gene Vault";
 		player_hidden = 0;
 		built = obj_controller.turn+3;
 		break;
@@ -152,10 +153,11 @@ function NewPlanetFeature(feature_type, other_data={}) constructor{
 		tier = 1;
 		break;
 	case P_features.Monastery:
-		planet_display="Fortress Monastary";
+		planet_display="Fortress Monastery";
 		player_hidden = 0;
 		forge=0;
-		name=global.name_generator.generate_imperial_ship_name();
+		// TODO - feature needs improvements
+		name="Fortress Monastery"; // global.name_generator.generate_imperial_ship_name();
 		break;
 	case P_features.Recruiting_World:
 		planet_display="Recruitment";
@@ -611,7 +613,7 @@ function discover_stc_fragment_popup(techies, mechanicus_reps){
 			pop.text = $"{_text}; what it might contain is unknown. The ground team has no {obj_ini.role[100][16]}s or Tech Priests, so you have no choice but to leave it be or notify the Mechanicus about its location.";
         }
 
-        array_push(options, {str1 : "Send it to the Adeptus Mechanicuss.", choice_func : send_stc_to_adeptus_mech});
+        array_push(options, {str1 : "Send it to the Adeptus Mechanicus.", choice_func : send_stc_to_adeptus_mech});
     }
     array_push(options,{str1: "Leave it.",
     		 choice_func : ground_mission_leave_it_function
