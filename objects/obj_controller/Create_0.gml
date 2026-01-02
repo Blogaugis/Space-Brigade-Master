@@ -556,37 +556,6 @@ production_research = {
 	hvyarmcon : [0,{}],
 	dread : [0,{}],
 }
-		if (scr_has_disadv("Tech Regression: Late Conventional")) {
-			with(production_research) {
-			plastics = [0,{}];
-			mechnchem = [0,{}];
-			bolt = [0,{}];
-			power_fields = [0,{}];
-			}
-		}
-		if (scr_has_disadv("Tech Regression: Medieval")) {
-			with(production_research) {
-			metallurgy = [1,{}];
-			combustion = [0,{}];
-			plastics = [0,{}];
-			mechnchem = [0,{}];
-			bolt = [0,{}];
-			power_fields = [0,{}];
-			}
-		}
-		if (scr_has_disadv("Tech Regression: Stone Age")) {
-			with(production_research) {
-			metallurgy = [0,{}];
-			mechanisms = [0,{}];
-			chemistry = [0,{}];
-			combustion = [0,{}];
-			plastics = [0,{}];
-			mechnchem = [0,{}];
-			bolt = [0,{}];
-			psi = [0,{}];
-			power_fields = [0,{}];
-			}
-		}
 
 production_research_pathways ={
 	// 
@@ -1410,6 +1379,38 @@ command=0;
 command=obj_ini.commands;
 // Removes the command marines from marine count
 if (global.load==-1) then marines-=command;
+// Add Tech Regression stuff
+		if (scr_has_disadv("Tech Regression: Late Conventional")) {
+			with(production_research) {
+			plastics = [0,{}];
+			mechnchem = [0,{}];
+			bolt = [0,{}];
+			power_fields = [0,{}];
+			}
+		}
+		if (scr_has_disadv("Tech Regression: Medieval")) {
+			with(production_research) {
+			metallurgy = [1,{}];
+			combustion = [0,{}];
+			plastics = [0,{}];
+			mechnchem = [0,{}];
+			bolt = [0,{}];
+			power_fields = [0,{}];
+			}
+		}
+		if (scr_has_disadv("Tech Regression: Stone Age")) {
+			with(production_research) {
+			metallurgy = [0,{}];
+			mechanisms = [0,{}];
+			chemistry = [0,{}];
+			combustion = [0,{}];
+			plastics = [0,{}];
+			mechnchem = [0,{}];
+			bolt = [0,{}];
+			psi = [0,{}];
+			power_fields = [0,{}];
+			}
+		}
 // **** INTRO SCREEN ****
 temp[30]=string(check_number)+" "+string(year_fraction)+" "+string(year)+".M"+string(millenium);// Date
 temp[31]=string_upper(adept_name);// Adept name
