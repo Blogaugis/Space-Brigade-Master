@@ -1420,7 +1420,7 @@ global.weapons = {
         "range": 16,
         "spli": 20,
         "arp": 0,
-        "tags":["heavy_ranged","vehicle","dreadnought"],
+        "tags":["bolt", "heavy_ranged","vehicle","dreadnought"],
 		"maintenance" : 0.06,
     },
     "Heavy Bolter Sponsons": {
@@ -1487,7 +1487,7 @@ global.weapons = {
         "range": 24,
         "spli": 1,
         "arp": 1,
-         "tags":["heavy_ranged"],
+         "tags":["las", "heavy_ranged"],
 		 "maintenance" : 0.05,
     },
     "Twin Linked Lascannon": {
@@ -1504,7 +1504,7 @@ global.weapons = {
         "range": 24,
         "spli": 2,
         "arp": 1,
-        "tags":["heavy_ranged","vehicle","dreadnought"]
+        "tags":["las", "heavy_ranged","vehicle","dreadnought"]
     },
     "Lascannons": {
          "abbreviation": "DblLascnn", 
@@ -1520,7 +1520,7 @@ global.weapons = {
         "range": 24,
         "spli": 1,
         "arp": 1,
-        "tags":["heavy_ranged","vehicle","dreadnought"]
+        "tags":["las", "heavy_ranged","vehicle","dreadnought"]
     },
     "Twin Linked Lascannon Mount": {
         "attack": {
@@ -1900,7 +1900,7 @@ global.weapons = {
             "master_crafted": 925,
             "artifact": 1250
         },
-        "description": "A Heavy Duty version of the volatile Plasma Gun.",
+        "description": "A Heavy Duty version of the Plasma Gun.",
         "melee_hands": 1,
         "ranged_hands": 2.25,
         "ammo": 16,
@@ -1917,7 +1917,7 @@ global.weapons = {
             "master_crafted": 925,
             "artifact": 1250
         },
-        "description": "A Heavy Duty version of the volatile Plasma Gun.",
+        "description": "A vehicle turret version of the Plasma Cannon.",
         "melee_hands": 1,
         "ranged_hands": 3,
         "ammo": 16,
@@ -2138,14 +2138,14 @@ global.weapons = {
             "master_crafted": 500,
             "artifact": 550
         },
-        "description": "A single-use long-range anti-tank missile, this weapon can surgically destroy armoured targets in the opening stages of a battle.",
+        "description": "A single-use long-range anti-tank missile, this weapon is intended to destroy armoured targets in the opening stages of a battle.",
         "melee_hands": 1,
         "ranged_hands": 2.25,
         "ammo": 1,
         "range": 50,
         "spli": 1,
         "arp": 1,
-        "tags":["vehicle"]
+        "tags":["vehicle", "precision"]
     },
 
 	 // Volkite
@@ -2237,8 +2237,8 @@ global.weapons = {
 	"Laspistol": {
 		"attack": {
 			"standard": 50,
-			"master_crafted": 60,
-			"artifact": 70
+			"master_crafted": 75,
+			"artifact": 100
 		},
 		"description": "The pistol version of the Lasgun, it fires a coherent beam of energetic photons that can burn through most materials.",
 		"abbreviation": "Lpstl",
@@ -2289,9 +2289,9 @@ global.weapons = {
         "attack": {
             "standard": 100,
             "master_crafted": 150,
-            "artifact": 250
+            "artifact": 200
         },
-        "description": "A vicious combat attachment that is attached to Bolters, in order to allow them to be used in melee combat.",
+        "description": "A combat attachment to Bolters, in order to allow them to be used in melee combat.",
         "melee_hands": 0,
         "ranged_hands": 0,
         "ammo": 0,
@@ -2576,7 +2576,7 @@ global.weapons = {
 		"description": "A standard Bolter with an underbarrel Meltagun for expanded tactical utility.",
 		"melee_hands": 1,
 		"ranged_hands": 1.75,
-		"ammo": 15,
+		"ammo": 12,
 		"range": 10,
 		"spli": 10,
 		"arp": 0,
