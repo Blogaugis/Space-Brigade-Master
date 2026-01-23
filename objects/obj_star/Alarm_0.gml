@@ -119,7 +119,7 @@ switch (star) {
         for (rui = 1; rui <= 4; rui++) {
             if (planets >= rui) {
                 planet[rui] = 1;
-                p_type[rui] = choose("Temperate", "Temperate", choose("Temperate", "Shrine"), "Feudal", "Agri", "Death", "Desert", "Ice", "Hive");
+                p_type[rui] = choose("Temperate", "Temperate", choose("Temperate", "Shrine"), "Feudal", "Agri", "Death", "Desert", "Lava", "Hive");
                 if (p_type[rui] == "Agri" || p_type[rui] == "Hive") {
                     p_owner[rui] = 2;
                     p_first[rui] = 2;
@@ -180,7 +180,7 @@ switch (name) {
         planets = 3;
         p_type[1] = "Feudal";
         planet[1] = 1;
-        array_push(p_feature[1], new NewPlanetFeature(P_features.Necron_Tomb));
+    //    array_push(p_feature[1], new NewPlanetFeature(P_features.Necron_Tomb));
         p_type[2] = "Dead";
         planet[2] = 1;
         p_type[3] = "Dead";
