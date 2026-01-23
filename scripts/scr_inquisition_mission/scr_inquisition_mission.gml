@@ -44,7 +44,7 @@ function scr_inquisition_mission(event, forced_mission = -1){
         var found_tyranid_org = false;
         var found_demon_world = false;
         
-        var necron_tomb_worlds = [];
+    //    var necron_tomb_worlds = [];
         var tyranid_org_worlds = [];
         var demon_worlds = [];
 
@@ -52,10 +52,10 @@ function scr_inquisition_mission(event, forced_mission = -1){
         for(var s = 0, _len =  array_length(all_stars); s <_len; s++){
             var _star = all_stars[s];
 
-            if (scr_star_has_planet_with_feature(_star, P_features.Necron_Tomb) && !awake_necron_star(_star.id)){
-                array_push(necron_tomb_worlds, _star);
-                found_sleeping_necrons = true;
-            }
+        //    if (scr_star_has_planet_with_feature(_star, P_features.Necron_Tomb) && !awake_necron_star(_star.id)){
+        //        array_push(necron_tomb_worlds, _star);
+        //        found_sleeping_necrons = true;
+        //    }
 
             if (star_has_planet_with_forces(_star, "Demons", 1)){
                 // array_push(demon_worlds, _star); // turning this off til i have a way to finish the mission
@@ -68,12 +68,12 @@ function scr_inquisition_mission(event, forced_mission = -1){
             }
         }
 
-        if (found_sleeping_necrons){
-            array_push(inquisition_missions, INQUISITION_MISSION.tomb_world);
-            log_message($"Was able to find a _star with dormant necron tomb for inquisition mission");
-        } else {
-            log_message($"Couldn't find any planets with a dormant necron tomb for inquisition mission")
-        }
+    //    if (found_sleeping_necrons){
+    //        array_push(inquisition_missions, INQUISITION_MISSION.tomb_world);
+    //        log_message($"Was able to find a _star with dormant necron tomb for inquisition mission");
+    //    } else {
+    //        log_message($"Couldn't find any planets with a dormant necron tomb for inquisition mission")
+    //    }
         if (found_tyranid_org){
             log_message($"Was able to find a _star with lvl 4 tyranids for inquisition mission");
             array_push(inquisition_missions, INQUISITION_MISSION.tyranid_organism);
@@ -113,7 +113,7 @@ function scr_inquisition_mission(event, forced_mission = -1){
             case INQUISITION_MISSION.inquisitor: mission_inquistion_hunt_inquisitor(); break;
             case INQUISITION_MISSION.spyrer: mission_inquistion_spyrer(); break;
             case INQUISITION_MISSION.artifact: mission_inquisition_artifact(); break;
-            case INQUISITION_MISSION.tomb_world: mission_inquisition_tomb_world(necron_tomb_worlds); break;
+        //    case INQUISITION_MISSION.tomb_world: mission_inquisition_tomb_world(necron_tomb_worlds); break;
             case INQUISITION_MISSION.tyranid_organism: mission_inquisition_tyranid_organism(tyranid_org_worlds); break;
             case INQUISITION_MISSION.ethereal: mission_inquisition_ethereal(); break;
             case INQUISITION_MISSION.demon_world: mission_inquisition_demon_world(demon_worlds); break;
@@ -189,7 +189,7 @@ function mission_inquisition_tyranid_organism(worlds){
     scr_popup("Inquisition Mission",text,"inquisition",$"tyranid_org|{string(_star.name)}|{string(planet)}|{string(eta+1)}|");
 
 }
-
+/*
 function mission_inquisition_tomb_world(tomb_worlds){
     log_message("RE: Necron Tomb Bombing");
     if (is_array(tomb_worlds)){
@@ -261,7 +261,7 @@ function init_mission_inquisition_tomb_world(){
     add_new_inquis_mission();
     exit;    
 }
-
+*/
 function mission_inquisition_artifact(){
     var text;
     log_message("RE: Artifact Hold");

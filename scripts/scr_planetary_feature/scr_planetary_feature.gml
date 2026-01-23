@@ -60,7 +60,7 @@ function NewPlanetFeature(feature_type, other_data={}) constructor{
 		hiding=true;
 		name = global.name_generator.generate_genestealer_cult_name();		
 		break;
-		case P_features.Necron_Tomb:
+	case P_features.Necron_Tomb:
 		awake = 0;
 		sealed = 0;
 		player_hidden = 1
@@ -110,7 +110,7 @@ function NewPlanetFeature(feature_type, other_data={}) constructor{
 		funds_spent = 0;
 		player_hidden = 0;
 		engineer_score = 0;
-	break;	
+		break;
 	case P_features.Ancient_Ruins:
 		static ruins_explored = scr_ruins_explored;
 		static explore = scr_explore_ruins;
