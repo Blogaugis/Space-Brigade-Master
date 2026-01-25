@@ -591,7 +591,7 @@ var all_advantages = [
             name : "Bolter Drilling",
             description : "Bolter drills are sacred to your chapter; all marines have increased attack with Bolter weaponry.",
             value : 40,
-            meta : ["Weapon Specialty"]
+        //    meta : ["Weapon Specialty"]
         },
         {
             name : "Retinue of Renown",
@@ -602,7 +602,7 @@ var all_advantages = [
             name : "Crafters",
             description : "Your chapter views artifacts as sacred; you start with better gear and maintain all equipment with more ease.",
             value : 40,
-            meta : ["Gear Quality"]
+        //    meta : ["Gear Quality"]
         },
         {
             name : "Ancient Armoury",
@@ -614,43 +614,43 @@ var all_advantages = [
             name : "Enemy: Eldar",
             description : "Eldar are particularly hated by your chapter.  When fighting Eldar damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
+        //    meta : ["Main Enemy"],
         },
         {
             name : "Enemy: Fallen",
             description : "Chaos Marines are particularly hated by your chapter.  When fighting the traitors damage is increased.",
-            value : 20,
-            meta : ["Main Enemy"],
+            value : 20, // Should it be allowed together with "Enemy: Imperium"?
+        //    meta : ["Main Enemy"],
         },
         {
             name : "Enemy: Necrons",
             description : "Necrons are particularly hated by your chapter.  When fighting Necrons damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
+        //    meta : ["Main Enemy"],
         },  
         {
             name : "Enemy: Orks",
             description : "Orks are particularly hated by your chapter.  When fighting Orks damage is increased.",
             value : 20,
-            meta : ["Main Enemy"]
+        //    meta : ["Main Enemy"]
         },
         {
             name : "Enemy: Tau",
             description : "Tau are particularly hated by your chapter.  When fighting Tau damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
+        //    meta : ["Main Enemy"],
         },
         {
             name : "Enemy: Tyranids",
             description : "Tyranids are particularly hated by your chapter. A large number of your veterans and marines are tyrannic war veterans and when fighting Tyranids damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
+        //    meta : ["Main Enemy"],
         },
         {
             name : "Kings of Space",
             description : "Veterans of naval combat, your chapter fleet has bonuses to offense, defence, an additional battle barge, and may always be controlled regardless of whether or not the Chapter Master is present.",
             value : 40,
-            meta : ["Naval"],
+        //    meta : ["Naval"],
         },
         {
             name : "Lightning Warriors",
@@ -730,7 +730,7 @@ var all_advantages = [
             name : "Ryzan Patronage",
             description : "Your chapter has strong ties to the Forgeworld of Ryza as a result your Techmarines are privy to the secrets of their Techpriests enhancing your Plasma and Las weaponry.",
             value : 40,
-            meta : ["Weapon Specialty"] 
+        //    meta : ["Weapon Specialty"] 
         },
         {
             name: "Elite Guard",
@@ -779,6 +779,7 @@ var all_disadvantages = [
         name : "Blood Debt",
         description : "Prevents your Chapter from recruiting new Astartes until enough of your marines, or enemies, have been killed.  Incompatible with Penitent chapter types.",
         value : 50,
+        meta : ["Allegiance"], // It shouldn't be compatible with "Enemy: Imperium" either
     },
     {
         name : "Depleted Gene-seed Stocks",
@@ -793,8 +794,8 @@ var all_disadvantages = [
     }, 
     {
         name : "Never Forgive",
-        description : "In the past traitors broke off from your chapter.  They harbor incriminating secrets or heritical beliefs, and as thus, must be hunted down whenever possible.",
-        value : 20,
+        description : "In the past traitors broke off from your chapter.  They harbor incriminating secrets or heretical beliefs, and as thus, must be hunted down whenever possible.",
+        value : 20, // It is kind of weird with "Enemy: Imperium", might be prudent to add it to ["Allegiance"] meta.
     },
     {
         name : "Shitty Luck",
@@ -844,7 +845,7 @@ var all_disadvantages = [
     },
     {
         name : "Obliterated",
-        description : "A recent string of unfortunate events has left your chapter decimated. You have very little left, will your story continue?",
+        description : "Considering the extreme losses that your chapter took, it should've been disbanded. However, for whatever reason, you are to continue the fight...",
         value : 80,
         meta : ["Status"],
     },
@@ -858,11 +859,11 @@ var all_disadvantages = [
         name : "Enduring Angels",
         description : "The Chapter's journey thus far has been arduous & unforgiving leaving them severely understrength yet not out of the fight. You begin with 5 fewer company's",
         value : 30,
-        meta : ["Status"],
+        meta : ["Status"], // Trait seems a bit pointless when "Sieged" is an option.
     },
     {
         name : "Serpents Delight",
-        description : "Sleeper cells infiltrated your chapter. When they rose up for the decapitation strike,they slew the 5 most experienced company's and many of the HQ staff before being defeated",
+        description : "Your chapter has recently suffered losses among its most experienced troops.",
         value : 50,
         meta : ["Status"],
     },
@@ -884,6 +885,12 @@ var all_disadvantages = [
         value : 20,
         meta : ["Psyker Views","Librarians"],
     },
+        {
+        name : "Enemy: Imperium",
+        description : "For whatever reason, your chapter is considered traitors to the Imperium. You gained contacts to local traitor elements, at least.",
+        value : 40, // 10 for each imperial faction.
+        meta : ["Allegiance"], // Should it be allowed together with "Enemy: Fallen"?
+        },
     {
         name : "Tech Regression: Late Conventional",
         description : "Whether due to brief period of isolation or simple negligence, your forge lacks some facilities. You'll need to spend some techmarine resources to rebuild them.",
