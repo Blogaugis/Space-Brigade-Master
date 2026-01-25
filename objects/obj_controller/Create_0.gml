@@ -1031,7 +1031,7 @@ known[eFACTION.Tau]=0;
 known[eFACTION.Tyranids]=0;
 known[eFACTION.Chaos]=0;
 known[eFACTION.Heretics]=0;
-known[12]=0;
+known[12]=0; // It should be the Daemons faction
 known[eFACTION.Necrons]=0;
 
 // UI testing
@@ -1128,8 +1128,29 @@ if (instance_exists(obj_ini)){
             obj_controller.disposition[7]+=5;
             obj_controller.disposition[8]+=10;
         }
+        if (scr_has_disadv("Enemy: Imperium")) {
+			// Imperials
+            obj_controller.disposition[2]-=40;
+            faction_status[eFACTION.Imperium]="War";
+            obj_controller.disposition[3]-=40;
+            faction_status[eFACTION.Mechanicus]="War";
+            obj_controller.disposition[4]-=40;
+            faction_status[eFACTION.Inquisition]="War";
+            obj_controller.disposition[5]-=40;
+            faction_status[eFACTION.Ecclesiarchy]="War";
+			// Chaos
+            obj_controller.disposition[10]+=35;
+            faction_status[eFACTION.Chaos]="Antagonism";
+            known[eFACTION.Chaos]=1; // Or, maybe it should be 2?
+            obj_controller.disposition[11]+=35;
+            faction_status[eFACTION.Heretics]="Antagonism";
+			// Should Daemons be included? If so, repeat for faction 12
+        }
         if (scr_has_adv("Enemy: Eldar")) {
             faction_status[eFACTION.Eldar]="War";
+        }
+        if (scr_has_adv("Enemy: Tau")) {
+            faction_status[eFACTION.Tau]="War";
         }
         // Founding Chapter STC Bonuses here
         if (global.chapter_name=="Salamanders"){
