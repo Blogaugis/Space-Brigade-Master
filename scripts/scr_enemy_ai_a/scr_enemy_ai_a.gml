@@ -38,9 +38,11 @@ function scr_enemy_ai_a() {
 	}
 
 	// checking for inquisition dead world inspections here
+	/*
 	if (present_fleet[eFACTION.Player]>=0 && !present_fleet[eFACTION.Inquisition]){
 		inquisitor_inspect_base();
 	}
+	*/
 
 	var stop;
 	var rand=0;

@@ -741,7 +741,7 @@ global.weapons = {
         "abbreviation": "PwrAxe",
         "attack": {
             "standard": 575,
-            "master_crafted": 600,
+            "master_crafted": 625,
             "artifact": 675
         },
         "melee_mod": {
@@ -764,7 +764,7 @@ global.weapons = {
         "attack": {
             "standard": 550,
             "master_crafted": 600,
-            "artifact": 675
+            "artifact": 650
         },
         "melee_mod": {
             "standard": 0,
@@ -2362,11 +2362,11 @@ global.weapons = {
     },
     "Ranger Long Rifle":{
         "abbreviation": "RangeLoRife",
-        "description":"Advanced and accurate rifles from a non-imperial entity.",
+        "description":"Advanced and accurate rifle, seemingly eldar origin.",
         "attack": {
           "standard": 500,
-          "master_crafted": 620,
-          "artifact": 740
+          "master_crafted": 625,
+          "artifact": 750
         },
         "melee_hands": 1,
         "ranged_hands": 1.75,

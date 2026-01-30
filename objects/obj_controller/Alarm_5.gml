@@ -115,16 +115,22 @@ if (turn=240) and (global.chapter_name="Lamenters"){
     scr_popup("Geneseed Mutation","Your Chapter has begun to have visions and nightmares of Sanguinius' fall.  The less mentally disciplined of your battle-brothers no longer are able to sleep soundly, waking from sleep in a screaming, frothing rage.  It appears the Black Rage has returned.","black_rage","");    
 }
 */
-// ** Battlefield Loot **
+// ** Loot from Scavengers Trait **
 if (scr_has_adv("Tech-Scavengers")){
     var lroll1,lroll2,loot="";
     lroll1=roll_dice_chapter(1, 100, "low");
     lroll2=roll_dice_chapter(1, 100, "low");
     if (lroll1<=5){
-        loot=choose("Chainsword","Bolt Pistol","Combat Knife","Narthecium");
-        if (lroll2<=80) then loot=choose("Power Sword","Storm Bolter");
-        if (lroll2<=60) then loot=choose("Plasma Pistol","Chainfist","Lascannon","Heavy Bolter","Assault Cannon","Bike");
-        if (lroll2<=30) then loot=choose("Artificer Armour","Plasma Gun","Chainfist","Rosarius","Psychic Hood");
+		// The weakest rolls should be mostly basic weaponry, fit for scout marines or hirelings
+        loot=choose("Combat Knife","Hellgun","Laspistol","Scout Armour");
+		// The (sub)standard kit of a space marine
+        if (lroll2<=80) then loot=choose("Chainsword","Bolt Pistol","Bolter","Sniper Rifle","Heavy Weapons Pack","MK5 Heresy");
+		// Better equipped marines
+		// TODO - refine the list further, with greater variation of power weapons, and combi tag weapons
+        if (lroll2<=60) then loot=choose("Power Sword","Power Axe","Chainfist","Plasma Pistol","Lascannon","Heavy Bolter","Assault Cannon","Bike","MK7 Aquila");
+		// Specialist-tier loot
+        if (lroll2<=30) then loot=choose("Crozius Arcanum","Storm Bolter","Plasma Gun","Rosarius","Psychic Hood","Narthecium","Servo-arm","MK6 Corvus");
+		// And, ultimately, hi-end loot
         if (lroll2<=10) then loot=choose("Terminator Armour","Artificer Armour","Dreadnought","Plasma Gun","Power Fist","Thunder Hammer","Iron Halo");
         var tix="A "+string(loot)+" has been gifted to the Chapter.";
         tix=string_replace(tix,"A A","An A");
@@ -255,7 +261,10 @@ for (var c = 0; c < 11; c++){
             penit_co[p]=c;
             penit_id[p]=e;
             penitorium+=1;
-            unit.alter_loyalty(-1);
+			// Loyalty of unit changes needs some considerations
+			// Putting a unit in penitorium should perhaps subtract a point of loyalty, once
+			// But loss per turn should be reconsidered
+        //    unit.alter_loyalty(-1);
             if (unit.corruption<90) and (unit.corruption>0){
                 var heresy_old=0,heresy_new=0;
                 heresy_old=round((unit.corruption*unit.corruption)/50)-0.5;
@@ -419,14 +428,18 @@ if (loyalty_counter==0) then scr_loyalty("Undevout","+");
 if (marines>=1050) then scr_loyalty("Non-Codex Size","+");
 
 var last_inquisitor_inspection=0;
+/*
 if (obj_ini.fleet_type=ePlayerBase.home_world) then last_inquisitor_inspection=last_world_inspection;
 if (obj_ini.fleet_type != ePlayerBase.home_world) then last_inquisitor_inspection=last_fleet_inspection;
+*/
 
 var inspec=false;
+/*
 if (loyalty>=85) and ((last_inquisitor_inspection+59)<turn) then inspec=true;
 if (loyalty>=70) and (loyalty<85) and ((last_inquisitor_inspection+47)<turn) then inspec=true;
 if (loyalty>=50) and (loyalty<70) and ((last_inquisitor_inspection+35)<turn) then inspec=true;
 if (loyalty<50) and ((last_inquisitor_inspection+11+choose(1,2,3,4))<turn) then inspec=true;
+*/
 
 if (obj_ini.fleet_type != ePlayerBase.home_world){
     if (instance_number(obj_p_fleet)==1) and (obj_ini.fleet_type = ePlayerBase.home_world){// Might be crusading, right?
