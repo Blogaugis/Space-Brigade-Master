@@ -110,7 +110,7 @@ function scr_inquisition_mission(event, forced_mission = -1){
         }
         switch (chosen_mission){
             case INQUISITION_MISSION.purge: mission_inquistion_purge(); break;
-            case INQUISITION_MISSION.inquisitor: mission_inquistion_hunt_inquisitor(); break;
+        //    case INQUISITION_MISSION.inquisitor: mission_inquistion_hunt_inquisitor(); break;
             case INQUISITION_MISSION.spyrer: mission_inquistion_spyrer(); break;
             case INQUISITION_MISSION.artifact: mission_inquisition_artifact(); break;
         //    case INQUISITION_MISSION.tomb_world: mission_inquisition_tomb_world(necron_tomb_worlds); break;

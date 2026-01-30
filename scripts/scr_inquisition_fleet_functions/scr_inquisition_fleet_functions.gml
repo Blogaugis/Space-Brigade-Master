@@ -25,7 +25,7 @@ function hunt_player_serfs(planet, system){
     });
 }
 
-
+/*
 function radical_inquisitor_mission_ship_arrival(){
 
     //TODO make a centralised player_fleet present method
@@ -69,7 +69,7 @@ function radical_inquisitor_mission_ship_arrival(){
     //instance_destroy();
     exit;
 }
-/*
+
 function inquisition_fleet_inspection_chase(){
 	var good=0,acty="";
 	var reset = !instance_exists(target);
@@ -146,14 +146,12 @@ function inquisition_fleet_inspection_chase(){
         
             exit;
 		}
-    }
+    
 }
-*/
 // TODO maybe have the inquisitor or his team as an actual entity that goes around and can die, which gives the player time to fix stuff 
 // either kill the inquisitor or he dies in combat
 
 // Sets up an inquisitor ship to do an inspection on the HomeWorld
-/*
 function new_inquisitor_inspection(){
 	var target_system = "none";
 	var new_inquis_fleet;
@@ -228,8 +226,7 @@ function new_inquisitor_inspection(){
         instance_activate_object(obj_star);
     }
 }
-*/
-/*
+
 function inquisitor_ship_approaches(){
     //TODO figure out the meaning of this line
     if ((string_count("eet",trade_goods)!=0) and (string_count("_her",trade_goods)!=0)) then exit;
@@ -265,10 +262,10 @@ function inquisitor_ship_approaches(){
         scr_popup("Inquisition Inspection", inquis_string, "");
     }
 }
-*/
+
 
 ///@Mixin obj_star
-/*
+
 function inquisitor_inspect_base(){
     var chapter_asset_discovery,yep=0,stop=false;
    
@@ -288,7 +285,7 @@ function inquisitor_inspect_base(){
                 p_owner[cur_planet]=1;
             }
             if (p_type[cur_planet]=="Dead") and (array_length(p_upgrades[cur_planet])>0){
-                if (planet_feature_bool(p_feature[cur_planet], [P_features.Secret_Base,P_features.Arsenal,P_features.Gene_Vault])==0) /*and (string_count(".0|",p_upgrades[cur_planet])>0)*/{
+                if (planet_feature_bool(p_feature[cur_planet], [P_features.Secret_Base,P_features.Arsenal,P_features.Gene_Vault])==0) /*and (string_count(".0|",p_upgrades[cur_planet])>0)*//*{
                     yep=cur_planet;
                 }
             }
