@@ -1023,7 +1023,8 @@ known[0]=2;
 known[eFACTION.Player]=999;
 known[eFACTION.Imperium]=1; // TODO: tweak these with certain traits in mind
 known[eFACTION.Mechanicus]=1;
-known[eFACTION.Inquisition]=0;
+// Making 1, otherwise player won't be given missions/quests from inquisition, because inspections are disabled
+known[eFACTION.Inquisition]=1;
 known[eFACTION.Ecclesiarchy]=0;
 known[eFACTION.Eldar]=0;
 known[eFACTION.Ork]=0;
@@ -1122,6 +1123,11 @@ other1="";
 if (instance_exists(obj_ini)){
     // General setup
     if (global.load==-1){
+        if (scr_has_disadv("Suspicious")) {
+			// I decided to use "Suspicious" instead of creating a separate "Antagonism: Imperium".
+			// If player wants no quests from inquisition, this trait should be selected.
+            known[eFACTION.Inquisition]=0;
+            }
         // Tolerant trait
         if (scr_has_disadv("Tolerant")) {
             obj_controller.disposition[6]+=5;
@@ -1130,18 +1136,30 @@ if (instance_exists(obj_ini)){
         }
         if (scr_has_disadv("Enemy: Imperium")) {
 			// Imperials
+			// Might need to set "known" to 2 instead of 1. Either is needed to reveal them in diplomacy screen
+			// Normally, when player becomes renegade, imperials faction leaders generally contact the player,
+			// to inform of the changed diplomatic situation - at least if their disposition goes into negative values,
+			// and contacting generally means known=2
             obj_controller.disposition[2]-=40;
             faction_status[eFACTION.Imperium]="War";
+            known[eFACTION.Imperium]=2;
             obj_controller.disposition[3]-=40;
             faction_status[eFACTION.Mechanicus]="War";
+            known[eFACTION.Mechanicus]=2;
             obj_controller.disposition[4]-=40;
             faction_status[eFACTION.Inquisition]="War";
+            known[eFACTION.Inquisition]=2;
             obj_controller.disposition[5]-=40;
             faction_status[eFACTION.Ecclesiarchy]="War";
+            known[eFACTION.Ecclesiarchy]=2;
 			// Chaos
+			// Testing has shown that at -35 disposition, the color is red, which could deceive the player about the relationship status
+			// red ideally should stand for "war", yellow/orange should be for "antagonism".
             obj_controller.disposition[10]+=35;
             faction_status[eFACTION.Chaos]="Antagonism";
-            known[eFACTION.Chaos]=1; // Or, maybe it should be 2?
+			// With 2, it means player has had an audience with the faction leader
+			// Which in turn makes the situation the same as player becoming renegade via the usual ways
+            known[eFACTION.Chaos]=2;
             obj_controller.disposition[11]+=35;
             faction_status[eFACTION.Heretics]="Antagonism";
 			// Should Daemons be included? If so, repeat for faction 12

@@ -831,11 +831,11 @@ function necron_tomb_mission_sequence(){
             text = "The energy readings are much stronger, now that your marines are deep inside the tunnels.  What was once cramped is now luxuriously large, the tunnel ceiling far overhead decorated by stalactites.";
         } else if (pop_data.mission_stage == 3) {
             image = "necron_tunnels_3";
-            text = "After several hours of descent the entrance to the Necron Tomb finally looms ahead- dancing, sickly green light shining free.  Your marine confirms that the Plasma Bomb is ready.";
+            text = "After several hours of descent, the entrance to the Necron Tomb looms ahead - green light clearly visible.  Your marine confirms that the Plasma Bomb is ready.";
         } else if (pop_data.mission_stage >= 4) {
             image = "";
             title = "Inquisition Mission Completed";
-            text = "Your marines finally enter the deepest catacombs of the Necron Tomb.  There they place the Plasma Bomb and arm it.  All around are signs of increasing Necron activity.  With half an hour set, your men escape back to the surface.  There is a brief rumble as the charge goes off, your mission a success.";
+            text = "Your marines finally enter the deepest catacombs of the Necron Tomb.  There they place the Plasma Bomb and arm it.  All around are signs of increasing Necron activity.  Within half an hour, your men escape back to the surface.  A brief quake is noted as the charge goes off.  Mission is a success.";
             reset_popup_options();
 
             alter_disposition(eFACTION.Inquisition, obj_controller.demanding ? choose(0, 0, 1) : 1);
