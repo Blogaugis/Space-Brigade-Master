@@ -17,7 +17,7 @@
 
 
 /// @param {Enum.EVENT} event 
-function scr_imperium_mission(){
+function scr_imperium_mission(event){
 function mission_investigate_registry(){
 		var stars = scr_get_stars();
 		var _valid_stars = array_filter_ext(stars,
