@@ -44,7 +44,7 @@ function scr_inquisition_mission(event, forced_mission = -1){
         var found_tyranid_org = false;
         var found_demon_world = false;
         
-        var necron_tomb_worlds = [];
+    //    var necron_tomb_worlds = [];
         var tyranid_org_worlds = [];
         var demon_worlds = [];
 
@@ -52,10 +52,10 @@ function scr_inquisition_mission(event, forced_mission = -1){
         for(var s = 0, _len =  array_length(all_stars); s <_len; s++){
             var _star = all_stars[s];
 
-            if (scr_star_has_planet_with_feature(_star, P_features.Necron_Tomb) && !awake_necron_star(_star.id)){
-                array_push(necron_tomb_worlds, _star);
-                found_sleeping_necrons = true;
-            }
+        //    if (scr_star_has_planet_with_feature(_star, P_features.Necron_Tomb) && !awake_necron_star(_star.id)){
+        //        array_push(necron_tomb_worlds, _star);
+        //        found_sleeping_necrons = true;
+        //    }
 
             if (star_has_planet_with_forces(_star, "Demons", 1)){
                 // array_push(demon_worlds, _star); // turning this off til i have a way to finish the mission
@@ -68,12 +68,12 @@ function scr_inquisition_mission(event, forced_mission = -1){
             }
         }
 
-        if (found_sleeping_necrons){
-            array_push(inquisition_missions, INQUISITION_MISSION.tomb_world);
-            log_message($"Was able to find a _star with dormant necron tomb for inquisition mission");
-        } else {
-            log_message($"Couldn't find any planets with a dormant necron tomb for inquisition mission")
-        }
+    //    if (found_sleeping_necrons){
+    //        array_push(inquisition_missions, INQUISITION_MISSION.tomb_world);
+    //        log_message($"Was able to find a _star with dormant necron tomb for inquisition mission");
+    //    } else {
+    //        log_message($"Couldn't find any planets with a dormant necron tomb for inquisition mission")
+    //    }
         if (found_tyranid_org){
             log_message($"Was able to find a _star with lvl 4 tyranids for inquisition mission");
             array_push(inquisition_missions, INQUISITION_MISSION.tyranid_organism);
@@ -110,10 +110,10 @@ function scr_inquisition_mission(event, forced_mission = -1){
         }
         switch (chosen_mission){
             case INQUISITION_MISSION.purge: mission_inquistion_purge(); break;
-            case INQUISITION_MISSION.inquisitor: mission_inquistion_hunt_inquisitor(); break;
+        //    case INQUISITION_MISSION.inquisitor: mission_inquistion_hunt_inquisitor(); break;
             case INQUISITION_MISSION.spyrer: mission_inquistion_spyrer(); break;
             case INQUISITION_MISSION.artifact: mission_inquisition_artifact(); break;
-            case INQUISITION_MISSION.tomb_world: mission_inquisition_tomb_world(necron_tomb_worlds); break;
+        //    case INQUISITION_MISSION.tomb_world: mission_inquisition_tomb_world(necron_tomb_worlds); break;
             case INQUISITION_MISSION.tyranid_organism: mission_inquisition_tyranid_organism(tyranid_org_worlds); break;
             case INQUISITION_MISSION.ethereal: mission_inquisition_ethereal(); break;
             case INQUISITION_MISSION.demon_world: mission_inquisition_demon_world(demon_worlds); break;
@@ -189,7 +189,7 @@ function mission_inquisition_tyranid_organism(worlds){
     scr_popup("Inquisition Mission",text,"inquisition",$"tyranid_org|{string(_star.name)}|{string(planet)}|{string(eta+1)}|");
 
 }
-
+/*
 function mission_inquisition_tomb_world(tomb_worlds){
     log_message("RE: Necron Tomb Bombing");
     if (is_array(tomb_worlds)){
@@ -261,7 +261,7 @@ function init_mission_inquisition_tomb_world(){
     add_new_inquis_mission();
     exit;    
 }
-
+*/
 function mission_inquisition_artifact(){
     var text;
     log_message("RE: Artifact Hold");
@@ -831,11 +831,11 @@ function necron_tomb_mission_sequence(){
             text = "The energy readings are much stronger, now that your marines are deep inside the tunnels.  What was once cramped is now luxuriously large, the tunnel ceiling far overhead decorated by stalactites.";
         } else if (pop_data.mission_stage == 3) {
             image = "necron_tunnels_3";
-            text = "After several hours of descent the entrance to the Necron Tomb finally looms ahead- dancing, sickly green light shining free.  Your marine confirms that the Plasma Bomb is ready.";
+            text = "After several hours of descent, the entrance to the Necron Tomb looms ahead - green light clearly visible.  Your marine confirms that the Plasma Bomb is ready.";
         } else if (pop_data.mission_stage >= 4) {
             image = "";
             title = "Inquisition Mission Completed";
-            text = "Your marines finally enter the deepest catacombs of the Necron Tomb.  There they place the Plasma Bomb and arm it.  All around are signs of increasing Necron activity.  With half an hour set, your men escape back to the surface.  There is a brief rumble as the charge goes off, your mission a success.";
+            text = "Your marines finally enter the deepest catacombs of the Necron Tomb.  There they place the Plasma Bomb and arm it.  All around are signs of increasing Necron activity.  Within half an hour, your men escape back to the surface.  A brief quake is noted as the charge goes off.  Mission is a success.";
             reset_popup_options();
 
             alter_disposition(eFACTION.Inquisition, obj_controller.demanding ? choose(0, 0, 1) : 1);

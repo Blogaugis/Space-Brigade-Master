@@ -374,9 +374,10 @@ if (i==1) and (planets>0){
                         case "Vulvis Major":
                             ranb = 1;
                             break;
-                        case "Necron Assrape":
+					// TODO - change the name to something less crude
+                    /*    case "Necron Assrape":
                             ranb = 2;
-                            break;
+                            break; */
                         case "Morrowynd":
                             ranb = 5;
                             break;
@@ -393,7 +394,7 @@ if (i==1) and (planets>0){
                                 break;
                             case 2:
                                 if (p_type[i]!="Hive") and (p_type[i]!="Lava") and (goo==0){
-                                    array_push(p_feature[i], new NewPlanetFeature(P_features.Necron_Tomb))
+                            //        array_push(p_feature[i], new NewPlanetFeature(P_features.Necron_Tomb))
                                     goo=1;
                                 }
                                 break;
@@ -414,7 +415,7 @@ if (i==1) and (planets>0){
                             //alternative spawn for necron tomb probably needs merging with other method
                             case 6:
                                 if ((p_type[i]=="Ice") or (p_type[i]=="Dead")){
-                                    array_push(p_feature[i], new NewPlanetFeature( P_features.Necron_Tomb))
+                            //        array_push(p_feature[i], new NewPlanetFeature( P_features.Necron_Tomb))
                                     goo=1;
                                 }
                                 break;

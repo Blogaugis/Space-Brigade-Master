@@ -591,7 +591,6 @@ var all_advantages = [
             name : "Bolter Drilling",
             description : "Bolter drills are sacred to your chapter; all marines have increased attack with Bolter weaponry.",
             value : 40,
-            meta : ["Weapon Specialty"]
         },
         {
             name : "Retinue of Renown",
@@ -602,7 +601,6 @@ var all_advantages = [
             name : "Crafters",
             description : "Your chapter views artifacts as sacred; you start with better gear and maintain all equipment with more ease.",
             value : 40,
-            meta : ["Gear Quality"]
         },
         {
             name : "Ancient Armoury",
@@ -614,43 +612,42 @@ var all_advantages = [
             name : "Enemy: Eldar",
             description : "Eldar are particularly hated by your chapter.  When fighting Eldar damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
         },
         {
             name : "Enemy: Fallen",
             description : "Chaos Marines are particularly hated by your chapter.  When fighting the traitors damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
+		// Should it be allowed together with "Enemy: Imperium"?
+		// Some may argue that this should be incompatible, considering similar traits make the player at war with respective factions.
+		// But on the other hand, chaos forces are varied, so it would not be out of place for chaos-aligned force capable against other chaos forces,
+		// while still maintaining... "Cold war" ("Antagonism") state with each other.
+		// For any contributor wanting to change this, you may uncomment the line below.
+        //    meta : ["Allegiance"],
         },
         {
             name : "Enemy: Necrons",
             description : "Necrons are particularly hated by your chapter.  When fighting Necrons damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
         },  
         {
             name : "Enemy: Orks",
             description : "Orks are particularly hated by your chapter.  When fighting Orks damage is increased.",
             value : 20,
-            meta : ["Main Enemy"]
         },
         {
             name : "Enemy: Tau",
             description : "Tau are particularly hated by your chapter.  When fighting Tau damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
         },
         {
             name : "Enemy: Tyranids",
             description : "Tyranids are particularly hated by your chapter. A large number of your veterans and marines are tyrannic war veterans and when fighting Tyranids damage is increased.",
             value : 20,
-            meta : ["Main Enemy"],
         },
         {
             name : "Kings of Space",
             description : "Veterans of naval combat, your chapter fleet has bonuses to offense, defence, an additional battle barge, and may always be controlled regardless of whether or not the Chapter Master is present.",
             value : 40,
-            meta : ["Naval"],
         },
         {
             name : "Lightning Warriors",
@@ -724,25 +721,24 @@ var all_advantages = [
             name : "Medicae Primacy",
             description : "Your chapter reveres its Apothecarion above all of it's specialist; You start with more Apothecaries.",
             value : 20,
-            meta : ["Apothecaries"]
+            meta : ["Apothecaries"],
         },
         {
             name : "Ryzan Patronage",
             description : "Your chapter has strong ties to the Forgeworld of Ryza as a result your Techmarines are privy to the secrets of their Techpriests enhancing your Plasma and Las weaponry.",
             value : 40,
-            meta : ["Weapon Specialty"] 
         },
         {
             name: "Elite Guard",
             description: "Your chapter is an elite fighting force comprised almost exclusively of Veterans. All Tactical Marines are replaced by Veterans.",
             value: 150,
-            meta: ["Specialists"]
+            meta: ["Specialists"],
         },
         {
             name : "Great Luck",
             description: "This is actually really helpful and beneficial for your chapter. Trust me.",
             value: 20,
-            meta: ["Luck"]
+            meta: ["Luck"],
         },                                                                                                                                                           
     ]
 
@@ -779,6 +775,7 @@ var all_disadvantages = [
         name : "Blood Debt",
         description : "Prevents your Chapter from recruiting new Astartes until enough of your marines, or enemies, have been killed.  Incompatible with Penitent chapter types.",
         value : 50,
+        meta : ["Allegiance"], // It shouldn't be compatible with "Enemy: Imperium" either
     },
     {
         name : "Depleted Gene-seed Stocks",
@@ -793,14 +790,18 @@ var all_disadvantages = [
     }, 
     {
         name : "Never Forgive",
-        description : "In the past traitors broke off from your chapter.  They harbor incriminating secrets or heritical beliefs, and as thus, must be hunted down whenever possible.",
+        description : "In the past traitors broke off from your chapter.  They harbor incriminating secrets or heretical beliefs, and as thus, must be hunted down whenever possible.",
         value : 20,
+		// It is kind of weird with "Enemy: Imperium", might be prudent to add it to ["Allegiance"] meta.
+		// But on the other hand, might as well let the player experiment, I suppose?
+		// Uncomment the line below, if you believe it should be incompatible.
+        // meta : ["Allegiance"],
     },
     {
         name : "Shitty Luck",
         description: "This is actually really bad for your chapter. Trust me.",
         value: 20,
-        meta: ["Luck"]
+        meta: ["Luck"],
     },
     {
         name : "Sieged",
@@ -816,8 +817,10 @@ var all_disadvantages = [
     },
     {
         name : "Suspicious",
-        description : "Some of your chapter's past actions or current practices make the inquisition suspicious.  Their disposition is lowered.",
-        value : 10,
+        description : "Your chapter has consistently evaded contact of inquisition. While you won't be able to negotiate with them, you won't get missions either.",
+		// Value of 0, as it has some advantages - no annoying inquisition missions - while drawbacks are fairly minor,
+		// such as not being able to trade with inquisition
+        value : 0,
         meta : ["Imperium Trust"],
     },
     {
@@ -844,7 +847,7 @@ var all_disadvantages = [
     },
     {
         name : "Obliterated",
-        description : "A recent string of unfortunate events has left your chapter decimated. You have very little left, will your story continue?",
+        description : "Considering the extreme losses that your chapter took, it should've been disbanded. However, for whatever reason, you are to continue the fight...",
         value : 80,
         meta : ["Status"],
     },
@@ -852,17 +855,17 @@ var all_disadvantages = [
         name : "Poor Equipment",
         description : "Whether due to being cut off from forge worlds or bad luck, your chapter no longer has enough high quality gear to go around. Your elite troops will have to make do with standard armour.",
         value: 10,
-        meta : ["Gear Quality"]
+        meta : ["Gear Quality"],
     },
     {
         name : "Enduring Angels",
         description : "The Chapter's journey thus far has been arduous & unforgiving leaving them severely understrength yet not out of the fight. You begin with 5 fewer company's",
         value : 30,
-        meta : ["Status"],
+        meta : ["Status"], // Trait seems a bit pointless when "Sieged" is an option.
     },
     {
         name : "Serpents Delight",
-        description : "Sleeper cells infiltrated your chapter. When they rose up for the decapitation strike,they slew the 5 most experienced company's and many of the HQ staff before being defeated",
+        description : "Your chapter has recently suffered losses among its most experienced troops.",
         value : 50,
         meta : ["Status"],
     },
@@ -884,6 +887,12 @@ var all_disadvantages = [
         value : 20,
         meta : ["Psyker Views","Librarians"],
     },
+        {
+        name : "Enemy: Imperium",
+        description : "For whatever reason, your chapter is considered traitors to the Imperium. You gained contacts to local traitor elements, at least.",
+        value : 40, // 10 for each imperial faction.
+        meta : ["Allegiance"],
+        },
     {
         name : "Tech Regression: Late Conventional",
         description : "Whether due to brief period of isolation or simple negligence, your forge lacks some facilities. You'll need to spend some techmarine resources to rebuild them.",

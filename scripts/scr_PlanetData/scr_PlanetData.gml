@@ -165,7 +165,8 @@ function PlanetData(planet, system) constructor{
     	planet_forces[1] = player_forces;
 
 	    planet_forces[2] =	guardsmen;
-
+	//    planet_forces[3] =	system.p_mechanicus[planet];
+	//    planet_forces[4] =	system.p_inquisition[planet];
 	    planet_forces[5] =	system.p_sisters[planet];
 	    planet_forces[6] =	system.p_eldar[planet];
 	    planet_forces[7] =	system.p_orks[planet];
@@ -212,6 +213,12 @@ function PlanetData(planet, system) constructor{
             case eFACTION.Ecclesiarchy:
                 system.p_sisters[planet] = _new_val;
                 break;                                  
+			// case eFACTION.Mechanicus:
+			//	system.p_mechanicus[planet] = _new_val;
+			//	break;
+			// case eFACTION.Inquisition:
+			//	system.p_inquisition[planet] = _new_val;
+			//	break;
         }
 
         return _new_val
@@ -956,6 +963,17 @@ function PlanetData(planet, system) constructor{
             if (current_owner=8){
                 draw_text(xx+480,yy+y7,$"Gue'Vesa Force:  {temp4}");
             }
+			// if (current_owner=10){
+            //    draw_text(xx+480,yy+y7,$"Traitor Guard:  {temp4}");
+            //}
+			// if (current_owner=11){
+            //    draw_text(xx+480,yy+y7,$"Traitor Militia:  {temp4}");
+            //}
+			// Eldar generally relocate the humans elsewhere, if lore-versed folks are to be believed
+			// Still, if anyone prefers for eldar to try recruiting humans, you can try the option below.
+			// if (current_owner=6){
+            //    draw_text(xx+480,yy+y7,$"Traitor Militia:  {temp4}");
+            //}
         }
         
         var temp5="";
@@ -1039,6 +1057,7 @@ function PlanetData(planet, system) constructor{
         
         
         var presence_text = "";
+		// TODO add Mechanicus and Inquisition forces eventually
         var faction_names = ["Adeptas", "Orks", "Tau", "Tyranids", "Chaos", "Traitors", "Daemons", "Necrons"];
         var faction_ids = ["p_sisters", "p_orks", "p_tau", "p_tyranids", "p_traitors", "p_chaos", "p_demons", "p_necrons"];
         var blurbs = ["Squad+", "Squads++", "Demi-Company", "Company", "Company+", "Companies++", "Chapter/2", "Chapter"];

@@ -115,13 +115,13 @@ function FeatureSelected(Feature, system, planet) constructor{
 				generic=true;
 				if (feature.awake==0 && feature.sealed==0){
 					title = "Dormant Necron Tomb";
-					body = "Scans indicate a Necron Tomb lies hidden under the surface of the planet, all signs indicate the tombis dormant as we must hope it remains";
+					body = "There appears to be a Necron Tomb under the surface of the planet, hopefully it will remain inactive. In the event of it's awakening, we'd have to use a plasma bomb to seal it.";
 				} else if (feature.sealed){
 					title = "Sealed Necron Tomb";
-					body = "Exterminatus and standard imperial armaments are no proof against the Necron Scourge with any luck those sealed within this tomb will remain there";
+					body = "The Necron Tomb beneath the surface has been sealed by a plasma bomb detonation. This should prevent Necrons from causing trouble for us for some time.";
 				} else if (feature.awake){
 					title = "Awake Tomb";
-					body = "The Cursed ranks of living metal spew forth from the Necron tomb below"
+					body = "Signs of Necron activity are obvious. We need to use a plasma bomb in battle to seal them inside."
 				}
 				break;
 			case P_features.Artifact:
@@ -145,13 +145,13 @@ function FeatureSelected(Feature, system, planet) constructor{
 				title = $"Cult of {feature.name}";
 				var control_string = "";
 				if (cult_control<25){
-					control_string = "currently has limited influence on the planet but is fast gaining speed";
+					control_string = "currently has limited influence on the planet, but continues to attract new followers";
 				} else if (cult_control<50){
-					control_string = "Is rapidly gaining momentum with the planets populace and will soon sieze control of the planet if left unchecked";
+					control_string = "Has notable influence over the planets populace and is likely to interfere with imperial control of the planet in forseeable future";
 				}else if (cult_control<75){
-					control_string = "Has managed to galvanise the populace to overcome the former governor of the planet turning much of the local pdf to it's cause, it must be stopped, lest it spread.";
+					control_string = "Holds a dominant position in political control of the planet, planet's imperial allegiance hangs by a thread.";
 				} else {
-					control_string = "The cult’s rot and control of the planet is complete; even if the cult can be dismantled, the corruption is great and the population will need significant purging and monitoring to remove the taint";
+					control_string = "It effectively controls the planet. It likely will require extensive purge to bring it back to imperial control.";
 				}
 				body = $"The Cult of {feature.name} {control_string}";
 				break;				
@@ -182,9 +182,9 @@ function FeatureSelected(Feature, system, planet) constructor{
 				title = "Ork Stronghold";
 				generic = true;
 				if (planet_data.planet_forces[eFACTION.Ork]){
-					body = $"For as long as this Stronghold stands the orks here will continue to fortify it. The larger it gets the greater the capacity of this planet to produce orkish machines of war and ships and the better protected the ork forces will be from bombardment";
+					body = $"Orks have established a stronghold on this planet. In addition to protection from bombardment, they are likely more capable to build their voidships here.";
 				} else {
-					body = "Without a force of orks to hold it together the fortress is slowly pulled apart from within by the inhabitants, It's capabilities will constantly decrease until soon there will be nothing left";
+					body = "The stronghold is currently being pulled apart by the inhabitants. Ensure that orks don't return, and it should soon cease to exist.";
 				}
 				break
             case P_features.Recruiting_World:
