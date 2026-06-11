@@ -139,6 +139,21 @@ function scr_cheatcode(argument0) {
 					}
 					break;
 
+				case "impmission":
+					var mission = cheat_arguments[0];
+					show_debug_message($"{mission},");
+					switch (mission){
+						case "registry": // TODO - needs improvements if more mission types will be added
+							scr_imperium_mission(EVENT.imperium_mission);
+						break;
+						default: 
+							scr_imperium_mission(EVENT.imperium_mission);
+						break;
+					}
+					show_debug_message("imperium mission initiated");
+					obj_controller.location_viewer.update_mission_log();
+         		 break;
+
 				case "mechmission":
 					show_debug_message("mech_mission");
 
@@ -187,6 +202,22 @@ function scr_cheatcode(argument0) {
 					show_debug_message("inquisitor mission initiated");
 					obj_controller.location_viewer.update_mission_log();
 					break;
+
+				case "sobmission":
+					var mission = cheat_arguments[0];
+					show_debug_message($"{mission},");
+					switch (mission){
+						case "priest": // TODO - improvements needed if more missions will be added
+							scr_sisters_mission(EVENT.sisters_mission);
+						break;
+						default: 
+							scr_sisters_mission(EVENT.sisters_mission);
+						break;
+					}
+					show_debug_message("sisters mission initiated");
+					obj_controller.location_viewer.update_mission_log();
+         		 break;
+
 				case "artifactpopulate":
 					with (obj_star) {
 						for (var i = 1; i <= planets; i++) {
