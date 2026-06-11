@@ -129,7 +129,7 @@ function scr_random_event(execute_now) {
 								events_total -= 1;
 							}
 							break;
-						case EVENT.sob_mission:
+						case EVENT.sisters_mission:
 							if (known[eFACTION.Ecclesiarchy]==0 || obj_controller.disposition[5] < 0 || obj_controller.faction_status[eFACTION.Ecclesiarchy] == "War") {
 								events_share[i] -= 1;
 								events_total -= 1;
@@ -379,7 +379,7 @@ function scr_random_event(execute_now) {
 	}
 	
 	else if (chosen_event == EVENT.sisters_mission) {
-		scr_sob_mission(chosen_event);
+		scr_sisters_mission(chosen_event);
 		_evented = true;
 
 	}
@@ -550,7 +550,7 @@ function scr_random_event(execute_now) {
 	}
     
 	// Flavor text/events
-	else if (chosen_event == EVENT.random_fun){
+	/* else if (chosen_event == EVENT.random_fun){
 		log_message("RE: Random");
 	    var text;
 	    var situation = irandom(4);
@@ -609,7 +609,7 @@ function scr_random_event(execute_now) {
 		scr_alert("color","lol",text,0,0);
         scr_event_log("red",text); 
 		_evented = true;
-	}
+	} */
 
 	else if (chosen_event == EVENT.warp_storms){
 		log_message("RE: Warp Storm");

@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"scr_sob_mission",
+  "%Name":"scr_sisters_mission",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"scr_sob_mission",
+  "name":"scr_sisters_mission",
   "parent":{
     "name":"Scripts",
     "path":"folders/Scripts.yy",

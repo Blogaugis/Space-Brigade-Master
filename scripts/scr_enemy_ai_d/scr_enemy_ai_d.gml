@@ -101,12 +101,30 @@ function scr_enemy_ai_d() {
             if (result="imperial") then scr_event_log("",alert_text);
             remove_planet_problem(i, "succession");
 	    }
+		// Imperium/Sector Governor variant
+		if (has_problem_planet_and_time(i, "recon", 0)>-1){
+            var alert_text="Imperium Mission Opportunity: Investigate registry, Expired.";
+            alert_text+=string(name)+" "+scr_roman(i)+".";
+            scr_alert("red","mission_expired",alert_text,0,0);
+            scr_event_log("red",alert_text);
+           // obj_controller.disposition[2]-=5;
+            remove_planet_problem(i, "recon");
+        }
 	   if (has_problem_planet_and_time(i, "recon", 0)>-1){
             var alert_text="Inquisition Mission Failed: Investigate ";
             alert_text+=string(name)+" "+scr_roman(i)+".";
             scr_alert("red","mission_failed",alert_text,0,0);
             scr_event_log("red",alert_text);
             obj_controller.disposition[4]-=5;
+            remove_planet_problem(i, "recon");
+        }
+		// SoB variant
+		if (has_problem_planet_and_time(i, "recon", 0)>-1){
+            var alert_text="Sororitas Mission Opportunity: Investigate priest, Expired.";
+            alert_text+=string(name)+" "+scr_roman(i)+".";
+            scr_alert("red","mission_expired",alert_text,0,0);
+            scr_event_log("red",alert_text);
+           // obj_controller.disposition[5]-=5; // +SMs are not obligated to help them
             remove_planet_problem(i, "recon");
         }
 
