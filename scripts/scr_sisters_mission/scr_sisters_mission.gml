@@ -57,7 +57,7 @@ function mission_investigate_priest(){
 		var text=$"You overhear the Ecclesiarchy instructions regarding {string(_star.name)} {scr_roman(planet)}";
 		text+=$"  It seems one of the priests there is behaving strangely. We could investigate this ourselves, by landing marines there.";
 	    text += $" You have {string(eta)} months until Ecclesiarchy completes own investigation.";
-	    scr_popup("Priest Investigation",text,"ecclesiarchy",$"recon|{string(_star.name)}|{string(planet)}|{string(eta)}|");
+	    scr_popup("Ecclesiarchy Recon",text,"ecclesiarchy",$"recon|{string(_star.name)}|{string(planet)}|{string(eta)}|");
 
 }
 }

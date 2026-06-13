@@ -57,7 +57,7 @@ function mission_investigate_registry(){
 		var text=$"You overhear the Sector Governor instructions regarding {string(_star.name)} {scr_roman(planet)}";
 		text+=$"  It seems there are numerous registry mismatches regarding taxes and other data. We could investigate this ourselves, by landing marines there.";
 	    text += $" You have {string(eta)} months until Imperium completes own investigation.";
-	    scr_popup("Registry Investigation",text,"imperium",$"recon|{string(_star.name)}|{string(planet)}|{string(eta)}|");
+	    scr_popup("Imperium Recon",text,"imperium",$"recon|{string(_star.name)}|{string(planet)}|{string(eta)}|");
 
 }
 }
