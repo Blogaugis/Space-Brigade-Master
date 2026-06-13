@@ -88,20 +88,22 @@ enum INQUISITION_MISSION {
 
 enum EVENT {
     //good
-    space_hulk,
     promotion,
     strange_building,
-    sororitas,
+    sororitas, // TODO - require checks for SoB diplomacy state or player allegiance
     rogue_trader,
-    inquisition_mission,
+	imperium_mission,
+	sisters_mission,
+    //neutral
+	space_hulk,
+	inquisition_mission,
     inquisition_planet,
     mechanicus_mission,
-    //neutral
     strange_behavior,
     fleet_delay,
     harlequins,
     succession_war,
-    random_fun,
+    // random_fun,
     //bad
     warp_storms,
     enemy_forces,

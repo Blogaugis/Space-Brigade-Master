@@ -61,6 +61,8 @@ function scr_random_event(execute_now) {
 						EVENT.strange_building, // Not sure if techmarine in the mood for building is a good thing
 						EVENT.sororitas, // This requires checks for renegade or traitor
 						EVENT.rogue_trader,
+						EVENT.imperium_mission, // Good event as it is an opportunity with no loss risk
+						EVENT.sisters_mission, // Same as imperium mission
 					];
 				}
 				else if(player_luck == luck.neutral){
@@ -117,6 +119,18 @@ function scr_random_event(execute_now) {
 							break;
 						case EVENT.inquisition_mission:
 							if (known[eFACTION.Inquisition]==0 || obj_controller.disposition[4] < 0 || obj_controller.faction_status[eFACTION.Inquisition] == "War") {
+								events_share[i] -= 1;
+								events_total -= 1;
+							}
+							break;
+						case EVENT.imperium_mission:
+							if (known[eFACTION.Imperium]==0 || obj_controller.disposition[1] < 0 || obj_controller.faction_status[eFACTION.Imperium] == "War") {
+								events_share[i] -= 1;
+								events_total -= 1;
+							}
+							break;
+						case EVENT.sisters_mission:
+							if (known[eFACTION.Ecclesiarchy]==0 || obj_controller.disposition[5] < 0 || obj_controller.faction_status[eFACTION.Ecclesiarchy] == "War") {
 								events_share[i] -= 1;
 								events_total -= 1;
 							}
@@ -357,7 +371,19 @@ function scr_random_event(execute_now) {
 		evented = spawn_mechanicus_mission();
 
 	}
-    
+	
+	else if (chosen_event == EVENT.imperium_mission) {
+		scr_imperium_mission(chosen_event);
+		_evented = true;
+
+	}
+	
+	else if (chosen_event == EVENT.sisters_mission) {
+		scr_sisters_mission(chosen_event);
+		_evented = true;
+
+	}
+	
 	else if (chosen_event == EVENT.inquisition_planet || chosen_event == EVENT.inquisition_mission) {
 		scr_inquisition_mission(chosen_event);
 	    _evented = true;
@@ -524,7 +550,7 @@ function scr_random_event(execute_now) {
 	}
     
 	// Flavor text/events
-	else if (chosen_event == EVENT.random_fun){
+	/* else if (chosen_event == EVENT.random_fun){
 		log_message("RE: Random");
 	    var text;
 	    var situation = irandom(4);
@@ -583,7 +609,7 @@ function scr_random_event(execute_now) {
 		scr_alert("color","lol",text,0,0);
         scr_event_log("red",text); 
 		_evented = true;
-	}
+	} */
 
 	else if (chosen_event == EVENT.warp_storms){
 		log_message("RE: Warp Storm");
