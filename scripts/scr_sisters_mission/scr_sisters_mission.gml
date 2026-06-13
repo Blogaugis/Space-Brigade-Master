@@ -18,6 +18,20 @@
 
 /// @param {Enum.EVENT} event 
 function scr_sisters_mission(event){
+
+	if ((obj_controller.known[eFACTION.Ecclesiarchy] == 0 || obj_controller.faction_status[eFACTION.Ecclesiarchy] == "War") && !global.cheat_debug){
+		log_message("Player is either hasn't met or is at war with Ecclesiarchy, not proceeding with Ecclesiarchy mission");
+		return;
+	}
+
+	if (global.cheat_debug){
+		show_debug_message("find mission");
+	}
+
+	if (event == EVENT.sisters_mission){
+		mission_investigate_priest();
+	}
+
 function mission_investigate_priest(){
 		var stars = scr_get_stars();
 		var _valid_stars = array_filter_ext(stars,

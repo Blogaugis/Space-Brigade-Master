@@ -18,6 +18,20 @@
 
 /// @param {Enum.EVENT} event 
 function scr_imperium_mission(event){
+
+	if ((obj_controller.known[eFACTION.Imperium] == 0 || obj_controller.faction_status[eFACTION.Imperium] == "War") && !global.cheat_debug){
+		log_message("Player is either hasn't met or is at war with Imperium, not proceeding with Imperium mission");
+		return;
+	} // The player should usually start as known to imperium, though being at war is achievable state in game. Might as well have this safeguard anyway
+
+	if (global.cheat_debug){
+		show_debug_message("find mission");
+	}
+
+	if (event == EVENT.imperium_mission){
+		mission_investigate_registry();
+	}
+
 function mission_investigate_registry(){
 		var stars = scr_get_stars();
 		var _valid_stars = array_filter_ext(stars,
