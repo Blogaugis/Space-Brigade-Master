@@ -28,6 +28,7 @@ enum UnitSpecialColours {
 
 enum eARMOUR_SET {
     None,
+    MK2,
     MK3,
     MK4,
     MK5,
@@ -331,7 +332,7 @@ function scr_draw_unit_image(_background = false) {
                 armour_type = ArmourType.Dreadnought;
             } else {
                 switch (unit_armour) {
-                    case "Scout Armour":
+                    case "Scout Armour": // TODO - consider adding "Tribalwear", "Chainmail", "Plate Armour" and "Flak Armour" as Scout-tier armours.
                         armour_type = ArmourType.Scout;
                         break;
                     case "Terminator Armour":
@@ -399,7 +400,7 @@ function scr_draw_unit_image(_background = false) {
 
                 // if (skin_color!=6) then draw_sprite(spr_clothing_colors,clothing_style,x_surface_offset,y_surface_offset);
             } else {
-                var _complex_armours = ["MK3 Iron Armour", "Terminator Armour", "Tartaros", "MK7 Aquila", "Power Armour", "MK8 Errant", "Artificer Armour", "MK4 Maximus", "MK5 Heresy", "MK6 Corvus", "Dreadnought", "Scout Armour","Cataphractii", "Contemptor Dreadnought"];
+                var _complex_armours = ["MK2 Crusade Armour", "MK3 Iron Armour", "Terminator Armour", "Tartaros", "MK7 Aquila", "Power Armour", "MK8 Errant", "Artificer Armour", "MK4 Maximus", "MK5 Heresy", "MK6 Corvus", "Dreadnought", "Scout Armour","Cataphractii", "Contemptor Dreadnought"];
                 if (array_contains(_complex_armours, unit_armour)) {
                     complex_set = new ComplexSet(self);
                     complex_livery = true;

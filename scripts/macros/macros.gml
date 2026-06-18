@@ -17,7 +17,7 @@
 #macro STR_ANY_TERMINATOR_ARMOUR "Any Terminator Armour"
 
 // Basic, because we don't include Artificer Armour
-#macro LIST_BASIC_POWER_ARMOUR ["MK7 Aquila", "MK6 Corvus", "MK5 Heresy", "MK8 Errant", "MK4 Maximus", "MK3 Iron Armour","Power Armour"]
+#macro LIST_BASIC_POWER_ARMOUR ["MK8 Errant", "MK7 Aquila", "MK6 Corvus", "MK5 Heresy", "MK4 Maximus", "MK3 Iron Armour", "MK2 Crusade Armour", "Power Armour"]
 #macro LIST_TERMINATOR_ARMOUR ["Terminator Armour", "Tartaros","Cataphractii"]
 #macro FACTION_NAMES ["","Your Chapter", "Imperium of Man","Adeptus Mechanicus","Inquisition","Ecclesiarchy","Eldar","Orks", "Tyranid Hive","Tau Empire","Chaos","Heretics","Genestealer Cults", "Necron Dynasties"]
 #macro XENOS_FACTIONS [6,7,8,9]
