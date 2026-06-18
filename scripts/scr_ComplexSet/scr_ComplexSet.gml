@@ -1323,6 +1323,15 @@ function ComplexSet(_unit) constructor {
 				});
 				armour_type = ArmourType.Normal;
 				break;
+			case "MK2 Crusade Armour":
+				add_group({
+					armour: spr_mk2_complexbody,
+					backpack: spr_mk2_backpack,
+					belt: spr_mk2_belt,
+					head: spr_mk2_heads,
+					left_arm: spr_mk2_leftarm,
+					right_arm: spr_mk2_rightarm
+			});
 			case "MK8 Errant":
 				add_group(mk7_bits);
 				armour_type = ArmourType.Normal;
